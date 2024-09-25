@@ -55,10 +55,11 @@ if (is_user_logged_in()) {
         {
 
             global $wpdb;
+            $commission_table_name = $wpdb->prefix . 'commission'; 
+            $user_table_name = $wpdb->prefix . 'users'; 
+            $sql =  "SELECT `" . $key . "` from `$commission_table_name` where code= '" . $code . "'";
 
-            $sql =  "SELECT `" . $key . "` from bny_commission where code= '" . $code . "'";
-
-            $sql = "SELECT display_name FROM `bny_users` as u, bny_commission as c WHERE u.ID = c.$key AND c.code='" . $code . "'";
+            $sql = "SELECT display_name FROM `$user_table_name` as u, `$commission_table_name` as c WHERE u.ID = c.$key AND c.code='" . $code . "'";
 
             $results = $wpdb->get_row($sql, 'ARRAY_A');
 
@@ -215,7 +216,10 @@ if (is_user_logged_in()) {
         private function get_table_data($search = '')
         {
             global $wpdb;
-
+            $commission_table_name = $wpdb->prefix . 'commission'; 
+            $user_table_name = $wpdb->prefix . 'users'; 
+            $post_table_name = $wpdb->prefix . 'posts'; 
+            $postmeta_table_name = $wpdb->prefix . 'postmeta'; 
             $curr_sql = "
                 SELECT
                     tt.commission,
@@ -241,15 +245,15 @@ if (is_user_logged_in()) {
                         '' AS acf_writer_name,
                         '' AS acf_writer_email,
                         '' AS org_rae
-                    FROM bny_commission
+                    FROM $commission_table_name
                     WHERE code not in (
                         SELECT commission_used.meta_value AS code
                         FROM
-                            bny_posts
-                            INNER JOIN bny_postmeta AS commission_used ON bny_posts.ID = commission_used.post_id AND commission_used.meta_key = 'commission_used'
+                            $post_table_name
+                            INNER JOIN $postmeta_table_name AS commission_used ON $post_table_name.ID = commission_used.post_id AND commission_used.meta_key = 'commission_used'
                         WHERE
-                            (bny_posts.post_type = 'story' OR bny_posts.post_type = 'drafts')
-                            AND (bny_posts.post_status = 'publish' OR bny_posts.post_status = 'draft')
+                            ($post_table_name.post_type = 'story' OR $post_table_name.post_type = 'drafts')
+                            AND ($post_table_name.post_status = 'publish' OR $post_table_name.post_status = 'draft')
                             AND commission_used.meta_value IS NOT NULL
                     )
                 
@@ -257,27 +261,27 @@ if (is_user_logged_in()) {
                 
                     SELECT
                         commission_used.meta_value AS commission,
-                        bny_posts.ID,
-                        bny_posts.post_title,
-                        bny_posts.post_date,
-                        bny_posts.post_author,
-                        bny_postmeta.meta_value AS payment_status,
+                        $post_table_name.ID,
+                        $post_table_name.post_title,
+                        $post_table_name.post_date,
+                        $post_table_name.post_author,
+                        $postmeta_table_name.meta_value AS payment_status,
                         claimed_by_meta.meta_value AS claimed_by,
                         acf_writer_name_meta.meta_value AS acf_writer_name, 
                         acf_writer_email_meta.meta_value AS acf_writer_email,
                         claimed_by_user.display_name AS org_rae
                     FROM
-                        bny_posts
-                        INNER JOIN bny_postmeta ON bny_posts.ID = bny_postmeta.post_id AND bny_postmeta.meta_key = '_payment_status'
-                        LEFT JOIN bny_postmeta AS claimed_by_meta ON bny_posts.ID = claimed_by_meta.post_id AND claimed_by_meta.meta_key = 'claimed_by'
-                        LEFT JOIN bny_postmeta AS acf_writer_name_meta ON bny_posts.ID = acf_writer_name_meta.post_id AND acf_writer_name_meta.meta_key = 'story_nom_de_plume'
-                        LEFT JOIN bny_postmeta AS acf_writer_email_meta ON bny_posts.ID = acf_writer_email_meta.post_id AND acf_writer_email_meta.meta_key = 'story_email_address'
-                        LEFT JOIN bny_postmeta AS commission_used ON bny_posts.ID = commission_used.post_id AND commission_used.meta_key = 'commission_used'
-                        LEFT JOIN bny_users AS claimed_by_user ON claimed_by_meta.meta_value = claimed_by_user.ID
+                        $post_table_name
+                        INNER JOIN $postmeta_table_name ON $post_table_name.ID = $postmeta_table_name.post_id AND $postmeta_table_name.meta_key = '_payment_status'
+                        LEFT JOIN $postmeta_table_name AS claimed_by_meta ON $post_table_name.ID = claimed_by_meta.post_id AND claimed_by_meta.meta_key = 'claimed_by'
+                        LEFT JOIN $postmeta_table_name AS acf_writer_name_meta ON $post_table_name.ID = acf_writer_name_meta.post_id AND acf_writer_name_meta.meta_key = 'story_nom_de_plume'
+                        LEFT JOIN $postmeta_table_name AS acf_writer_email_meta ON $post_table_name.ID = acf_writer_email_meta.post_id AND acf_writer_email_meta.meta_key = 'story_email_address'
+                        LEFT JOIN $postmeta_table_name AS commission_used ON $post_table_name.ID = commission_used.post_id AND commission_used.meta_key = 'commission_used'
+                        LEFT JOIN $user_table_name AS claimed_by_user ON claimed_by_meta.meta_value = claimed_by_user.ID
                     WHERE
-                    (bny_posts.post_type = 'story' OR bny_posts.post_type = 'drafts')
+                    ($post_table_name.post_type = 'story' OR $post_table_name.post_type = 'drafts')
                     AND 
-                    (bny_posts.post_status = 'publish' OR bny_posts.post_status = 'draft')
+                    ($post_table_name.post_status = 'publish' OR $post_table_name.post_status = 'draft')
                 ) AS tt
             ";
 
@@ -376,7 +380,6 @@ if (is_user_logged_in()) {
                 'per_page'    => $per_page, // items to show on a page
                 'total_pages' => ceil($total_items / $per_page) // use ceil to round up
             ));
-
             $this->items = $this->table_data;
         }
     }
@@ -432,7 +435,8 @@ if (is_user_logged_in()) {
                 'current_owner' => $current_owner
             );
             // Insert the data into the bny_commission table
-            $result = $wpdb->insert('bny_commission', $data);
+            $table_name = $wpdb->prefix . 'commission'; 
+            $result = $wpdb->insert($table_name, $data);
 
             // Check if the insertion was successful
             if ($result !== false) {
