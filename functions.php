@@ -3165,6 +3165,30 @@ function pol_check_if_commission_is_of_published_post($commission)
 	return ($curr_comm_post_id == 0) ? false : true;
 }
 
+function pol_get_commission_post_info($commission)
+{
+	global $wpdb;
+	$table_prefix = $wpdb->prefix;
+	$results = $wpdb->get_results($wpdb->prepare("
+		SELECT ".$table_prefix ."posts.* FROM ".$table_prefix ."posts INNER JOIN ".$table_prefix ."postmeta ON ( ".$table_prefix ."posts.ID = ".$table_prefix ."postmeta.post_id ) WHERE 1=1 
+		AND ( ( ".$table_prefix ."postmeta.meta_key = 'commission_used' 
+		AND ".$table_prefix ."postmeta.meta_value = '".$commission."' ) ) 
+		AND ".$table_prefix ."posts.post_type IN ('drafts', 'story') 
+		AND ".$table_prefix ."posts.post_status IN ('publish', 'draft', 'pending', 'future', 'private', 'inherit', 'trash')
+		GROUP BY ".$table_prefix ."posts.ID 
+		ORDER BY ".$table_prefix ."posts.post_date DESC
+	"), ARRAY_A);
+
+	$post_info = [];
+	if(!empty($results)){
+		foreach ($results as $row) {
+			array_push($post_info, $row['ID'], $row['post_title']);
+			return $post_info;
+		}
+	}
+	return false;
+}
+
 
 
 
@@ -3243,8 +3267,6 @@ function list_transferred_commissions($user)
 add_action('wp_ajax_list_user_commisions', 'list_user_commisions');
 function list_user_commisions($user, $status = "", $sort="ASC")
 {
-
-	// Get the current page number
 	$is_ajax_call = defined('DOING_AJAX') && DOING_AJAX;
 	global $wpdb;
 	$sort_by = isset($_POST['sort_by']) ? $_POST['sort_by'] : $sort;
@@ -3255,38 +3277,46 @@ function list_user_commisions($user, $status = "", $sort="ASC")
 	$current_logged_in_user_meta = get_userdata($current_logged_in_user);
 	$is_current_logged_in_user_rae = get_user_meta($current_logged_in_user, 'rae_approved', true);
 
+
 	$user_role = 'user';
+	
 	if (get_user_meta($author_user->ID, 'rae_approved', true) == 1) {
 		$user_role = 'rae';
 	} else if (in_array('administrator', (array) $author_user->roles)) {
 		$user_role = 'admin';
 	}
-
+	
 	$curr_author = get_userdata($user);
 	$curr_author_display_name = $curr_author->display_name;
+	$sql = '';
 
-
-	// $actual_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `$table_name` WHERE current_owner = $user"), ARRAY_A);
-
-	// if ($user_role == 'admin' || $user_role == 'rae') {
 	if ($user_role == 'rae') {
-		// $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `$table_name` WHERE org_rae = $user"), ARRAY_A);
-		$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `$table_name` WHERE org_rae = %s ORDER BY status $sort_by", $user), ARRAY_A);
+		if ($sort_by != '') {
+			$sql = "SELECT * FROM `$table_name` WHERE org_rae = $user ORDER BY status $sort_by";
+		} else {
+			$sql = "SELECT * FROM `$table_name` WHERE org_rae = $user ORDER BY last_transfer DESC";
+		}
 	} else {
-		// $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `$table_name` WHERE current_owner = $user"), ARRAY_A);
-		$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `$table_name` WHERE current_owner = %s ORDER BY status $sort_by",$user), ARRAY_A);
+		if ($sort_by != '') {
+			$sql = "SELECT * FROM `$table_name` WHERE current_owner = $user ORDER BY status $sort_by";
+		} else {
+			$sql = "SELECT * FROM `$table_name` WHERE current_owner = $user ORDER BY last_transfer DESC";
+		}
 	}
 
+
+	$results = $wpdb->get_results($wpdb->prepare($sql), ARRAY_A);
+	
+
 	$result = '';
-
-
 	if ($results) {
 		$result .= '<table class="profile-table profile-select-commission-table">';
 		$result .= '<tr>';
 
 		$result .= '<th>Commission</th>';
 		$result .= '<th>Originating RAE</th>';
-		$result .= '<th>Status<span class="sort_comission" data-current_author_id="'.$user.'">⇅</span></th>';
+		$result .= '<th>Story Title</th>';
+		$result .= '<th>Status <span class="sort_comission" data-current_author_id="' . $user . '">⇅</span></th>';
 		if ($is_current_logged_in_user_rae && $user_role == 'user') {
 
 			$result .= '<th>Action</th>';
@@ -3306,6 +3336,14 @@ function list_user_commisions($user, $status = "", $sort="ASC")
 
 			$status = pol_check_if_commission_is_of_published_post($row['code']) ? 'Published' : $status;
 
+			$commission_post_title = '';
+			if ($status == 'Published' || $status == 'In use') {
+				// var_dump(pol_get_commission_post_info($row['code']));
+				$commission_post_title =  pol_get_commission_post_info($row['code']) == false ? '' : pol_get_commission_post_info($row['code'])[1];
+			} else {
+				$commission_post_title = '';
+			}
+
 			$result .= "<tr><td>" . esc_html($row['code']) . "</td>";
 
 			if ($user_role == 'admin' ||  $user_role == 'rae') {
@@ -3319,11 +3357,14 @@ function list_user_commisions($user, $status = "", $sort="ASC")
 				}
 			}
 
+			//display story title
+			$result .= "<td>" . $commission_post_title . "</td>";
+
 			$result .= "<td>" . $status . "</td>";
 			if ($is_current_logged_in_user_rae && $user_role == 'user') {
-				if($row['status'] == 0  && $row['org_rae'] == $current_logged_in_user){
+				if ($row['status'] == 0  && $row['org_rae'] == $current_logged_in_user) {
 					$result .= "<td> <a href='javascript:void(0);' data-comission_id='" . $row['id'] . "' data-org_rae='" . $row['org_rae'] . "' data-current_owner='" . $row['current_owner'] . "' class ='revoke-button' id ='revoke-button'><i class='fa-regular fa-circle-xmark'></i><span>Revoke commission</span></a></td></tr>";
-				}else{
+				} else {
 					$result .= "<td></td>";
 				}
 			}
@@ -3331,11 +3372,11 @@ function list_user_commisions($user, $status = "", $sort="ASC")
 		$result .= '</table>';
 	}
 	if ($is_ajax_call) {
-        wp_send_json_success($result);
-        wp_die(); // This is required to terminate immediately and return a proper response
-    } else {
-        return $result;
-    }
+		wp_send_json_success($result);
+		wp_die();
+	} else {
+		return $result;
+	}
 }
 
 
@@ -4061,7 +4102,7 @@ function so_update_story_meta_after_adding_commission($post_id, $commission)
 	update_post_meta($post_id, 'claimed_by', $commission_rae);
 
 	//update the commission status
-	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 2 WHERE code = '" . $commission . "'");
+	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
 }
 
 

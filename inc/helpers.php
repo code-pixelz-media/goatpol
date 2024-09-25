@@ -1085,22 +1085,22 @@ function pol_transfer_commission()
 
 		if (($curr_user_role == "rae" || $curr_user_role == "admin") && ($recevier_role == "rae" || $recevier_role == "admin")) {
 
-			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
+			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'rae_rae', $commission_code, '');
 			
 		} else if (($curr_user_role == "rae" || $curr_user_role == "admin") && $recevier_role == "user") {
 
-			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , org_rae = " . $sender_id . ", current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
+			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , last_transfer = CURRENT_TIMESTAMP, org_rae = " . $sender_id . ", current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'rae_user', $commission_code, '');
 			
 		} else if ($curr_user_role == "user" && ($recevier_role == "rae" || $recevier_role == "admin")) {
 			// $curr_org_rae = $wpdb->get_var( $wpdb->prepare("SELECT org_rae FROM $table_name WHERE id = '" . $id . "'"));
-			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = $receiver_id, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
+			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, org_rae = $receiver_id, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'user_rae', $commission_code, '');
 			
 		} else if ($curr_user_role == "user" && $recevier_role == "user") {
 
-			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 ,current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
+			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , last_transfer = CURRENT_TIMESTAMP,current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 
 			$org_rae = $wpdb->get_var("SELECT org_rae FROM $table_name WHERE id = '" . $id . "'");
 			$org_rae_user = get_user_by('id', (int) $org_rae);
@@ -1133,7 +1133,7 @@ function pol_update_commission_status()
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'commission';
 	$commission = $_POST['commission'];
-	$wpdb->get_results("UPDATE {$table_name} SET status = 2 WHERE code = '" . $commission . "'");
+	$wpdb->get_results("UPDATE {$table_name} SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
 }
 
 
@@ -1173,7 +1173,7 @@ function pol_transfer_single_commission()
 
 
 	if (!empty($commission_code)) {
-		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
+		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
 		cpm_send_commission_transfer_email($author_id, 'user_user', $commission_code, get_user_by('id', (int) $rae_id)->display_name);
 		wp_send_json_success('transfered');
 	} else {
@@ -1189,7 +1189,7 @@ function pol_revoke_commission()
 	$comission_id = $_POST['comission_id'];
 
 	$table_name = $wpdb->prefix . 'commission';
-	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , current_owner = " . $rae_id . " WHERE id = '" . $comission_id . "'");
+	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $rae_id . " WHERE id = '" . $comission_id . "'");
 }
 
 
