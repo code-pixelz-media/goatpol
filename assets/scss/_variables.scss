@@ -1,0 +1,246 @@
+// ------------------------------------------------------------------------------ //
+//  VARIABLES
+// ------------------------------------------------------------------------------ //
+
+:root {
+
+	/* Colors */
+	@each $slug, $hex in $colors {
+		--pol-#{$slug}-color: #{$hex};
+	}
+
+	/* Layout */
+	--pol-inner-width-thin: #{rem($width-thin)};
+	--pol-inner-width-small: #{rem($width-small)};
+	--pol-inner-width-medium: #{rem($width-medium)};
+	--pol-inner-width-max: #{rem($width-max)};
+
+	/* Gutter */
+	--pol-inner-gutter: 3.6rem;
+	@media (min-width: $mobile) {
+		--pol-inner-gutter: 4.8rem;
+	}
+	@media (min-width: $tablet) {
+		--pol-inner-gutter: 6.4rem;
+	}
+	@media (min-width: $laptop) {
+		--pol-inner-gutter: 8.2rem;
+	}
+
+
+	/* Typography */
+	--pol-root-font-size: #{percentage($rem/16px)};
+
+	--pol-body-font: #{inspect($body-font-family)};
+	--pol-body-font-weight: #{$body-font-weight};
+	--pol-body-font-weight-bold: #{$body-font-weight-bold};
+	--pol-body-letter-spacing: #{$body-letter-spacing};
+	--pol-body-text-transform: #{$body-text-transform};
+	--pol-body-text-color: #{$body-text-color};
+	--pol-body-font-size: #{rem($body-font-size-min)};
+	--pol-body-line-height: #{$body-line-height-min};
+
+	@media (min-width: $tablet) {
+		--pol-body-font-size: #{rem($body-font-size-max)};
+		--pol-body-line-height: #{$body-line-height-max};
+	}
+
+	// Paragraph
+	--pol-paragraph-spacing: #{$paragraph-spacing * rem($body-font-size-min)};
+
+	@media (min-width: $tablet) {
+		--pol-paragraph-spacing: #{$paragraph-spacing * rem($body-font-size-max)};
+	}
+
+	// Other font sizes
+	--pol-xl-font-size: #{rem($xl-font-size-min)};
+	--pol-xl-line-height: #{$xl-line-height-min};
+	
+	--pol-lg-font-size: #{rem($lg-font-size-min)};
+	--pol-lg-line-height: #{$lg-line-height-min};
+	
+	--pol-sm-font-size: #{rem($sm-font-size-min)};
+	--pol-sm-line-height: #{$sm-line-height-min};
+	
+	--pol-xs-font-size: #{rem($xs-font-size-min)};
+	--pol-xs-line-height: #{$xs-line-height-min};
+
+	@media (min-width: $tablet) {
+		--pol-xl-font-size: #{rem($xl-font-size-max)};
+		--pol-xl-line-height: #{$xl-line-height-max};
+
+		--pol-lg-font-size: #{rem($lg-font-size-max)};
+		--pol-lg-line-height: #{$lg-line-height-max};
+
+		--pol-sm-font-size: #{rem($sm-font-size-max)};
+		--pol-sm-line-height: #{$sm-line-height-max};
+
+		--pol-xs-font-size: #{rem($xs-font-size-max)};
+		--pol-xs-line-height: #{$xs-line-height-max};
+	}
+
+	// Headings
+	--pol-heading-font: #{inspect($heading-font-family)};
+	--pol-heading-font-weight: #{$heading-font-weight};
+	--pol-heading-font-weight-bold: #{$heading-font-weight-bold};
+	--pol-heading-letter-spacing: #{$heading-letter-spacing};
+	--pol-heading-text-transform: #{$heading-text-transform};
+	--pol-heading-text-color: var(--pol-accent-dark-color);
+	--pol-heading-leading: #{$heading-leading};
+
+	// H1
+	--pol-h1-font-size: #{rem($h1-font-size-min)};
+	--pol-h1-line-height: #{$h1-line-height-min};
+	--pol-h1-font-weight: #{$h1-font-weight};
+	--pol-h1-letter-spacing: #{$h1-letter-spacing};
+	--pol-h1-text-transform: #{$h1-text-transform};
+
+	@media (min-width: $tablet) {
+		--pol-h1-font-size: #{rem($h1-font-size-max)};
+		--pol-h1-line-height: #{$h1-line-height-max};
+	}
+
+	// H2
+	--pol-h2-font-size: #{rem($h2-font-size-min)};
+	--pol-h2-line-height: #{$h2-line-height-min};
+	--pol-h2-font-weight: #{$h2-font-weight};
+	--pol-h2-letter-spacing: #{$h2-letter-spacing};
+	--pol-h2-text-transform: #{$h2-text-transform};
+
+	@media (min-width: $tablet) {
+		--pol-h2-font-size: #{rem($h2-font-size-max)};
+		--pol-h2-line-height: #{$h2-line-height-max};
+	}
+
+	// H3
+	--pol-h3-font-size: #{rem($h3-font-size-min)};
+	--pol-h3-line-height: #{$h3-line-height-min};
+	--pol-h3-font-weight: #{$h3-font-weight};
+	--pol-h3-letter-spacing: #{$h3-letter-spacing};
+	--pol-h3-text-transform: #{$h3-text-transform};
+
+	@media (min-width: $tablet) {
+		--pol-h3-font-size: #{rem($h3-font-size-max)};
+		--pol-h3-line-height: #{$h3-line-height-max};
+	}
+
+	// H4
+	--pol-h4-font-size: #{rem($h4-font-size-min)};
+	--pol-h4-line-height: #{$h4-line-height-min};
+	--pol-h4-font-weight: #{$h4-font-weight};
+	--pol-h4-letter-spacing: #{$h4-letter-spacing};
+	--pol-h4-text-transform: #{$h4-text-transform};
+
+	@media (min-width: $tablet) {
+		--pol-h4-font-size: #{rem($h4-font-size-max)};
+		--pol-h4-line-height: #{$h4-line-height-max};
+	}
+
+	// H5
+	--pol-h5-font-size: #{rem($h5-font-size-min)};
+	--pol-h5-line-height: #{$h5-line-height-min};
+	--pol-h5-font-weight: #{$h5-font-weight};
+	--pol-h5-letter-spacing: #{$h5-letter-spacing};
+	--pol-h5-text-transform: #{$h5-text-transform};
+
+	@media (min-width: $tablet) {
+		--pol-h5-font-size: #{rem($h5-font-size-max)};
+		--pol-h5-line-height: #{$h5-line-height-max};
+	}
+
+	// H6
+	--pol-h6-font-size: #{rem($h6-font-size-min)};
+	--pol-h6-line-height: #{$h6-line-height-min};
+	--pol-h6-font-weight: #{$h6-font-weight};
+	--pol-h6-letter-spacing: #{$h6-letter-spacing};
+	--pol-h6-text-transform: #{$h6-text-transform};
+
+	@media (min-width: $tablet) {
+		--pol-h6-font-size: #{rem($h6-font-size-max)};
+		--pol-h6-line-height: #{$h6-line-height-max};
+	}
+
+	/* Other Text Styles ----------------------------- */
+
+	// Prefix
+	--pol-prefix-font-weight: #{$prefix-font-weight};
+	--pol-prefix-letter-spacing: #{$prefix-letter-spacing};
+	--pol-prefix-text-transform: #{$prefix-text-transform};
+	--pol-prefix-text-color: #{$prefix-text-color};
+	--pol-prefix-font-size: #{$prefix-font-size};
+	--pol-prefix-line-height: #{$prefix-line-height};
+
+	// Prefix (Small)
+	--pol-prefix-small-font-size: #{$prefix-small-font-size};
+	--pol-prefix-small-line-height: #{$prefix-small-line-height};
+
+
+	// Blockquotes
+	--pol-blockquote-font-weight: #{$blockquote-font-weight};
+	--pol-blockquote-citation-font-weight: #{$blockquote-citation-font-weight};
+
+
+	/* Borders ----------------------------- */
+
+	--pol-border-width: #{rem($border-width)};
+	--pol-border-width-thick: #{rem($border-width-thick)};
+
+
+	/* Buttons ----------------------------- */
+
+	--pol-button-font-size: #{rem($button-font-size)};
+	--pol-button-line-height: #{$button-line-height};
+	--pol-button-font-weight: #{$button-font-weight};
+	--pol-button-letter-spacing: #{$button-letter-spacing};
+	--pol-button-text-transform: #{$button-text-transform};
+	--pol-button-border-width: #{rem($button-border-width)};
+	--pol-button-border-radius: #{rem($button-border-radius)};
+	--pol-button-padding-y: #{$button-padding-y};
+	--pol-button-padding-x: #{$button-padding-x};
+	--pol-button-text-color: #{$button-text-color};
+	--pol-button-background-color: #{$button-background-color};
+	--pol-button-border-color: #{$button-border-color};
+	--pol-button-text-color-active: #{$button-text-color-active};
+	--pol-button-background-color-active: #{$button-background-color-active};
+	--pol-button-border-color-active: #{$button-border-color-active};
+
+
+	/* Forms ----------------------------- */
+
+	--pol-form-label-font-size: #{$form-label-font-size};
+	--pol-form-label-line-height: #{$form-label-line-height};
+	--pol-form-label-text-color: #{$form-label-text-color};
+	--pol-form-label-font-weight: #{$form-label-font-weight};
+
+	--pol-form-input-border-width: #{rem($form-input-border-width)};
+	--pol-form-input-border-radius: #{rem($form-input-border-radius)};
+	--pol-form-input-padding-y: #{rem($form-input-padding-y)};
+	--pol-form-input-padding-x: #{rem($form-input-padding-x)};
+	--pol-form-input-border-color: #{$form-input-border-color};
+	--pol-form-input-text-color: #{$form-input-text-color};
+	--pol-form-input-min-height: #{rem($form-input-min-height)};
+
+	
+	/* Header ----------------------------- */
+
+	--pol-header-text-color: var(--pol-heading-color);
+	--pol-header-background-color: var(--pol-background-color);
+	
+
+	/* Modal Menu ----------------------------- */
+
+	--pol-menu-modal-text-color: var(--pol-white-color);
+	--pol-menu-modal-background-color: var(--pol-primary-color);
+
+
+	/* Footer ----------------------------- */
+
+	--pol-footer-text-color: var(--pol-primary-color);
+	--pol-footer-background-color: var(--pol-background-color);
+
+
+	/* Helpers ----------------------------- */
+	
+	--pol-screen-height: 100vh;
+
+}

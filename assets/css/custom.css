@@ -1,0 +1,51 @@
+.loggedin.menu-item{
+    display: none;
+}
+.rs-change-password-wrapper .form-group {
+    margin-top: 20px;
+}
+.rs-change-password-wrapper button.wp-block-button.wp-block-button__link {
+    padding: 10px 40px !important;
+}
+.rs-change-password-wrapper .wp-block-buttons {
+    margin: 25px 0 !important;
+}
+.parent-hamburgerr .hamburgerr.active .bar{
+    background-color: #000;
+}
+
+
+#menu-popup-content {
+    overflow: auto;
+    z-index: 10001;
+}
+
+.cbtn-ground-rules {
+    border: 0.3rem;
+    border-radius: 3rem;
+    color: #FFFF;
+    background: #39414d;
+    text-align: center;
+    text-decoration: none;
+    /* position: relative; */
+    line-height: 4.2rem;
+    font-size: inherit;
+    padding: 1rem 3rem;
+    margin: 2.2rem;
+}
+
+.cpm-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: none;
+    pointer-events: auto;
+}
+
+body.ground-rules-popup-open {
+    overflow: hidden;
+}

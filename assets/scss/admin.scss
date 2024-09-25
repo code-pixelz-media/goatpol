@@ -1,0 +1,63 @@
+/* ------------------------------------------------------------------------------ /*
+/*  ADMIN STYLES
+/* ------------------------------------------------------------------------------ */
+
+@import 'config';
+@import 'functions';
+@import 'variables';
+
+
+html.interface-interface-skeleton__html-container {
+  font-size: var(--pol-root-font-size);
+}
+
+.acf-field[data-name="google_map_initial_position"] .acf-google-map .canvas {
+  height: 400px !important;
+}
+
+.acf-field-relationship[data-name="place_stories"] {
+  .acf-relationship {
+    border: 0;
+
+    .choices {
+      display: none;
+    }
+
+    .values {
+      width: 100%;
+      float: none;
+
+      .values-list {
+        padding: 0;
+        margin: -2px 0;
+        height: auto;
+        overflow: visible;
+
+        li {
+          padding-top: 2px;
+          padding-bottom: 2px;
+
+          .acf-rel-item {
+            color: inherit;
+            background-color: var(--pol-light-background-color);
+            transition: background-color 0.1s ease;
+
+            &:hover {
+              background-color: var(--pol-accent-light-color);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &:not(.enable-edit) {
+    .acf-relationship {
+      .values {  
+        .acf-icon.-minus {
+          display: none;
+        }
+      }
+    }
+  }
+}

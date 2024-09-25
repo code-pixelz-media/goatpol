@@ -1,0 +1,474 @@
+/* ------------------------------------------------------------------------------ /*
+/*  LOGIN STYLES
+/* ------------------------------------------------------------------------------ */
+:root {
+  /* Colors */
+  --pol-background-color: #FFFFFF;
+  --pol-light-background-color: #F0F0F0;
+  --pol-primary-color: #39414d;
+  --pol-secondary-color: #78808F;
+  --pol-tertiary-color: #A0A0A0;
+  --pol-border-color: #E0E0E0;
+  --pol-accent-color: #587291;
+  --pol-accent-light-color: #D0D1D6;
+  --pol-accent-dark-color: #28303d;
+  --pol-white-color: #FFFFFF;
+  /* Layout */
+  --pol-inner-width-thin: 74rem;
+  --pol-inner-width-small: 82rem;
+  --pol-inner-width-medium: 96rem;
+  --pol-inner-width-max: 120rem;
+  /* Gutter */
+  --pol-inner-gutter: 3.6rem;
+  /* Typography */
+  --pol-root-font-size: 62.5%;
+  --pol-body-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --pol-body-font-weight: 400;
+  --pol-body-font-weight-bold: 700;
+  --pol-body-letter-spacing: 0;
+  --pol-body-text-transform: none;
+  --pol-body-text-color: var(--pol-primary-color);
+  --pol-body-font-size: 1.7rem;
+  --pol-body-line-height: 1.5;
+  --pol-paragraph-spacing: 2.55rem;
+  --pol-xl-font-size: 2rem;
+  --pol-xl-line-height: 1.325;
+  --pol-lg-font-size: 1.8rem;
+  --pol-lg-line-height: 1.35;
+  --pol-sm-font-size: 1.4rem;
+  --pol-sm-line-height: 1.5;
+  --pol-xs-font-size: 1.3rem;
+  --pol-xs-line-height: 1.4;
+  --pol-heading-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --pol-heading-font-weight: 400;
+  --pol-heading-font-weight-bold: 600;
+  --pol-heading-letter-spacing: 0;
+  --pol-heading-text-transform: none;
+  --pol-heading-text-color: var(--pol-accent-dark-color);
+  --pol-heading-leading: calc(2rem + 0.5em);
+  --pol-h1-font-size: 5.4rem;
+  --pol-h1-line-height: 1.1;
+  --pol-h1-font-weight: 300;
+  --pol-h1-letter-spacing: 0;
+  --pol-h1-text-transform: none;
+  --pol-h2-font-size: 4rem;
+  --pol-h2-line-height: 1.15;
+  --pol-h2-font-weight: 400;
+  --pol-h2-letter-spacing: 0;
+  --pol-h2-text-transform: none;
+  --pol-h3-font-size: 3.2rem;
+  --pol-h3-line-height: 1.25;
+  --pol-h3-font-weight: 400;
+  --pol-h3-letter-spacing: 0;
+  --pol-h3-text-transform: none;
+  --pol-h4-font-size: 3rem;
+  --pol-h4-line-height: 1.2;
+  --pol-h4-font-weight: 400;
+  --pol-h4-letter-spacing: 0;
+  --pol-h4-text-transform: none;
+  --pol-h5-font-size: 2.4rem;
+  --pol-h5-line-height: 1.35;
+  --pol-h5-font-weight: 600;
+  --pol-h5-letter-spacing: 0;
+  --pol-h5-text-transform: none;
+  --pol-h6-font-size: 2.1rem;
+  --pol-h6-line-height: 1.3;
+  --pol-h6-font-weight: 600;
+  --pol-h6-letter-spacing: 0;
+  --pol-h6-text-transform: none;
+  /* Other Text Styles ----------------------------- */
+  --pol-prefix-font-weight: 700;
+  --pol-prefix-letter-spacing: 0.1em;
+  --pol-prefix-text-transform: uppercase;
+  --pol-prefix-text-color: var(--pol-accent-color);
+  --pol-prefix-font-size: var(--pol-sm-font-size);
+  --pol-prefix-line-height: var(--pol-sm-line-height);
+  --pol-prefix-small-font-size: var(--pol-xs-font-size);
+  --pol-prefix-small-line-height: var(--pol-xs-line-height);
+  --pol-blockquote-font-weight: 500;
+  --pol-blockquote-citation-font-weight: 700;
+  /* Borders ----------------------------- */
+  --pol-border-width: 0.2rem;
+  --pol-border-width-thick: 0.3rem;
+  /* Buttons ----------------------------- */
+  --pol-button-font-size: 1.7rem;
+  --pol-button-line-height: 1.1;
+  --pol-button-font-weight: 500;
+  --pol-button-letter-spacing: 0;
+  --pol-button-text-transform: none;
+  --pol-button-border-width: 0.3rem;
+  --pol-button-border-radius: 3rem;
+  --pol-button-padding-y: 0.75em;
+  --pol-button-padding-x: 1.5em;
+  --pol-button-text-color: var(--pol-white-color);
+  --pol-button-background-color: var(--pol-primary-color);
+  --pol-button-border-color: var(--pol-primary-color);
+  --pol-button-text-color-active: var(--pol-primary-color);
+  --pol-button-background-color-active: var(--pol-white-color);
+  --pol-button-border-color-active: var(--pol-primary-color);
+  /* Forms ----------------------------- */
+  --pol-form-label-font-size: var(--pol-lg-font-size);
+  --pol-form-label-line-height: var(--pol-lg-line-height);
+  --pol-form-label-text-color: var(--pol-heading-color);
+  --pol-form-label-font-weight: 500;
+  --pol-form-input-border-width: 0.3rem;
+  --pol-form-input-border-radius: 0rem;
+  --pol-form-input-padding-y: 0.8rem;
+  --pol-form-input-padding-x: 1.2rem;
+  --pol-form-input-border-color: var(--pol-accent-dark-color);
+  --pol-form-input-text-color: var(--pol-accent-dark-color);
+  --pol-form-input-min-height: 5rem;
+  /* Header ----------------------------- */
+  --pol-header-text-color: var(--pol-heading-color);
+  --pol-header-background-color: var(--pol-background-color);
+  /* Modal Menu ----------------------------- */
+  --pol-menu-modal-text-color: var(--pol-white-color);
+  --pol-menu-modal-background-color: var(--pol-primary-color);
+  /* Footer ----------------------------- */
+  --pol-footer-text-color: var(--pol-primary-color);
+  --pol-footer-background-color: var(--pol-background-color);
+  /* Helpers ----------------------------- */
+  --pol-screen-height: 100vh;
+}
+
+@media (min-width: 375px) {
+  :root {
+    --pol-inner-gutter: 4.8rem;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-inner-gutter: 6.4rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  :root {
+    --pol-inner-gutter: 8.2rem;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-body-font-size: 1.8rem;
+    --pol-body-line-height: 1.55;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-paragraph-spacing: 2.7rem;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-xl-font-size: 2.2rem;
+    --pol-xl-line-height: 1.3;
+    --pol-lg-font-size: 1.9rem;
+    --pol-lg-line-height: 1.3;
+    --pol-sm-font-size: 1.5rem;
+    --pol-sm-line-height: 1.45;
+    --pol-xs-font-size: 1.4rem;
+    --pol-xs-line-height: 1.45;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-h1-font-size: 8.2rem;
+    --pol-h1-line-height: 1;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-h2-font-size: 5.6rem;
+    --pol-h2-line-height: 1.1;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-h3-font-size: 4.4rem;
+    --pol-h3-line-height: 1.2;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-h4-font-size: 3.4rem;
+    --pol-h4-line-height: 1.25;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-h5-font-size: 2.8rem;
+    --pol-h5-line-height: 1.3;
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --pol-h6-font-size: 2.3rem;
+    --pol-h6-line-height: 1.3;
+  }
+}
+
+#login {
+  width: 100%;
+}
+
+#login>p {
+  text-align: center;
+  padding: 0;
+  margin: 10px 0;
+}
+
+#login form {
+  border: 0;
+  overflow: visible;
+  margin-top: 0;
+}
+
+@media screen and (max-width: 600px) {
+  #login form {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
+
+#login form p.submit {
+  padding-bottom: 25px !important;
+  -webkit-transform: initial !important;
+  transform: initial !important;
+}
+
+#login form p label br {
+  display: none;
+}
+
+#login form .forgetmenot {
+  margin-top: 5px;
+}
+
+.wp-pwd {
+  margin-bottom: 16px;
+}
+
+#user_pass {
+  margin-bottom: 0;
+}
+
+.login .button.wp-hide-pw {
+  line-height: 1;
+  bottom: 0;
+  height: calc(100% - 5px);
+  top: 5px;
+}
+
+.login .button.wp-hide-pw .dashicons {
+  top: 0;
+}
+
+#login h1 a:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#login input[type=checkbox] {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#login input[type=checkbox]:checked:before {
+  font: 400 24px/1 dashicons;
+  margin: -4px -6px;
+}
+
+#login form .submit .button {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none;
+  height: auto !important;
+  line-height: inherit;
+  -webkit-transform: translateY(0px) !important;
+  transform: translateY(0px) !important;
+}
+
+#login .message {
+  background: transparent;
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 5px 0;
+}
+
+body.login {
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+#login h1 a {
+  width: auto;
+  background-image: url("../img/logo.jpg");
+  background-position: center center;
+  margin-left: auto;
+  margin-right: auto;
+  background-size: contain;
+  width: 400px;
+  height: 200px;
+  margin-bottom: 10px !important;
+}
+
+#login {
+  max-width: 400px;
+}
+
+#login form {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#login form .input {
+  background-color: #fff;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 13px;
+}
+
+#login form #user_login {
+  margin-bottom: 16px;
+}
+
+#login form .input {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #39414d;
+  border-radius: 0;
+  font-size: 22px;
+  color: #39414d;
+  margin-top: 4px;
+}
+
+#login form .user-pass-wrap {
+  margin-bottom: 24px;
+}
+
+#login .button.wp-hide-pw {
+  color: #39414d;
+}
+
+#login .button.wp-hide-pw:focus {
+  border-color: currentColor;
+  -webkit-box-shadow: 0 0 0 1px currentColor;
+  box-shadow: 0 0 0 1px currentColor;
+}
+
+#login form label:not([for=rememberme]),
+#login .message {
+  font-size: 16px;
+  color: #78808f;
+}
+
+#login form .submit .button {
+  background-color: #39414d;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 39px;
+  padding-right: 39px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #39414d;
+  border-radius: 30px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+#login form .submit .button:hover,
+#login form .submit .button:focus {
+  background-color: #fff;
+  color: #39414d;
+}
+
+#login #backtoblog {
+  display: none;
+}
+
+#login .forgetmenot label {
+  font-size: 16px;
+  color: #595f6b;
+}
+
+#login form .forgetmenot {
+  margin-top: 12px;
+}
+
+#login form input[type=checkbox] {
+  height: 21px;
+  width: 21px;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 0;
+  border-color: #39414d;
+  background-color: #fbfbfb;
+}
+
+#login #nav,
+#login #nav a,
+#login #backtoblog a,
+#login .privacy-policy-page-link a {
+  color: #78808f;
+  font-size: 13px;
+}
+
+#login .login-title {
+  text-align: left;
+  padding: 0 20px;
+  color: var(--pol-accent-dark-color);
+  padding-top: 20px;
+  text-align: center;
+}
+
+#login form {
+  padding-top: 10px;
+}
+
+#login p#nav {
+  display: flex;
+  justify-content: center;
+}
+
+#login a.login-register-redirect {
+  text-decoration: none;
+}
+
+#login a.login-register-redirect h4 {
+  color: #28303d;
+  font-size: 24px;
+  padding: 0 20px;
+  text-align: center;
+  margin: 15px 0;
+}
+
+#resetpassform .reset-pass-submit {
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+#login #resetpassform .reset-pass-submit .wp-generate-pw {
+  background: transparent;
+  color: #000;
+  border: transparent;
+  text-decoration: underline;
+  padding: 0;
+}

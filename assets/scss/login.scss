@@ -1,0 +1,211 @@
+/* ------------------------------------------------------------------------------ /*
+/*  LOGIN STYLES
+/* ------------------------------------------------------------------------------ */
+
+@import 'config';
+@import 'functions';
+@import 'variables';
+
+#login {
+	width: 100%;
+}
+
+#login > p {
+	text-align: center;
+	padding: 0;
+	margin: 10px 0;
+}
+
+#login form {
+	border: 0;
+	overflow: visible;
+	margin-top: 0;
+
+  @media screen and (max-width:600px) {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
+
+#login form p.submit {
+	padding-bottom: 25px !important;
+	transform: initial !important;
+}
+
+#login form p label br {
+	display: none;
+}
+
+#login form .forgetmenot {
+	margin-top: 5px;
+}
+
+.wp-pwd {
+	margin-bottom: 16px;
+}
+
+#user_pass {
+	margin-bottom: 0;
+}
+
+.login .button.wp-hide-pw {
+	line-height: 1;
+	bottom: 0;
+	height: calc(100% - 5px);
+	top: 5px;
+}
+
+.login .button.wp-hide-pw .dashicons {
+	top: 0;
+}
+
+#login h1 a:focus {
+	box-shadow: none;
+}
+
+#login input[type="checkbox"] {
+	box-shadow: none;
+}
+
+#login input[type="checkbox"]:checked:before {
+	font: 400 24px/1 dashicons;
+	margin: -4px -6px;
+}
+
+#login form .submit .button {
+	box-shadow: none;
+	text-shadow: none;
+	height: auto !important;
+	line-height: inherit;
+	transform: translateY(0px) !important;
+}
+
+#login .message {
+	background: transparent;
+	border: 0;
+	box-shadow: none;
+	padding: 5px 0;
+}
+
+body.login {
+	background-color: #ffffff;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+#login h1 a {
+	width: auto;
+	background-image: url('../img/logo.jpg');
+	background-position: center center;
+	margin-left: auto;
+	margin-right: auto;
+	background-size: contain;
+	width: 400px;
+	height: 200px;
+	margin-bottom: 10px !important;
+}
+
+#login {
+	max-width: 400px;
+}
+
+#login form {
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	box-shadow: none;
+}
+
+#login form .input {
+	background-color: #fff;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 13px;
+}
+
+#login form #user_login {
+	margin-bottom: 16px;
+}
+
+#login form .input {
+	border-style: solid;
+	border-width: 2px;
+	border-color: #39414d;
+  border-radius: 0;
+	font-size: 22px;
+	color: #39414d;
+  margin-top: 4px;
+}
+
+#login form .user-pass-wrap {
+  margin-bottom: 24px;
+}
+
+#login .button.wp-hide-pw {
+	color: #39414d;
+
+  &:focus {
+    border-color: currentColor;
+    box-shadow: 0 0 0 1px currentColor;
+  }
+}
+
+#login form label:not([for="rememberme"]),
+#login .message {
+	font-size: 16px;
+	color: #78808f;
+}
+
+#login form .submit .button {
+	background-color: #39414d;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 39px;
+	padding-right: 39px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #39414d;
+	border-radius: 30px;
+	font-size: 16px;
+	color: #ffffff;
+
+  &:hover,
+  &:focus {
+    background-color: #fff;
+    color: #39414d;
+  }
+}
+
+#login #backtoblog {
+	display: none;
+}
+
+#login .forgetmenot label {
+	font-size: 16px;
+	color: #595f6b;
+}
+
+#login form .forgetmenot {
+	margin-top: 12px;
+}
+
+#login form input[type="checkbox"] {
+	height: 21px;
+	width: 21px;
+	border-style: solid;
+	border-width: 2px;
+  border-radius: 0;
+	border-color: #39414d;
+	background-color: #fbfbfb;
+}
+
+#login #nav,
+#login #nav a,
+#login #backtoblog a,
+#login .privacy-policy-page-link a {
+	color: #78808f;
+	font-size: 13px;
+}

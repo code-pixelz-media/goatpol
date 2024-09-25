@@ -1,0 +1,212 @@
+// ------------------------------------------------------------------------------ //
+//  CONFIG
+// ------------------------------------------------------------------------------ //
+
+// REM -------------------------------- //
+
+$rem:           10px;
+
+
+// BREAKPOINTS ------------------------ //
+
+$mobile:        375px;
+$tablet:        700px;
+$laptop:        1000px;
+$desktop:       1200px;
+$desktop-xl:    1600px;
+
+$wpmobile:      600px; // don't change
+$wptablet:      782px; // don't change
+
+
+// ALIGNMENTS ------------------------ //
+
+$width-thin:    740px;
+$width-small:   820px;
+$width-medium:  960px;
+$width-max:     1200px;
+
+
+// COLORS ---------------------------- //
+
+$colors: (
+  'background':       #FFFFFF,
+  'light-background': #F0F0F0,
+  'primary':          #39414d,
+  'secondary':        #78808F,
+  'tertiary':         #A0A0A0,
+  'border':           #E0E0E0,
+  'accent':           #587291,
+  'accent-light':     #D0D1D6,
+  'accent-dark':      #28303d,
+  'white':            #FFFFFF,
+);
+
+
+// TYPOGRAPHY ---------------------------- //
+
+$body-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+$body-font-weight: 400;
+$body-font-weight-bold: 700;
+$body-letter-spacing: 0;
+$body-text-transform: none;
+$body-font-size-min: 17px;
+$body-font-size-max: 18px;
+$body-line-height-min: 1.5;
+$body-line-height-max: 1.55;
+$body-text-color: var(--pol-primary-color);
+
+// XL
+$xl-font-size-min: 20px;
+$xl-font-size-max: 22px;
+$xl-line-height-min: 1.325;
+$xl-line-height-max: 1.3;
+
+// LG
+$lg-font-size-min: 18px;
+$lg-font-size-max: 19px;
+$lg-line-height-min: 1.35;
+$lg-line-height-max: 1.3;
+
+// SM
+$sm-font-size-min: 14px;
+$sm-font-size-max: 15px;
+$sm-line-height-min: 1.5;
+$sm-line-height-max: 1.45;
+
+// XS
+$xs-font-size-min: 13px;
+$xs-font-size-max: 14px;
+$xs-line-height-min: 1.4;
+$xs-line-height-max: 1.45;
+
+// Headings
+$heading-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+$heading-font-weight: 400;
+$heading-font-weight-bold: 600;
+$heading-letter-spacing: 0;
+$heading-text-transform: none;
+$heading-text-color: var(--pol-accent-dark-color);
+
+// H1
+$h1-font-size-min: 54px;
+$h1-font-size-max: 82px;
+$h1-line-height-min: 1.1;
+$h1-line-height-max: 1;
+$h1-font-weight: 300;
+$h1-letter-spacing: $heading-letter-spacing;
+$h1-text-transform: $heading-text-transform;
+
+// H2
+$h2-font-size-min: 40px;
+$h2-font-size-max: 56px;
+$h2-line-height-min: 1.15;
+$h2-line-height-max: 1.1;
+$h2-font-weight: $heading-font-weight;
+$h2-letter-spacing: $heading-letter-spacing;
+$h2-text-transform: $heading-text-transform;
+
+// H3
+$h3-font-size-min: 32px;
+$h3-font-size-max: 44px;
+$h3-line-height-min: 1.25;
+$h3-line-height-max: 1.2;
+$h3-font-weight: $heading-font-weight;
+$h3-letter-spacing: $heading-letter-spacing;
+$h3-text-transform: $heading-text-transform;
+
+// H4
+$h4-font-size-min: 30px;
+$h4-font-size-max: 34px;
+$h4-line-height-min: 1.2;
+$h4-line-height-max: 1.25;
+$h4-font-weight: $heading-font-weight;
+$h4-letter-spacing: $heading-letter-spacing;
+$h4-text-transform: $heading-text-transform;
+
+// H5
+$h5-font-size-min: 24px;
+$h5-font-size-max: 28px;
+$h5-line-height-min: 1.35;
+$h5-line-height-max: 1.3;
+$h5-font-weight: 600;
+$h5-letter-spacing: $heading-letter-spacing;
+$h5-text-transform: $heading-text-transform;
+
+// H6
+$h6-font-size-min: 21px;
+$h6-font-size-max: 23px;
+$h6-line-height-min: 1.3;
+$h6-line-height-max: 1.3;
+$h6-font-weight: 600;
+$h6-letter-spacing: $heading-letter-spacing;
+$h6-text-transform: $heading-text-transform;
+
+
+// PREFIX / SUBTITLE ------------------------ //
+
+$prefix-font-weight: 700;
+$prefix-letter-spacing: 0.1em;
+$prefix-text-transform: uppercase;
+$prefix-text-color: var(--pol-accent-color);
+$prefix-font-size: var(--pol-sm-font-size);
+$prefix-line-height: var(--pol-sm-line-height);
+
+$prefix-small-font-size: var(--pol-xs-font-size);
+$prefix-small-line-height: var(--pol-xs-line-height);
+
+
+// BLOCKQUOTES ------------------------ //
+
+$blockquote-font-weight: 500;
+$blockquote-citation-font-weight: 700;
+
+
+// SPACING ------------------------ //
+
+$paragraph-spacing: 1.5;
+$heading-leading: calc(2rem + .5em);
+
+
+// BORDERS ---------------------------- //
+
+$border-width: 2px;
+$border-width-thick: 3px;
+
+
+// BUTTONS ---------------------------- //
+
+$button-font-size: 17px;
+$button-line-height: 1.1;
+$button-font-weight: 500;
+$button-letter-spacing: 0;
+$button-text-transform: none;
+$button-padding-y: .75em;
+$button-padding-x: 1.5em;
+
+$button-border-width: $border-width-thick;
+$button-border-radius: 30px;
+
+$button-text-color: var(--pol-white-color);
+$button-background-color: var(--pol-primary-color);
+$button-border-color: var(--pol-primary-color);
+
+$button-text-color-active: var(--pol-primary-color);
+$button-background-color-active: var(--pol-white-color);
+$button-border-color-active: var(--pol-primary-color);
+
+
+// FORMS ---------------------------- //
+
+$form-label-font-size: var(--pol-lg-font-size);
+$form-label-line-height: var(--pol-lg-line-height);
+$form-label-text-color: var(--pol-heading-color);
+$form-label-font-weight: 500;
+
+$form-input-border-width: $border-width-thick;
+$form-input-border-radius: 0px;
+$form-input-border-color: var(--pol-accent-dark-color);
+$form-input-padding-y: 8px;
+$form-input-padding-x: 12px;
+$form-input-text-color: var(--pol-accent-dark-color);
+$form-input-min-height: 50px;
