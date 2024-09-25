@@ -459,9 +459,11 @@ if (is_user_logged_in()) {
                 <h3>Add Commission</h3>
                 <form method="POST" class="add_commission_form">
                     <div class="commission-form-group add_commission_wrapper">
+                        <label for="add_commission_key">Add Commission</label>
                         <input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key">
                     </div>
                     <div class="commission-form-group org_rae_wrapper">
+                    <label for="org_rae">Choose RAE</label>
                         <select name="org_rae" id="org_rae" class="org_rae">
                             <option value="">Select a user</option>
                             <?php
@@ -472,16 +474,12 @@ if (is_user_logged_in()) {
                             );
                             $user_query = new WP_User_Query($args);
                             $approved_users = $user_query->get_results(); // Get the users
-
                             $current_user_id = get_current_user_id(); // Get the current logged-in user ID
-
                             // Check if there are any users
                             if (!empty($approved_users)) {
-                                foreach ($approved_users as $user) {
-                                    // Set the logged-in user as selected
-                                    $selected = ($user->ID == $current_user_id) ? 'selected' : '';
-                                    echo '<option value="' . esc_attr($user->ID) . '" ' . $selected . '>' . esc_html($user->display_name) . '</option>';
-                                }
+                                foreach ($approved_users as $user) {?>
+                                    <option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID,$current_user_id); ?> > <?php echo esc_html($user->display_name); ?> </option>
+                                <?php }
                             } else {
                                 // If no users found, display a message
                                 echo '<option value="">No approved users found</option>';
@@ -490,6 +488,7 @@ if (is_user_logged_in()) {
                         </select>
                     </div>
                     <div class="commission-form-group current_owner_wrapper">
+                    <label for="current_owner">Choose Current Owner</label>
                         <select name="current_owner" id="current_owner" class="current_owner">
                             <option value="">Select a user</option>
                             <?php
@@ -499,9 +498,7 @@ if (is_user_logged_in()) {
 
                             // Loop through each user and create an option
                             foreach ($users as $user) {
-                                // Check if the user is the logged-in user and set them as selected
-                                $selected = ($user->ID == $current_user_id) ? 'selected' : '';
-                                echo '<option value="' . esc_attr($user->ID) . '" ' . $selected . '>' . esc_html($user->display_name) . '</option>';
+                                echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID,$current_user_id) . '>' . esc_html($user->display_name) . '</option>';
                             }
                             ?>
                         </select>

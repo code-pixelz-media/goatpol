@@ -48,36 +48,54 @@
   cursor: pointer;
 }
 form.add_commission_form {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
-.add_commission_wrapper{
-    width: 40%;
+.add_commission_wrapper {
+  width: 40%;
 }
-.org_rae_wrapper, .current_owner_wrapper{
-    width: 22%;
+.org_rae_wrapper,
+.current_owner_wrapper {
+  width: 22%;
 }
-.add_submit_button{
-    width: 10%;
+.add_submit_button {
+  width: 10%;
+  display: flex;
+  align-items: end;
 }
-.commission-form-group input, .commission-form-group span, .add_submit_button input{
-    width: 100% !important;
+.commission-form-group input,
+.commission-form-group span,
+.add_submit_button input {
+  width: 100% !important;
 }
-.commission-form-group .select2-container--default .select2-selection--single .select2-selection__arrow b{
-    left: unset;
-    right: 5%;
+.commission-form-group
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow
+  b {
+  left: unset;
+  right: 5%;
 }
-.commission-form-group .select2-container--default .select2-selection--single .select2-selection__rendered{
-    display: inline;
+.commission-form-group
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  display: inline;
 }
-.commission-form-group .select2-container--default .select2-selection--single .select2-selection__arrow{
-    right: 10px;
-    width: 20px !important;
+.commission-form-group
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow {
+  right: 10px;
+  width: 20px !important;
 }
-.commission-form-group .select2-container .select2-selection--single{
-    display: flex;
+.commission-form-group .select2-container .select2-selection--single {
+  display: flex;
 }
-.commission-form-group .select2-container--default .select2-selection--single .select2-selection__clear{
-    margin-right: 5px;
+.commission-form-group
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__clear {
+  margin-right: 5px;
 }
