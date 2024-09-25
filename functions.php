@@ -1,5 +1,18 @@
 <?php
 
+function admin_script_enqueue()
+{
+	// Enqueue Select2 CSS
+	wp_enqueue_style('select2-css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
+
+	// Enqueue Select2 JS
+	wp_enqueue_script('select2-js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'), null, true);
+
+	wp_enqueue_style('admin-styles', get_template_directory_uri() . '/admin_style.css', array(), time(), 'all');
+	wp_enqueue_script('admin-custom-js', get_template_directory_uri() . '/admin_script.js', array('jquery'), time(), true);
+}
+add_action('admin_enqueue_scripts', 'admin_script_enqueue');
+
 function goatpol_theme_conditions_check()
 {
 	if (is_front_page() && !is_user_logged_in()) {
@@ -358,11 +371,6 @@ function pol_force_jquery_on_footer()
 }
 add_action('wp_enqueue_scripts', 'pol_force_jquery_on_footer', 10);
 
-function admin_script_enqueue()
-{
-	wp_enqueue_script('admin-custom-js', get_template_directory_uri() . '/admin_script.js', array('jquery'), time(), TRUE);
-}
-add_action('admin_enqueue_scripts', 'admin_script_enqueue', 10);
 
 /**
 

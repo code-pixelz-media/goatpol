@@ -416,11 +416,100 @@ if (is_user_logged_in()) {
     // Plugin menu callback function
     function commission_list_init()
     {
-        // Creating an instance
-        $table = new Commission_List_Table();
+        global $wpdb;
+        if (isset($_POST["add_commission_submit"])) {
+            $commission_text = sanitize_text_field($_POST["commission_key"]);
+            $org_rae = sanitize_text_field($_POST["org_rae"]);
+            $current_owner = sanitize_text_field($_POST["current_owner"]);
+            // Get the current logged-in user
+            $current_user_id = get_current_user_id();
 
-        echo '<div class="wrap"><h2>Commissions</h2>';
-        echo '<form method="post">';
+            // Prepare data for insertion
+            $data = array(
+                'code'          => $commission_text,
+                'status'        => 0,
+                'org_rae'      => $org_rae,
+                'current_owner' => $current_owner
+            );
+            // Insert the data into the bny_commission table
+            $result = $wpdb->insert('bny_commission', $data);
+
+            // Check if the insertion was successful
+            if ($result !== false) {
+                // Optionally, you can display a success message or redirect
+                echo 'Commission added successfully!';
+            } else {
+                // Handle insertion error
+                echo 'Failed to add commission.';
+            }
+        }
+        // Creating an instance
+        $table = new Commission_List_Table(); ?>
+
+        <div class="wrap">
+            <h2>Commissions</h2>
+            <div class="add-commission-btn"><a href="javascript:void(0);" class="button add-commission" id="add-commission">Add Commission</a></div>
+            <div class="popup-overlay"></div>
+
+            <div class="popup" id="popup">
+                <h3>Add Commission</h3>
+                <form method="POST" class="add_commission_form">
+                    <div class="commission-form-group add_commission_wrapper">
+                        <input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key">
+                    </div>
+                    <div class="commission-form-group org_rae_wrapper">
+                        <select name="org_rae" id="org_rae" class="org_rae">
+                            <option value="">Select a user</option>
+                            <?php
+                            // Query users with 'rae_approved' meta key set to '1'
+                            $args = array(
+                                'meta_key'   => 'rae_approved',
+                                'meta_value' => '1',
+                            );
+                            $user_query = new WP_User_Query($args);
+                            $approved_users = $user_query->get_results(); // Get the users
+
+                            $current_user_id = get_current_user_id(); // Get the current logged-in user ID
+
+                            // Check if there are any users
+                            if (!empty($approved_users)) {
+                                foreach ($approved_users as $user) {
+                                    // Set the logged-in user as selected
+                                    $selected = ($user->ID == $current_user_id) ? 'selected' : '';
+                                    echo '<option value="' . esc_attr($user->ID) . '" ' . $selected . '>' . esc_html($user->display_name) . '</option>';
+                                }
+                            } else {
+                                // If no users found, display a message
+                                echo '<option value="">No approved users found</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="commission-form-group current_owner_wrapper">
+                        <select name="current_owner" id="current_owner" class="current_owner">
+                            <option value="">Select a user</option>
+                            <?php
+                            // Get all WordPress users
+                            $users = get_users();
+                            $current_user_id = get_current_user_id(); // Get the current logged-in user ID
+
+                            // Loop through each user and create an option
+                            foreach ($users as $user) {
+                                // Check if the user is the logged-in user and set them as selected
+                                $selected = ($user->ID == $current_user_id) ? 'selected' : '';
+                                echo '<option value="' . esc_attr($user->ID) . '" ' . $selected . '>' . esc_html($user->display_name) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="add_submit_button">
+                        <input type="submit" name="add_commission_submit" value="Add" class="button button-primary submit_commission_key">
+                    </div>
+                </form>
+                <button id="popup-close-button">X</button>
+            </div>
+            <form method="post">
+        <?php
         // Prepare table
         $table->prepare_items();
         // Search form
