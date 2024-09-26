@@ -462,7 +462,10 @@ if (is_user_logged_in()) {
             }
         }
         // Creating an instance
-        $table = new Commission_List_Table(); ?>
+        $table = new Commission_List_Table(); 
+        
+// Example usage
+$unique_string = generate_unique_alphanumeric_string();?>
 
         <div class="wrap">
             <h2>Commissions</h2>
@@ -475,7 +478,7 @@ if (is_user_logged_in()) {
                 <form method="POST" class="add_commission_form">
                     <div class="commission-form-group add_commission_wrapper">
                         <label for="add_commission_key">Add Commission</label>
-                        <input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key">
+                        <input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key" value="<?php echo $unique_string; ?>" readonly>
                     </div>
                     <div class="commission-form-group org_rae_wrapper">
                         <label for="org_rae">Choose RAE</label>

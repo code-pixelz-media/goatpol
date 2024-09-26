@@ -4198,3 +4198,21 @@ function delete_commission_details()
 	wp_send_json_success(array('message' => 'Commission deleted'));
 	wp_die();
 }
+
+function generate_unique_alphanumeric_string() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'commission'; // Table name (replace 'commission' with your actual table name)
+
+    do {
+        // Generate a random alphanumeric string of 12 characters
+        $random_string = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 12);
+
+        // Query to check if the string exists in the table
+        $exists = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM $table_name WHERE your_column_name = %s",
+            $random_string
+        ));
+    } while ($exists > 0); // Keep generating new strings until a unique one is found
+
+    return $random_string;
+}
