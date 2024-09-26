@@ -178,7 +178,7 @@ if (is_user_logged_in()) {
                         echo $this->column_default($item, $column_name);
                         echo $this->handle_row_actions($item, $column_name, $primary);
                         echo '<div class="commission_action_link">';
-                        echo '<a href="javascript:void(0);" class="commission_action" data-id="' . $id . '" data-action="edit" >edit</a>';
+                        echo '<a href="javascript:void(0);" class="commission_action" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
                         echo '<a href="javascript:vclass(0);" class="commission_action" data-id="' . $id . '" data-action="delete" >delete</a>';
                         echo '</div>';
                         echo '</td>';

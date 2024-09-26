@@ -4144,6 +4144,7 @@ add_action('admin_footer', function () {
 	</style>
 <?php
 });
+
 add_action('wp_ajax_get_commission_details', 'get_commission_details');
 function get_commission_details()
 {
@@ -4153,6 +4154,13 @@ function get_commission_details()
 	// Get the commission ID from the AJAX request
 	$commission_id = $_POST['commission_id'] ? $_POST['commission_id'] : '';
 	$action_id = $_POST['action_type'];
+	$post_id = $_POST['post_id'];
+	$post_title = get_the_title($post_id);
+	$author_id = get_post_field('post_author', $post_id);
+	$edit_profile_link = get_edit_user_link($author_id);
+	$post_status = get_post_status($post_id);
+	$author_display_name = get_the_author_meta('display_name', $author_id);
+	// var_dump($edit_profile_link);
 	$commission = [];
 	if (!empty($commission_id)) {
 		// Query the wp_commission table to get details of the commission
@@ -4183,7 +4191,7 @@ function get_commission_details()
 				);
 				$user_query = new WP_User_Query($args);
 				$approved_users = $user_query->get_results(); // Get the users
-				$org_rae =  $commission['org_rae'];// Get the current logged-in user ID
+				$org_rae =  $commission['org_rae']; // Get the current logged-in user ID
 				// Check if there are any users
 				if (!empty($approved_users)) {
 					foreach ($approved_users as $user) { ?>
@@ -4216,7 +4224,8 @@ function get_commission_details()
 			<input type="submit" name="update_commission_submit" value="Update" class="button button-primary submit_commission_key">
 		</div>
 	</form>
-
+	<span>There is a story <a href="<?php echo esc_url(get_edit_post_link($post_id)); ?>"><strong><?php echo esc_html($post_title); ?></strong></a> by <a href="<?php echo esc_url($edit_profile_link); ?>"><strong><?php echo esc_html($author_display_name); ?></strong></a> with status <strong><?php echo esc_html($post_status); ?></strong> using this commission.
+	</span>
 <?php
 	$content = ob_get_contents();
 	ob_get_clean();

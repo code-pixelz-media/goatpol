@@ -38,6 +38,7 @@ jQuery(document).ready(function () {
 
     // Get the data attributes for the ID and action type
     var commissionId = jQuery(this).data("id");
+    var post_id = jQuery(this).data("post_id");
     var actionType = jQuery(this).data("action");
 console.log(commissionId,actionType);
     jQuery.ajax({
@@ -47,6 +48,7 @@ console.log(commissionId,actionType);
         action: "get_commission_details", // WordPress action hook
         commission_id: commissionId,
         action_type: actionType,
+        post_id: post_id,
       },
       success: function (response) {
         if (response.success) {
