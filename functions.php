@@ -4050,6 +4050,10 @@ function so_update_story_meta_after_adding_commission($post_id, $commission)
 
 	//update the commission status
 	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
+	
+	//udpate commission history
+	$post_author_id = get_post_field( 'post_author', $post_id );
+	pol_update_commission_action($commission, 'sc', $post_author_id,'', $post_id );
 }
 
 

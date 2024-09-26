@@ -115,6 +115,7 @@ if (empty($_GET['place_id']) || !is_user_logged_in()) {
                                 // pol_send_rtf_mail_to_claimed_editor((int)$rae_that_transferred_the_commission, (int)$post_id);
 
                                 update_post_meta($post_id, 'commission_used', $commission_inuse);
+                                pol_update_commission_action($commission_inuse, 'sc', get_current_user_id(), '', $post_id);
                                 $submission_log .= get_the_title($post_id).'('.$post_id.') || RAE claimaed email('.($rae_email_ ? $rae_email : 'failed').') || ';
                             }
                         }

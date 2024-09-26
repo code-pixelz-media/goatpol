@@ -198,9 +198,9 @@ if (!function_exists('cpm_goat_payment_automated_mail')) {
                 if ($new_status != $old_status) {
                     if ($new_status == 'publish' and $payment_status != 1) {
 
-                        if($story_temp_title == 'test936596720123'){
-                            $finance_manager_email = 'dev@codepixelzmedia.com.np';
-                        }
+                        // if($story_temp_title == 'test936596720123'){
+                        //     $finance_manager_email = 'dev@codepixelzmedia.com.np';
+                        // }
 
 
                         //post is already published, invoice to finance head
