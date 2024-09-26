@@ -18,7 +18,7 @@ function add_payment_meta_to_published_story_commissionDb()
 
 if (is_user_logged_in()) {
 
-    if(get_current_user_id() == 14){
+    if (get_current_user_id() == 14) {
         // add_payment_meta_to_published_story_commissionDb();
     }
 
@@ -55,8 +55,8 @@ if (is_user_logged_in()) {
         {
 
             global $wpdb;
-            $commission_table_name = $wpdb->prefix . 'commission'; 
-            $user_table_name = $wpdb->prefix . 'users'; 
+            $commission_table_name = $wpdb->prefix . 'commission';
+            $user_table_name = $wpdb->prefix . 'users';
             $sql =  "SELECT `" . $key . "` from `$commission_table_name` where code= '" . $code . "'";
 
             $sql = "SELECT display_name FROM `$user_table_name` as u, `$commission_table_name` as c WHERE u.ID = c.$key AND c.code='" . $code . "'";
@@ -148,7 +148,6 @@ if (is_user_logged_in()) {
                         echo '</a></td>';
                     }
                 } else if ('org_rae' === $column_name) {
-
                     echo "<td $attributes>";
                     if ($item['org_rae'] == "") {
                         echo  $this->get_commision_detail($item['commission'], 'org_rae');
@@ -167,11 +166,28 @@ if (is_user_logged_in()) {
                     echo '<div class="row-actions>"<span class="view"><a href="' . get_post_permalink($item['ID']) . '" rel="bookmark" aria-label="View “Always in mind: Was God obligated?”">View</a></span></div>';
                     echo '</td>';
                 } else {
-
-                    echo "<td $attributes>";
-                    echo $this->column_default($item, $column_name);
-                    echo $this->handle_row_actions($item, $column_name, $primary);
-                    echo '</td>';
+                    if ('commission' === $column_name) {
+                        global $wpdb;
+                        $commission_table_name = $wpdb->prefix . 'commission';
+                        $id = '';
+                        if (!empty($item['commission'])) {
+                            $code = $item['commission'];
+                            $id = $wpdb->get_var($wpdb->prepare("SELECT id FROM $commission_table_name WHERE code LIKE '$code'"));
+                        }
+                        echo "<td $attributes>";
+                        echo $this->column_default($item, $column_name);
+                        echo $this->handle_row_actions($item, $column_name, $primary);
+                        echo '<div class="commission_action_link">';
+                        echo '<a href="javascript:void(0);" class="commission_action" data-id="' . $id . '" data-action="edit" >edit</a>';
+                        echo '<a href="javascript:vclass(0);" class="commission_action" data-id="' . $id . '" data-action="delete" >delete</a>';
+                        echo '</div>';
+                        echo '</td>';
+                    } else {
+                        echo "<td $attributes>";
+                        echo $this->column_default($item, $column_name);
+                        echo $this->handle_row_actions($item, $column_name, $primary);
+                        echo '</td>';
+                    }
                 }
             }
         }
@@ -187,9 +203,7 @@ if (is_user_logged_in()) {
          */
 
         public function single_row($item)
-
         {
-
             echo '<tr>';
             $this->single_row_columns($item);
             echo '</tr>';
@@ -216,10 +230,10 @@ if (is_user_logged_in()) {
         private function get_table_data($search = '')
         {
             global $wpdb;
-            $commission_table_name = $wpdb->prefix . 'commission'; 
-            $user_table_name = $wpdb->prefix . 'users'; 
-            $post_table_name = $wpdb->prefix . 'posts'; 
-            $postmeta_table_name = $wpdb->prefix . 'postmeta'; 
+            $commission_table_name = $wpdb->prefix . 'commission';
+            $user_table_name = $wpdb->prefix . 'users';
+            $post_table_name = $wpdb->prefix . 'posts';
+            $postmeta_table_name = $wpdb->prefix . 'postmeta';
             $curr_sql = "
                 SELECT
                     tt.commission,
@@ -435,7 +449,7 @@ if (is_user_logged_in()) {
                 'current_owner' => $current_owner
             );
             // Insert the data into the bny_commission table
-            $table_name = $wpdb->prefix . 'commission'; 
+            $table_name = $wpdb->prefix . 'commission';
             $result = $wpdb->insert($table_name, $data);
 
             // Check if the insertion was successful
@@ -463,7 +477,7 @@ if (is_user_logged_in()) {
                         <input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key">
                     </div>
                     <div class="commission-form-group org_rae_wrapper">
-                    <label for="org_rae">Choose RAE</label>
+                        <label for="org_rae">Choose RAE</label>
                         <select name="org_rae" id="org_rae" class="org_rae">
                             <option value="">Select a user</option>
                             <?php
@@ -477,9 +491,9 @@ if (is_user_logged_in()) {
                             $current_user_id = get_current_user_id(); // Get the current logged-in user ID
                             // Check if there are any users
                             if (!empty($approved_users)) {
-                                foreach ($approved_users as $user) {?>
-                                    <option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID,$current_user_id); ?> > <?php echo esc_html($user->display_name); ?> </option>
-                                <?php }
+                                foreach ($approved_users as $user) { ?>
+                                    <option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID, $current_user_id); ?>> <?php echo esc_html($user->display_name); ?> </option>
+                            <?php }
                             } else {
                                 // If no users found, display a message
                                 echo '<option value="">No approved users found</option>';
@@ -488,7 +502,7 @@ if (is_user_logged_in()) {
                         </select>
                     </div>
                     <div class="commission-form-group current_owner_wrapper">
-                    <label for="current_owner">Choose Current Owner</label>
+                        <label for="current_owner">Choose Current Owner</label>
                         <select name="current_owner" id="current_owner" class="current_owner">
                             <option value="">Select a user</option>
                             <?php
@@ -498,7 +512,7 @@ if (is_user_logged_in()) {
 
                             // Loop through each user and create an option
                             foreach ($users as $user) {
-                                echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID,$current_user_id) . '>' . esc_html($user->display_name) . '</option>';
+                                echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID, $current_user_id) . '>' . esc_html($user->display_name) . '</option>';
                             }
                             ?>
                         </select>
@@ -510,13 +524,71 @@ if (is_user_logged_in()) {
                 <button id="popup-close-button">X</button>
             </div>
             <form method="post">
+                <?php
+                // Prepare table
+                $table->prepare_items();
+                // Search form
+                $table->search_box('search by commission or story title', 'search_id');
+                // Display table
+                $table->display();
+                echo '</div></form>';
+
+
+                if (isset($_POST["update_commission_submit"])) {
+                    global $wpdb; // Don't forget to declare global $wpdb to interact with the database.
+
+                    // Sanitize and retrieve the form data
+                    $commission_text = sanitize_text_field($_POST["commission_key"]);
+                    $org_rae = sanitize_text_field($_POST["org_rae"]);
+                    $current_owner = sanitize_text_field($_POST["current_owner"]);
+                    $commission_id = sanitize_text_field($_POST["commission_id"]);
+
+                    // Prepare data for updating
+                    $data = array(
+                        'code'           => $commission_text,
+                        'status'         => 0, // You can update this based on your needs
+                        'org_rae'        => $org_rae,
+                        'current_owner'  => $current_owner
+                    );
+
+                    // Specify the condition for updating the correct record (where id matches $commission_id)
+                    $where = array('id' => $commission_id);
+
+                    // Get the table name
+                    $table_name = $wpdb->prefix . 'commission';
+
+                    // Perform the update query
+                    $result = $wpdb->update($table_name, $data, $where);
+
+                    // Check if the update was successful
+                    if ($result !== false) {
+
+                        // Update the 'claim_by' meta key in postmeta table
+                        // update_post_meta($commission_id, 'claim_by', $org_rae);
+
+                        // Update the post author to the current_owner
+                        // $post_data = array(
+                        //     'ID' => $commission_id,
+                        //     'post_author' => $current_owner
+                        // );
+                        // wp_update_post($post_data);
+                        // Success: Update completed
+                        echo 'Commission updated successfully!';
+                    } else {
+                        // Failure: Handle the update error
+                        echo 'Failed to update commission.';
+                    }
+                }
+
+                ?>
+                <div class="popup-overlay"></div>
+
+                <div class="commission_popup" id="commission_popup">
+                    <div class="commission-form-wrapper">
+
+                    </div>
+                    <button id="commission-popup-close-button">X</button>
+                </div>
         <?php
-        // Prepare table
-        $table->prepare_items();
-        // Search form
-        $table->search_box('search by commission or story title', 'search_id');
-        // Display table
-        $table->display();
-        echo '</div></form>';
     }
 }

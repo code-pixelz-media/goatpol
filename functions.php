@@ -621,7 +621,7 @@ function pol_admin_scripts()
 
 	wp_enqueue_script('pol-admin-scripts', get_template_directory_uri() . '/assets/js/admin.js', $js_dependencies, time(), true);
 
-	
+
 	$screen = get_current_screen();
 	if ($screen && $screen->base == 'post' && $screen->post_type == 'story') {
 
@@ -1603,12 +1603,12 @@ function cpm_draft_email($post_id)
 											</tr>
 											<?php
 											$contributors_id_seeking_commission = [];
-											foreach ($contributors_seeking_commission as $contributor) { 
+											foreach ($contributors_seeking_commission as $contributor) {
 												if (in_array($contributor->ID, $contributors_id_seeking_commission)) {
 													continue;
 												}
 												array_push($contributors_id_seeking_commission, $contributor->ID);
-												?>
+											?>
 												<tr>
 													<td>
 														<?php echo (get_user_meta($contributor->ID, 'currently_seeking_commission', true))[1]; ?>
@@ -3170,17 +3170,17 @@ function pol_get_commission_post_info($commission)
 	global $wpdb;
 	$table_prefix = $wpdb->prefix;
 	$results = $wpdb->get_results($wpdb->prepare("
-		SELECT ".$table_prefix ."posts.* FROM ".$table_prefix ."posts INNER JOIN ".$table_prefix ."postmeta ON ( ".$table_prefix ."posts.ID = ".$table_prefix ."postmeta.post_id ) WHERE 1=1 
-		AND ( ( ".$table_prefix ."postmeta.meta_key = 'commission_used' 
-		AND ".$table_prefix ."postmeta.meta_value = '".$commission."' ) ) 
-		AND ".$table_prefix ."posts.post_type IN ('drafts', 'story') 
-		AND ".$table_prefix ."posts.post_status IN ('publish', 'draft', 'pending', 'future', 'private', 'inherit', 'trash')
-		GROUP BY ".$table_prefix ."posts.ID 
-		ORDER BY ".$table_prefix ."posts.post_date DESC
+		SELECT " . $table_prefix . "posts.* FROM " . $table_prefix . "posts INNER JOIN " . $table_prefix . "postmeta ON ( " . $table_prefix . "posts.ID = " . $table_prefix . "postmeta.post_id ) WHERE 1=1 
+		AND ( ( " . $table_prefix . "postmeta.meta_key = 'commission_used' 
+		AND " . $table_prefix . "postmeta.meta_value = '" . $commission . "' ) ) 
+		AND " . $table_prefix . "posts.post_type IN ('drafts', 'story') 
+		AND " . $table_prefix . "posts.post_status IN ('publish', 'draft', 'pending', 'future', 'private', 'inherit', 'trash')
+		GROUP BY " . $table_prefix . "posts.ID 
+		ORDER BY " . $table_prefix . "posts.post_date DESC
 	"), ARRAY_A);
 
 	$post_info = [];
-	if(!empty($results)){
+	if (!empty($results)) {
 		foreach ($results as $row) {
 			array_push($post_info, $row['ID'], $row['post_title']);
 			return $post_info;
@@ -3227,7 +3227,7 @@ function list_transferred_commissions($user)
 				$checkbox_status = 'disabled';
 				$status = 'In use';
 			}
-			
+
 			$status = pol_check_if_commission_is_of_published_post($row['code']) ? 'Published' : $status;
 
 			$result .= "
@@ -3265,7 +3265,7 @@ function list_transferred_commissions($user)
 
 // Function to list out all user commisions based on status
 add_action('wp_ajax_list_user_commisions', 'list_user_commisions');
-function list_user_commisions($user, $status = "", $sort="ASC")
+function list_user_commisions($user, $status = "", $sort = "ASC")
 {
 	$is_ajax_call = defined('DOING_AJAX') && DOING_AJAX;
 	global $wpdb;
@@ -3279,13 +3279,13 @@ function list_user_commisions($user, $status = "", $sort="ASC")
 
 
 	$user_role = 'user';
-	
+
 	if (get_user_meta($author_user->ID, 'rae_approved', true) == 1) {
 		$user_role = 'rae';
 	} else if (in_array('administrator', (array) $author_user->roles)) {
 		$user_role = 'admin';
 	}
-	
+
 	$curr_author = get_userdata($user);
 	$curr_author_display_name = $curr_author->display_name;
 	$sql = '';
@@ -3306,7 +3306,7 @@ function list_user_commisions($user, $status = "", $sort="ASC")
 
 
 	$results = $wpdb->get_results($wpdb->prepare($sql), ARRAY_A);
-	
+
 
 	$result = '';
 	if ($results) {
@@ -3571,11 +3571,11 @@ if (!function_exists('goat_pol_email_content_when_writer_signs_up_workshop')) {
 	?>
 		<p>
 
-			Dear <?php echo $user_name; ?>, thank you for signing up to attend <?php echo $workshop_title; ?>, 
-			which will meet online at <?php echo $workshop_time_date; ?>. 
-			You can read more about the workshop, or remove yourself from the list of those attending, 
-			at its <a href="<?php echo $workshop_url; ?>">listing page</a> 
-			The online link for attending the workshop is <a href="<?php echo $workshop_online_link; ?>"><?php echo $workshop_online_link; ?></a>. 
+			Dear <?php echo $user_name; ?>, thank you for signing up to attend <?php echo $workshop_title; ?>,
+			which will meet online at <?php echo $workshop_time_date; ?>.
+			You can read more about the workshop, or remove yourself from the list of those attending,
+			at its <a href="<?php echo $workshop_url; ?>">listing page</a>
+			The online link for attending the workshop is <a href="<?php echo $workshop_online_link; ?>"><?php echo $workshop_online_link; ?></a>.
 			Please be prompt and arrive on time.
 		</p>
 	<?php
@@ -3804,7 +3804,7 @@ function workshop_participants_meta_box($post)
 	foreach ($signups as $signup) {
 		$user_workshops = get_user_meta($signup, 'workshops', true);
 		$user = get_user_by('id', $signup);
-		if(!$user){
+		if (!$user) {
 			continue;
 		}
 		$user_display_name = $user->display_name;
@@ -3814,7 +3814,7 @@ function workshop_participants_meta_box($post)
 		$checked = $has_workshop_in_usermeta ? 'checked' : '';
 		//echo '<input class="show-hide-workshop" type="checkbox" data-workshop-id="' . $post->ID . '" data-user-id="' . $signup . '" ' . $checked . '>';
 		echo '<label>' . $user_display_name . '</label> <br><br>';
-		?>
+	?>
 		<script>
 			jQuery(document).ready(function() {
 				jQuery('.show-hide-workshop').off('change');
@@ -3846,7 +3846,7 @@ function workshop_participants_meta_box($post)
 				});
 			});
 		</script>
-		<?php
+	<?php
 	}
 
 
@@ -3857,13 +3857,13 @@ function workshop_participants_meta_box($post)
 	// 	'post_type' => 'workshop',
 	// 	'posts_per_page' => -1, // Retrieve all workshops
 	// 	'meta_query' => [
-    //         [
-    //             'key' => 'workshop-date-time',
-    //             'value' => $current_datetime,
-    //             'compare' => '<',
-    //             'type' => 'DATETIME'
-    //         ]
-    //     ],
+	//         [
+	//             'key' => 'workshop-date-time',
+	//             'value' => $current_datetime,
+	//             'compare' => '<',
+	//             'type' => 'DATETIME'
+	//         ]
+	//     ],
 	// );
 
 	// // Query the workshops
@@ -3958,16 +3958,17 @@ function workshop_participants_meta_box($post)
 
 
 //check if the same place already exists then dont create another place with the same name
-function pol_place_already_exists($title){
+function pol_place_already_exists($title)
+{
 	$args = array(
 		'post_type' => 'place',
 		'post_status' => 'publish',
 		'posts_per_page' => 1,
 		'title' => $title,
 	);
-	
+
 	$posts = get_posts($args);
-	
+
 	if ($posts) return true;
 
 	return false;
@@ -4012,7 +4013,7 @@ function pol_create_new_place_post_type($map_array, $story_id)
 		//add story id to place meta
 		update_post_meta($story_id, 'place_stories', [$place_id]);
 		update_post_meta($story_id, '_place_stories', 'field_6218d3d8944ab');
-		
+
 		return true;
 	} else {
 		return false;
@@ -4047,7 +4048,7 @@ function render_commission_meta_box($post)
 		<span class="invalid-commission"></span>
 	<?php } else { ?>
 		<label for="commission_field">Commission: <?php echo esc_attr($commission); ?></label>
-<?php
+	<?php
 	}
 }
 
@@ -4069,10 +4070,10 @@ function so_save_commission_meta($post_id)
 	}
 
 	if ((isset($_POST['acf']['field_663cf35777ff1']) && !empty($_POST['acf']['field_663cf35777ff1']))) {
-		$map_array_acf =stripslashes( $_POST['acf']['field_663cf35777ff1']);
+		$map_array_acf = stripslashes($_POST['acf']['field_663cf35777ff1']);
 		$map_array = json_decode($map_array_acf, true);
 
-		if(pol_place_already_exists($map_array['address'])) return;
+		if (pol_place_already_exists($map_array['address'])) return;
 
 		if (isset($_POST['acf']['field_663cf35777ff1'])) {
 			unset($_POST['acf']['field_62e039dfaecbb']);
@@ -4092,10 +4093,10 @@ function so_update_story_meta_after_adding_commission($post_id, $commission)
 
 	//add the commission to meta
 	update_post_meta($post_id, 'commission_used', $commission);
-	
+
 	//add payment meta to story
 	update_post_meta($post_id, '_payment_status', 0);
-	
+
 
 	//add RAE to meta
 	$commission_rae = $wpdb->get_var("SELECT org_rae FROM $table_name WHERE code = '" . $commission . "'");
@@ -4136,9 +4137,95 @@ add_action('admin_footer', function () {
 		.wp-admin .column-author a {
 			display: none;
 		}
+
 		.wp-admin tr.comment:hover .row-actions * {
 			display: none;
 		}
 	</style>
 <?php
 });
+add_action('wp_ajax_get_commission_details', 'get_commission_details');
+function get_commission_details()
+{
+	ob_start();
+	global $wpdb;
+
+	// Get the commission ID from the AJAX request
+	$commission_id = $_POST['commission_id'] ? $_POST['commission_id'] : '';
+	$action_id = $_POST['action_type'];
+	$commission = [];
+	if (!empty($commission_id)) {
+		// Query the wp_commission table to get details of the commission
+		$commission = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM wp_commission WHERE id = %d",
+				$commission_id
+			),
+			ARRAY_A
+		);
+	}
+?>
+	<h3>Add Commission</h3>
+
+	<form method="POST" class="add_commission_form">
+		<div class="commission-form-group add_commission_wrapper">
+			<label for="add_commission_key">Add Commission</label>
+			<input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key" value="<?php echo $commission['code']; ?>" readonly>
+		</div>
+		<div class="commission-form-group org_rae_wrapper">
+			<label for="org_rae">Choose RAE</label>
+			<select name="org_rae" id="org_rae" class="org_rae">
+				<?php
+				// Query users with 'rae_approved' meta key set to '1'
+				$args = array(
+					'meta_key'   => 'rae_approved',
+					'meta_value' => '1',
+				);
+				$user_query = new WP_User_Query($args);
+				$approved_users = $user_query->get_results(); // Get the users
+				$org_rae =  $commission['org_rae'];// Get the current logged-in user ID
+				// Check if there are any users
+				if (!empty($approved_users)) {
+					foreach ($approved_users as $user) { ?>
+						<option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID, $org_rae); ?>> <?php echo esc_html($user->display_name); ?> </option>
+				<?php }
+				} else {
+					// If no users found, display a message
+					echo '<option value="">No approved users found</option>';
+				}
+				?>
+			</select>
+		</div>
+		<div class="commission-form-group current_owner_wrapper">
+			<label for="current_owner">Choose Current Owner</label>
+			<select name="current_owner" id="current_owner" class="current_owner">
+				<?php
+				// Get all WordPress users
+				$users = get_users();
+				$current_owner =  $commission['current_owner']; // Get the current logged-in user ID
+
+				// Loop through each user and create an option
+				foreach ($users as $user) {
+					echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID, $current_owner) . '>' . esc_html($user->display_name) . '</option>';
+				}
+				?>
+			</select>
+		</div>
+		<input type="hidden" name="commission_id" value="<?php echo $commission_id; ?>">
+		<div class="add_submit_button">
+			<input type="submit" name="update_commission_submit" value="Update" class="button button-primary submit_commission_key">
+		</div>
+	</form>
+
+<?php
+	$content = ob_get_contents();
+	ob_get_clean();
+	if ($content) {
+		// Return the commission details as JSON response
+		wp_send_json_success($content);
+	} else {
+		wp_send_json_error(array('message' => 'Commission not found'));
+	}
+
+	wp_die(); // Properly terminate the AJAX request
+}

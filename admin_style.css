@@ -1,5 +1,5 @@
 /* commission popup */
-#popup {
+#popup,#commission_popup {
   display: none;
 }
 .popup-overlay {
@@ -13,7 +13,7 @@
   display: none;
   pointer-events: auto;
 }
-.popup {
+.popup,.commission_popup {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -31,11 +31,11 @@
 .popup-open {
   overflow: hidden;
 }
-.popupshown {
+.popupshown,.commission-popupshown {
   height: 100vh;
   overflow: hidden;
 }
-#popup-close-button {
+#popup-close-button,#commission-popup-close-button {
   position: absolute;
   right: 15px;
   top: 15px;
@@ -66,7 +66,7 @@ form.add_commission_form {
 }
 .commission-form-group input,
 .commission-form-group span,
-.add_submit_button input {
+.add_submit_button input, .commission-form-group .current_owner {
   width: 100% !important;
 }
 .commission-form-group
@@ -98,4 +98,14 @@ form.add_commission_form {
   .select2-selection--single
   .select2-selection__clear {
   margin-right: 5px;
+}
+.commission_action_link {
+  display: none;
+}
+
+td.commission.column-commission:hover .commission_action_link{
+  display: flex;
+  gap: 20px;
+  justify-content: left;
+  align-items: center;
 }
