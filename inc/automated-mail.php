@@ -239,6 +239,10 @@ if (!function_exists('cpm_goat_payment_automated_mail')) {
                         $log_msg .= 'Published By '.get_the_author_meta('display_name', get_current_user_id()). '('.get_current_user_id().')';
 
                         pol_invoice_log($log_msg);
+
+                        //save commission history
+                        $story_commission = get_post_meta($post_id, 'commission_used' , true);
+                        pol_update_commission_action($story_commission , 'sp', $author_id, '', $post_id);
                     }
                 }
             }

@@ -1645,6 +1645,10 @@ function pol_send_mail_story_finished()
 					update_post_meta($story_id, 'mail-sent-final', true);
 					wp_update_post(array('ID' => $story_id, 'post_type' => 'story'));
 					$submission_log .= 'Post type updated(story)';
+
+					//save commission history
+					$story_commission = get_post_meta($story_id, 'commission_used' , true);
+					pol_update_commission_action($story_commission , 'sc', $story_author_id, '', $story_id);
 				}
 				pol_story_submission_log($submission_log);
 			}

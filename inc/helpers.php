@@ -1107,6 +1107,8 @@ function pol_transfer_commission()
 			cpm_send_commission_transfer_email($receiver_id, 'user_user', $commission_code, $org_rae_user->display_name);
 		}
 
+		pol_update_commission_action($commission_code, 'tr', $sender_id, $receiver_id);
+
 		// else if ($curr_user_role == "rae" && $recevier_role == "admin") {
 
 		// 	// $update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = 0, current_owner = 0 WHERE id = '" . $id . "'");
@@ -1138,6 +1140,7 @@ function pol_transfer_single_commission()
 	if (!empty($commission_code)) {
 		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
 		cpm_send_commission_transfer_email($author_id, 'rae_user', $commission_code, get_user_by('id', (int) $rae_id)->display_name);
+		pol_update_commission_action($commission_code, 'tr', $rae_id, $author_id);
 		wp_send_json_success('transfered');
 	} else {
 		wp_send_json_success('not_found');
