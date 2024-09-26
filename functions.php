@@ -3903,60 +3903,6 @@ function workshop_participants_meta_box($post)
 	// }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//=====================================================
-//=====================================================
-//=====================================================
-
-
-
 //check if the same place already exists then dont create another place with the same name
 function pol_place_already_exists($title)
 {
@@ -4142,10 +4088,11 @@ add_action('admin_footer', function () {
 			display: none;
 		}
 	</style>
-	<?php
+<?php
 });
 
 add_action('wp_ajax_get_commission_details', 'get_commission_details');
+
 function get_commission_details()
 {
 	ob_start();
@@ -4160,7 +4107,7 @@ function get_commission_details()
 	$edit_profile_link = get_edit_user_link($author_id);
 	$post_status = get_post_status($post_id);
 	$author_display_name = get_the_author_meta('display_name', $author_id);
-	// var_dump($edit_profile_link);
+	$commission_table_name = $wpdb->prefix . 'commission';
 	$commission = [];
 	if (!empty($commission_id)) {
 		// Query the wp_commission table to get details of the commission
@@ -4171,66 +4118,63 @@ function get_commission_details()
 			),
 			ARRAY_A
 		);
-	}
-	if ($action_id == 'edit') { ?>
-		<h3>Add Commission</h3>
+	} ?>
+	<h3>Add Commission</h3>
 
-		<form method="POST" class="add_commission_form">
-			<div class="commission-form-group add_commission_wrapper">
-				<label for="add_commission_key">Add Commission</label>
-				<input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key" value="<?php echo $commission['code']; ?>" readonly>
-			</div>
-			<div class="commission-form-group org_rae_wrapper">
-				<label for="org_rae">Choose RAE</label>
-				<select name="org_rae" id="org_rae" class="org_rae">
-					<?php
-					// Query users with 'rae_approved' meta key set to '1'
-					$args = array(
-						'meta_key'   => 'rae_approved',
-						'meta_value' => '1',
-					);
-					$user_query = new WP_User_Query($args);
-					$approved_users = $user_query->get_results(); // Get the users
-					$org_rae =  $commission['org_rae']; // Get the current logged-in user ID
-					// Check if there are any users
-					if (!empty($approved_users)) {
-						foreach ($approved_users as $user) { ?>
-							<option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID, $org_rae); ?>> <?php echo esc_html($user->display_name); ?> </option>
-					<?php }
-					} else {
-						// If no users found, display a message
-						echo '<option value="">No approved users found</option>';
-					}
-					?>
-				</select>
-			</div>
-			<div class="commission-form-group current_owner_wrapper">
-				<label for="current_owner">Choose Current Owner</label>
-				<select name="current_owner" id="current_owner" class="current_owner">
-					<?php
-					// Get all WordPress users
-					$users = get_users();
-					$current_owner =  $commission['current_owner']; // Get the current logged-in user ID
+	<form method="POST" class="add_commission_form">
+		<div class="commission-form-group add_commission_wrapper">
+			<label for="add_commission_key">Add Commission</label>
+			<input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key" value="<?php echo $commission['code']; ?>" readonly>
+		</div>
+		<div class="commission-form-group org_rae_wrapper">
+			<label for="org_rae">Choose RAE</label>
+			<select name="org_rae" id="org_rae" class="org_rae">
+				<?php
+				// Query users with 'rae_approved' meta key set to '1'
+				$args = array(
+					'meta_key'   => 'rae_approved',
+					'meta_value' => '1',
+				);
+				$user_query = new WP_User_Query($args);
+				$approved_users = $user_query->get_results(); // Get the users
+				$org_rae =  $commission['org_rae']; // Get the current logged-in user ID
+				// Check if there are any users
+				if (!empty($approved_users)) {
+					foreach ($approved_users as $user) { ?>
+						<option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID, $org_rae); ?>> <?php echo esc_html($user->display_name); ?> </option>
+				<?php }
+				} else {
+					// If no users found, display a message
+					echo '<option value="">No approved users found</option>';
+				}
+				?>
+			</select>
+		</div>
+		<div class="commission-form-group current_owner_wrapper">
+			<label for="current_owner">Choose Current Owner</label>
+			<select name="current_owner" id="current_owner" class="current_owner">
+				<?php
+				// Get all WordPress users
+				$users = get_users();
+				$current_owner =  $commission['current_owner']; // Get the current logged-in user ID
 
-					// Loop through each user and create an option
-					foreach ($users as $user) {
-						echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID, $current_owner) . '>' . esc_html($user->display_name) . '</option>';
-					}
-					?>
-				</select>
-			</div>
-			<input type="hidden" name="commission_id" value="<?php echo $commission_id; ?>">
-			<div class="add_submit_button">
-				<input type="submit" name="update_commission_submit" value="Update" class="button button-primary submit_commission_key">
-			</div>
-		</form>
-		<?php if(!empty($post_id)){ ?>
+				// Loop through each user and create an option
+				foreach ($users as $user) {
+					echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID, $current_owner) . '>' . esc_html($user->display_name) . '</option>';
+				}
+				?>
+			</select>
+		</div>
+		<input type="hidden" name="commission_id" value="<?php echo $commission_id; ?>">
+		<div class="add_submit_button">
+			<input type="submit" name="update_commission_submit" value="Update" class="button button-primary submit_commission_key">
+		</div>
+	</form>
+	<?php if (!empty($post_id)) { ?>
 		<span>There is a story <a href="<?php echo esc_url(get_edit_post_link($post_id)); ?>"><strong><?php echo esc_html($post_title); ?></strong></a> by <a href="<?php echo esc_url($edit_profile_link); ?>"><strong><?php echo esc_html($author_display_name); ?></strong></a> with status <strong><?php echo esc_html($post_status); ?></strong> using this commission.
 		</span>
 <?php }
-	}else{
 
-	}
 	$content = ob_get_contents();
 	ob_get_clean();
 	if ($content) {
@@ -4241,4 +4185,16 @@ function get_commission_details()
 	}
 
 	wp_die(); // Properly terminate the AJAX request
+}
+
+
+add_action('wp_ajax_delete_commission_details', 'delete_commission_details');
+function delete_commission_details()
+{
+	global $wpdb;
+	$commission_id = $_POST['commission_id'] ? $_POST['commission_id'] : '';
+	$commission_table_name = $wpdb->prefix . 'commission';
+	$wpdb->delete($commission_table_name, array('id' => $commission_id));
+	wp_send_json_success(array('message' => 'Commission deleted'));
+	wp_die();
 }
