@@ -1135,9 +1135,6 @@ function pol_transfer_single_commission()
 	$table_name = $wpdb->prefix . 'commission';
 	$commission_code = $wpdb->get_var("SELECT code FROM $table_name WHERE current_owner = '" . $rae_id . "' AND status = 0 LIMIT 1");
 
-	// echo $wpdb->last_query;
-
-
 	if (!empty($commission_code)) {
 		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
 		cpm_send_commission_transfer_email($author_id, 'rae_user', $commission_code, get_user_by('id', (int) $rae_id)->display_name);
@@ -1163,13 +1160,13 @@ function pol_update_commission_status()
  * like trasnfer, revoke, story published using that commission and so on
  * commission in a database table based on provided parameters.
  *
- * @param  string $commission cannot be empty
+ * @param  string$commission cannot be empty
  * @param  string $action cannot be empty, must be either 'tr' for transfer, 're' for revoke, 'sc' for story created, 'sp' for story published, 'cc' for new commission created
  * @param  string $sender_id can not be empty for 'tr', 're', 'cc', 'sc', 'sp'
  * @param  string $receiver_id can not be empty for 'tr', 're', 'cc'
  * @return void
  */
-add_action('wp_ajax_pol_update_commission_action', 'pol_update_commission_action');
+
 function pol_update_commission_action($commission = '', $action = '', $sender_id = '', $receiver_id = '', $story_id = '')
 {
 	global $wpdb;
@@ -1229,6 +1226,7 @@ function pol_update_commission_action($commission = '', $action = '', $sender_id
 
 	return true;
 }
+add_action('wp_ajax_pol_update_commission_action', 'pol_update_commission_action');
 
 
 function pol_decode_commission_action_history($commission)
@@ -1241,6 +1239,11 @@ function pol_decode_commission_action_history($commission)
 	// Unserialize the action history if it's not already an array
 	$action_history = unserialize($action_history);
 	$action_history = is_array($action_history) ? $action_history : [] ;
+
+	if(empty($action_history)){
+		return 'NO HISTORY FOUND';
+	}
+
 	$sentences = [];
 
 	// Define what each action means
@@ -1254,6 +1257,8 @@ function pol_decode_commission_action_history($commission)
 
 	// Sort the array by keys (timestamps) in descending order
 	krsort($action_history);
+
+	
 
 	// Iterate over the action history and generate sentences
 	foreach ($action_history as $timestamp => $actions) {
