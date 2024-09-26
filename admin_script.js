@@ -40,28 +40,55 @@ jQuery(document).ready(function () {
     var commissionId = jQuery(this).data("id");
     var post_id = jQuery(this).data("post_id");
     var actionType = jQuery(this).data("action");
-console.log(commissionId,actionType);
-    jQuery.ajax({
-      url: ajaxurl, // WordPress AJAX URL
-      type: "POST",
-      data: {
-        action: "get_commission_details", // WordPress action hook
-        commission_id: commissionId,
-        action_type: actionType,
-        post_id: post_id,
-      },
-      success: function (response) {
-        if (response.success) {
-          jQuery(".commission-form-wrapper").html(response.data);
-        } else {
-          console.log("Error: " + response.data.message);
-        }
-      },
-      error: function () {
-        console.log("Error fetching commission details.");
-      },
-    });
+      jQuery.ajax({
+        url: ajaxurl, // WordPress AJAX URL
+        type: "POST",
+        data: {
+          action: "get_commission_details", // WordPress action hook
+          commission_id: commissionId,
+          action_type: actionType,
+          post_id: post_id,
+        },
+        success: function (response) {
+          if (response.success) {
+            jQuery(".commission-form-wrapper").html(response.data);
+          } else {
+            console.log("Error: " + response.data.message);
+          }
+        },
+        error: function () {
+          console.log("Error fetching commission details.");
+        },
+      });
   });
+
+  jQuery(document).on('click','.commission_delete_action',function(){
+    var commissionId = jQuery(this).data("id");
+    let text = "Do you want to delete this commission ?";
+    if (confirm(text) == true) {
+      jQuery.ajax({
+        url: ajaxurl, // WordPress AJAX URL
+        type: "POST",
+        data: {
+          action: "delete_commission_details", // WordPress action hook
+          commission_id: commissionId,
+        },
+        success: function (response) {
+          console.log(response);
+          if (response.success) {
+            jQuery(".after_action_message").html(response.data.message);
+          } else {
+            console.log("Error: " + response.data.message);
+          }
+          window.location.reload(); 
+        },
+        error: function () {
+          console.log("Error deleting commission details.");
+        },
+      });
+    }
+  });
+
   // Close the popup
   jQuery("#commission-popup-close-button").click(function () {
     jQuery("#commission_popup").hide();

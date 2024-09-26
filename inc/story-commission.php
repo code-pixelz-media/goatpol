@@ -179,7 +179,7 @@ if (is_user_logged_in()) {
                         echo $this->handle_row_actions($item, $column_name, $primary);
                         echo '<div class="commission_action_link">';
                         echo '<a href="javascript:void(0);" class="commission_action" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
-                        echo '<a href="javascript:vclass(0);" class="commission_action" data-id="' . $id . '" data-action="delete" >delete</a>';
+                        echo '<a href="javascript:vclass(0);" class="commission_delete_action" data-id="' . $id . '" data-action="delete" >delete</a>';
                         echo '</div>';
                         echo '</td>';
                     } else {
@@ -466,6 +466,7 @@ if (is_user_logged_in()) {
 
         <div class="wrap">
             <h2>Commissions</h2>
+            <div class="after_action_message"></div>
             <div class="add-commission-btn"><a href="javascript:void(0);" class="button add-commission" id="add-commission">Add Commission</a></div>
             <div class="popup-overlay"></div>
 
@@ -563,15 +564,6 @@ if (is_user_logged_in()) {
                     // Check if the update was successful
                     if ($result !== false) {
 
-                        // Update the 'claim_by' meta key in postmeta table
-                        // update_post_meta($commission_id, 'claim_by', $org_rae);
-
-                        // Update the post author to the current_owner
-                        // $post_data = array(
-                        //     'ID' => $commission_id,
-                        //     'post_author' => $current_owner
-                        // );
-                        // wp_update_post($post_data);
                         // Success: Update completed
                         echo 'Commission updated successfully!';
                     } else {
