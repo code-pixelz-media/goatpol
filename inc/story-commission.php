@@ -462,10 +462,10 @@ if (is_user_logged_in()) {
             }
         }
         // Creating an instance
-        $table = new Commission_List_Table(); 
-        
-// Example usage
-$unique_string = generate_unique_alphanumeric_string();?>
+        $table = new Commission_List_Table();
+
+        // Example usage
+        $unique_string = generate_unique_alphanumeric_string(); ?>
 
         <div class="wrap">
             <h2>Commissions</h2>
