@@ -52,6 +52,7 @@ jQuery(document).ready(function () {
         success: function (response) {
           if (response.success) {
             jQuery(".commission-form-wrapper").html(response.data);
+            jQuery(".after_action_message").text(response.data.message);
           } else {
             console.log("Error: " + response.data.message);
           }
@@ -74,7 +75,7 @@ jQuery(document).ready(function () {
           commission_id: commissionId,
         },
         success: function (response) {
-          console.log(response);
+          alert('Commission deleted.');
           if (response.success) {
             jQuery(".after_action_message").html(response.data.message);
           } else {
