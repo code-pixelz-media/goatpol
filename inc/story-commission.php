@@ -166,7 +166,7 @@ if (is_user_logged_in()) {
                     echo '<div class="row-actions>"<span class="view"><a href="' . get_post_permalink($item['ID']) . '" rel="bookmark" aria-label="View “Always in mind: Was God obligated?”">View</a></span></div>';
                     echo '</td>';
                 } else {
-                    if ('commission' === $column_name) {
+                    if ('commission' === $column_name && empty($item['post_title'])) {
                         global $wpdb;
                         $commission_table_name = $wpdb->prefix . 'commission';
                         $id = '';
