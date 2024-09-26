@@ -640,38 +640,40 @@ function pol_mail_sender($to, $subject, $message, $salutation = '', $attach = ar
 }
 
 
-function pol_invoice_log($message) {
-	if(empty($message)){
+function pol_invoice_log($message)
+{
+	if (empty($message)) {
 		return;
 	}
 
-    if (true === WP_DEBUG) {
-		
-        $log_file = WP_CONTENT_DIR . '/invoice.log';
-        
-        // Format the message with a timestamp
-        $formatted_message = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
-        
-        // Write the message to the log file
-        error_log($formatted_message, 3, $log_file);
-    }
+	if (true === WP_DEBUG) {
+
+		$log_file = WP_CONTENT_DIR . '/invoice.log';
+
+		// Format the message with a timestamp
+		$formatted_message = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
+
+		// Write the message to the log file
+		error_log($formatted_message, 3, $log_file);
+	}
 }
 
 
-function pol_story_submission_log($message) {
-	if(empty($message)){
+function pol_story_submission_log($message)
+{
+	if (empty($message)) {
 		return;
 	}
 
-    if (true === WP_DEBUG) {
-        $log_file = WP_CONTENT_DIR . '/story-submission.log';
-        
-        // Format the message with a timestamp
-        $formatted_message = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
-        
-        // Write the message to the log file
-        error_log($formatted_message, 3, $log_file);
-    }
+	if (true === WP_DEBUG) {
+		$log_file = WP_CONTENT_DIR . '/story-submission.log';
+
+		// Format the message with a timestamp
+		$formatted_message = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
+
+		// Write the message to the log file
+		error_log($formatted_message, 3, $log_file);
+	}
 }
 
 
@@ -1087,17 +1089,14 @@ function pol_transfer_commission()
 
 			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'rae_rae', $commission_code, '');
-			
 		} else if (($curr_user_role == "rae" || $curr_user_role == "admin") && $recevier_role == "user") {
 
 			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , last_transfer = CURRENT_TIMESTAMP, org_rae = " . $sender_id . ", current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'rae_user', $commission_code, '');
-			
 		} else if ($curr_user_role == "user" && ($recevier_role == "rae" || $recevier_role == "admin")) {
 			// $curr_org_rae = $wpdb->get_var( $wpdb->prepare("SELECT org_rae FROM $table_name WHERE id = '" . $id . "'"));
 			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, org_rae = $receiver_id, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'user_rae', $commission_code, '');
-			
 		} else if ($curr_user_role == "user" && $recevier_role == "user") {
 
 			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , last_transfer = CURRENT_TIMESTAMP,current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
@@ -1106,15 +1105,14 @@ function pol_transfer_commission()
 			$org_rae_user = get_user_by('id', (int) $org_rae);
 
 			cpm_send_commission_transfer_email($receiver_id, 'user_user', $commission_code, $org_rae_user->display_name);
-			
-		} 
-		
+		}
+
 		// else if ($curr_user_role == "rae" && $recevier_role == "admin") {
 
 		// 	// $update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = 0, current_owner = 0 WHERE id = '" . $id . "'");
 		// 	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , org_rae = " . $sender_id . ", current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 		// 	cpm_send_commission_transfer_email($receiver_id, 'other_admin', $commission_code, '');
-			
+
 		// }else if ($curr_user_role == "user" && $recevier_role == "admin") {
 
 		// 	// $update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = 0, current_owner = 0 WHERE id = '" . $id . "'");
@@ -1126,6 +1124,29 @@ function pol_transfer_commission()
 	wp_die();
 }
 
+add_action('wp_ajax_pol_transfer_single_commission', 'pol_transfer_single_commission');
+function pol_transfer_single_commission()
+{
+	global $wpdb;
+	$rae_id = $_POST['raeID'];
+	$author_id = $_POST['authorID'];
+
+	//get one comission of the rae whose status is 0
+	$table_name = $wpdb->prefix . 'commission';
+	$commission_code = $wpdb->get_var("SELECT code FROM $table_name WHERE current_owner = '" . $rae_id . "' AND status = 0 LIMIT 1");
+
+	// echo $wpdb->last_query;
+
+
+	if (!empty($commission_code)) {
+		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
+		cpm_send_commission_transfer_email($author_id, 'rae_user', $commission_code, get_user_by('id', (int) $rae_id)->display_name);
+		wp_send_json_success('transfered');
+	} else {
+		wp_send_json_success('not_found');
+	}
+}
+
 
 add_action('wp_ajax_pol_update_commission_status', 'pol_update_commission_status');
 function pol_update_commission_status()
@@ -1134,6 +1155,141 @@ function pol_update_commission_status()
 	$table_name = $wpdb->prefix . 'commission';
 	$commission = $_POST['commission'];
 	$wpdb->get_results("UPDATE {$table_name} SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
+}
+
+
+/**
+ * Funcntion to add a date along with the commission and the action performed on the commission 
+ * like trasnfer, revoke, story published using that commission and so on
+ * commission in a database table based on provided parameters.
+ *
+ * @param  string $commission cannot be empty
+ * @param  string $action cannot be empty, must be either 'tr' for transfer, 're' for revoke, 'sc' for story created, 'sp' for story published, 'cc' for new commission created
+ * @param  string $sender_id can not be empty for 'tr', 're', 'cc', 'sc', 'sp'
+ * @param  string $receiver_id can not be empty for 'tr', 're', 'cc'
+ * @return void
+ */
+add_action('wp_ajax_pol_update_commission_action', 'pol_update_commission_action');
+function pol_update_commission_action($commission = '', $action = '', $sender_id = '', $receiver_id = '', $story_id = '')
+{
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'commission';
+
+	$is_ajax_call = defined('DOING_AJAX') && DOING_AJAX;
+
+	$commission = isset($_POST['commission']) ? $_POST['commission'] : $commission;
+	$action = isset($_POST['action']) ? $_POST['action'] : $action;
+	$sender_id = isset($_POST['sender_id']) ? (int)$_POST['sender_id'] : (int) $sender_id;
+	$receiver_id = isset($_POST['receiver_id']) ? (int)$_POST['receiver_id'] : (int) $receiver_id;
+	$story_id = isset($_POST['story_id']) ? (int)$_POST['story_id'] : (int) $story_id;
+	$error = '';
+
+	if ($commission == '') {
+		$error = 'commission_empty';
+	} else if ($action == '') {
+		$error = 'action_empty';
+	} else if (($action == 'tr' || $action == 're' || $action == 'cc')  && ($sender_id == '' || $receiver_id == '')) {
+		if ($sender_id == '') {
+			$error = 'sender_id_empty';
+		} else if ($receiver_id == '') {
+			$error = 'receiver_id_empty';
+		}
+	} else if (($action == 'sc' || $action == 'sp')  && ($sender_id == '' || $story_id == '')) {
+		if ($sender_id == '') {
+			$error = 'sender_id_empty';
+		} else if ($story_id == '') {
+			$error = 'story_id_empty';
+		}
+	}
+
+	if ($error != '') {
+		if ($is_ajax_call) {
+			wp_send_json_success($error);
+			wp_die();
+		}
+		return $error;
+	}
+
+	$action_history = $wpdb->get_var("SELECT action_history FROM $table_name WHERE code = '" . $commission . "'");
+	$action_history = unserialize($action_history);
+	$action_history = is_array($action_history) ? $action_history : [];
+
+	if ($action == 'tr' || $action == 're' || $action == 'cc') {
+		$action_history[time()] .= strtoupper($action) . '-' . $sender_id . '-' . $receiver_id;
+	} else if ($action == 'sc' || $action == 'sp') {
+		$action_history[time()] .= strtoupper($action) . '-' . $sender_id . '-' . $story_id;
+	}
+
+	$wpdb->get_results("UPDATE {$table_name} SET action_history = '" . serialize($action_history) . "' WHERE code = '" . $commission . "'");
+	// $wpdb->update(
+	//     $table_name,
+	//     ['action_history' => serialize($action_history)],
+	//     ['code' => $commission]
+	// );
+
+	return true;
+}
+
+
+function pol_decode_commission_action_history($commission)
+{
+
+	global $wpdb;
+	$action_history = $wpdb->get_var("SELECT action_history FROM {$wpdb->prefix}commission WHERE code = '$commission'");
+
+
+	// Unserialize the action history if it's not already an array
+	$action_history = unserialize($action_history);
+	$action_history = is_array($action_history) ? $action_history : [] ;
+	$sentences = [];
+
+	// Define what each action means
+	$action_types = [
+		'TR' => '[%s] Commission transferred from %s to %s.',
+		'RE' => '[%s] Commission revoked by %s and returned to %s.',
+		'CC' => '[%s] New commission created by %s and assigned to %s.',
+		'SC' => '[%s] Story created by %s for the story "%s".',
+		'SP' => '[%s] Story published by %s for the story "%s".'
+	];
+
+	// Sort the array by keys (timestamps) in descending order
+	krsort($action_history);
+
+	// Iterate over the action history and generate sentences
+	foreach ($action_history as $timestamp => $actions) {
+		$action_date_time = date('Y-m-d H:i:s', (int)$timestamp);
+		$action_parts = explode('-', $actions);
+
+		// Get the action code (e.g., 'TR', 'RE', etc.)
+		$action_code = $action_parts[0];
+		$sender_id = (int) $action_parts[1];
+		$recipient_or_story_id = (int) $action_parts[2];
+
+		// Retrieve the display name of the user from the database
+		$sender_user = get_userdata($sender_id);
+		$sender_name = $sender_user->display_name;
+
+		// For story-related actions, get the post title
+		if ($action_code === 'SC' || $action_code === 'SP') {
+			$story_title = get_the_title($recipient_or_story_id);
+		}
+
+		// Check if the action code is valid
+		if (array_key_exists($action_code, $action_types)) {
+			if ($action_code === 'TR' || $action_code === 'RE' || $action_code === 'CC') {
+
+				$receiver_user = get_userdata($recipient_or_story_id);
+				$receiver_name = $receiver_user->display_name;
+
+				$sentences[] .= sprintf($action_types[$action_code],$action_date_time, $sender_name, $receiver_name);
+			} elseif ($action_code === 'SC' || $action_code === 'SP') {
+				$sentences[] .= sprintf($action_types[$action_code],$action_date_time, $sender_name, $story_title);
+			}
+		}
+	}
+
+	// Return the sentences with each sentence on a new line
+	return implode("\n", $sentences);
 }
 
 
@@ -1158,28 +1314,7 @@ function pol_add_user_workshop()
 	wp_die();
 }
 
-add_action('wp_ajax_pol_transfer_single_commission', 'pol_transfer_single_commission');
-function pol_transfer_single_commission()
-{
-	global $wpdb;
-	$rae_id = $_POST['raeID'];
-	$author_id = $_POST['authorID'];
 
-	//get one comission of the rae whose status is 0
-	$table_name = $wpdb->prefix . 'commission';
-	$commission_code = $wpdb->get_var("SELECT code FROM $table_name WHERE current_owner = '" . $rae_id . "' AND status = 0 LIMIT 1");
-
-	// echo $wpdb->last_query;
-
-
-	if (!empty($commission_code)) {
-		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
-		cpm_send_commission_transfer_email($author_id, 'user_user', $commission_code, get_user_by('id', (int) $rae_id)->display_name);
-		wp_send_json_success('transfered');
-	} else {
-		wp_send_json_success('not_found');
-	}
-}
 add_action('wp_ajax_pol_revoke_commission', 'pol_revoke_commission');
 function pol_revoke_commission()
 {
@@ -1300,14 +1435,14 @@ function pol_request_commission()
 	$current_commissions = $wpdb->get_var("SELECT count(id) FROM {$table_name} WHERE curr_owner = $uid AND status != 2");
 
 	$currently_seeking_commission = get_user_meta($uid, 'currently_seeking_commission', true);
-	
-	
+
+
 	if ($currently_seeking_commission[0] == 1 && $current_commissions == 0) { //if rae already notified and does not have any available commissions
 		wp_send_json_success('rae_notification_sent');
-	}else if ($current_commissions == 0) {
+	} else if ($current_commissions == 0) {
 		update_user_meta($uid, 'currently_seeking_commission', [1, date("d/m/Y")]);
 		wp_send_json_success('rae_notified');
-	}else {
+	} else {
 		update_user_meta($uid, 'currently_seeking_commission', [0, date("d/m/Y")]);
 		wp_send_json_success('has_commission');
 	}
@@ -1330,10 +1465,10 @@ function pol_check_if_commission_is_valid()
 {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'commission';
-	$commission_status = $wpdb->get_var("SELECT COUNT(code) FROM $table_name WHERE code = '" . $_POST['commission'] . "' AND current_owner = '" . $_POST['author_id']. "' AND status != 2");
+	$commission_status = $wpdb->get_var("SELECT COUNT(code) FROM $table_name WHERE code = '" . $_POST['commission'] . "' AND current_owner = '" . $_POST['author_id'] . "' AND status != 2");
 
-	if($commission_status == 0) wp_send_json_success(false);
-	
+	if ($commission_status == 0) wp_send_json_success(false);
+
 	wp_send_json_success(true);
 
 	wp_die();
@@ -1734,7 +1869,7 @@ function pol_upload_stories($atts)
 
 
 
-					
+
 					if ($story_thumbnail_id != '') {
 						echo '<img style="height: 100px;" src="' . wp_get_attachment_url($story_thumbnail_id) . '" alt="' . $story_title . '">';
 					} else {
@@ -1890,10 +2025,10 @@ add_action('wp_ajax_pol_remove_participants', 'pol_remove_participants');
 function pol_remove_participants()
 {
 
-	if(!is_user_logged_in()) {
+	if (!is_user_logged_in()) {
 		return;
 	}
-	
+
 	$curr_uid = get_current_user_id();
 	$curr_user = get_user_by('id', (int) $curr_uid);
 
@@ -1927,7 +2062,7 @@ function pol_remove_participants()
 			update_post_meta($workshop_id, 'signups', array_values($get_all_signups));
 			$date_now = date("Y-m-d h:i:sa");
 			array_push($remove_log, [$date_now => ['workshop_id' => $workshop_id, 'current_user' => $curr_uid, 'removed_user' => $uid]]);
-			update_option('workshop_user_remove_log',$remove_log);
+			update_option('workshop_user_remove_log', $remove_log);
 		}
 	}
 
@@ -1939,7 +2074,7 @@ function pol_remove_participants()
 		}
 	}
 
-	if((int)$workshop_id != 19293){
+	if ((int)$workshop_id != 19293) {
 		gotpol_email_template($user_email, $user_name, $workshop_id, $action);
 	}
 
