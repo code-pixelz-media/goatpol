@@ -1057,13 +1057,14 @@ function pol_remove_pvc_dasboard()
  * commission in a database table based on provided parameters.
  *
  * @param  string $commission cannot be empty
- * @param  string $action cannot be empty, must be either 'tr' for transfer, 're' for revoke, 'sc' for story created, 'sp' for story published, 'cc' for new commission created
+ * @param  string $action cannot be empty
+ * must be either 'tr' for transfer, 're' for revoke, 'sc' for story created, 'sp' for story published, 'cc' for new commission created, 'ce' for commission edited
  * @param  string $sender_id can not be empty for 'tr', 're', 'cc', 'sc', 'sp'
  * @param  string $receiver_id can not be empty for 'tr', 're', 'cc'
  * @return void
  */
 
-function pol_update_commission_action($commission = '', $action = '', $sender_id = '', $receiver_id = '', $story_id = '')
+function pol_update_commission_action($commission = '', $action = '', $sender_id = '', $receiver_id = '', $story_id = '', $action_initiator = '')
 {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'commission';
@@ -1075,17 +1076,26 @@ function pol_update_commission_action($commission = '', $action = '', $sender_id
 	$sender_id = isset($_POST['sender_id']) ? (int)$_POST['sender_id'] : (int) $sender_id;
 	$receiver_id = isset($_POST['receiver_id']) ? (int)$_POST['receiver_id'] : (int) $receiver_id;
 	$story_id = isset($_POST['story_id']) ? (int)$_POST['story_id'] : (int) $story_id;
+	$action_initiator = isset($_POST['action_initiator']) ? (int)$_POST['action_initiator'] : (int) $action_initiator;
 	$error = '';
 
 	if ($commission == '') {
 		$error = 'commission_empty';
 	} else if ($action == '') {
 		$error = 'action_empty';
-	} else if (($action == 'tr' || $action == 're' || $action == 'cc')  && ($sender_id == '' || $receiver_id == '')) {
+	} else if (($action == 'tr' || $action == 're')  && ($sender_id == '' || $receiver_id == '')) {
 		if ($sender_id == '') {
 			$error = 'sender_id_empty';
 		} else if ($receiver_id == '') {
 			$error = 'receiver_id_empty';
+		}
+	} else if (($action == 'cc' || $action == 'ce')  && ($action_initiator == '' || $sender_id == '' || $receiver_id == '')) {
+		if ($sender_id == '') {
+			$error = 'sender_id_empty';
+		} else if ($receiver_id == '') {
+			$error = 'receiver_id_empty';
+		} else if ($action_initiator == '') {
+			$error = 'action_initiator_empty';
 		}
 	} else if (($action == 'sc' || $action == 'sp')  && ($sender_id == '' || $story_id == '')) {
 		if ($sender_id == '') {
@@ -1107,10 +1117,12 @@ function pol_update_commission_action($commission = '', $action = '', $sender_id
 	$action_history = unserialize($action_history);
 	$action_history = is_array($action_history) ? $action_history : [];
 
-	if ($action == 'tr' || $action == 're' || $action == 'cc') {
+	if ($action == 'tr' || $action == 're') {
 		$action_history += [time() => strtoupper($action) . '-' . $sender_id . '-' . $receiver_id];
 	} else if ($action == 'sc' || $action == 'sp') {
 		$action_history += [time() => strtoupper($action) . '-' . $sender_id . '-' . $story_id];
+	} else if ($action == 'cc' || $action == 'ce') {
+		$action_history += [time() => strtoupper($action) . '-' . $action_initiator  . '-' . $sender_id . '-' . $receiver_id];
 	}
 
 	$wpdb->get_results("UPDATE {$table_name} SET action_history = '" . serialize($action_history) . "' WHERE code = '" . $commission . "'");
@@ -1141,8 +1153,9 @@ function pol_decode_commission_action_history($commission)
 	// Define what each action means
 	$action_types = [
 		'TR' => '[%s] Commission transferred from %s to %s. <br>',
-		'RE' => '[%s] Commission revoked by %s and returned to %s. <br>',
-		'CC' => '[%s] New commission created by %s and assigned to %s. <br>',
+		'RE' => '[%s] Commission revoked by %s from %s. <br>',
+		'CC' => '[%s] New commission created by %s and rae is %s and assigned to %s. <br>',
+		'CE' => '[%s] Commission edited by %s and rae is %s and assigned to %s. <br>',
 		'SC' => '[%s] Story created by %s for the story "%s". <br>',
 		'SP' => '[%s] Story published by %s for the story "%s". <br>'
 	];
@@ -1171,16 +1184,31 @@ function pol_decode_commission_action_history($commission)
 			$story_title = get_the_title($recipient_or_story_id);
 		}
 
+		if ($action_code === 'CC' || $action_code === 'CE') {
+			$action_initiator = $action_parts[1];
+			$action_initiator_user = get_userdata($action_initiator);
+			$action_initiator_name = $action_initiator_user->display_name;
+
+			$sender_user = get_userdata((int) $action_parts[2]);
+			$sender_name = $sender_user->display_name;
+
+			$receiver_user = get_userdata((int) $action_parts[3]);
+			$receiver_name = $receiver_user->display_name;
+		}
+
+		if ($action_code === 'TR' || $action_code === 'RE') {
+			$receiver_user = get_userdata($recipient_or_story_id);
+			$receiver_name = $receiver_user->display_name;
+		}
+
 		// Check if the action code is valid
 		if (array_key_exists($action_code, $action_types)) {
-			if ($action_code === 'TR' || $action_code === 'RE' || $action_code === 'CC') {
-
-				$receiver_user = get_userdata($recipient_or_story_id);
-				$receiver_name = $receiver_user->display_name;
-
+			if ($action_code === 'TR' || $action_code === 'RE') {
 				$sentences[] .= sprintf($action_types[$action_code], $action_date_time, $sender_name, $receiver_name);
 			} elseif ($action_code === 'SC' || $action_code === 'SP') {
 				$sentences[] .= sprintf($action_types[$action_code], $action_date_time, $sender_name, $story_title);
+			} elseif ($action_code === 'CC' || $action_code === 'CE') {
+				$sentences[] .= sprintf($action_types[$action_code], $action_date_time, $action_initiator_name, $sender_name,  $receiver_name);
 			}
 		}
 	}
@@ -1325,20 +1353,19 @@ function pol_update_commission_status()
 			)
 		)
 	);
-	
-	$query = new WP_Query( $args );
-	
-	if ( $query->have_posts() ) {
-		while ( $query->have_posts() ) {
+
+	$query = new WP_Query($args);
+
+	if ($query->have_posts()) {
+		while ($query->have_posts()) {
 			$query->the_post();
-			
+
 			$post_id = get_the_ID(); // Get post ID
 			$post_author_id = get_the_author_meta('ID'); // Get post author ID
-			
+
 			pol_update_commission_action($commission, 'sc', $post_author_id, '', $post_id);
 		}
 	}
-	
 }
 
 
@@ -1377,7 +1404,7 @@ function pol_revoke_commission()
 
 	$table_name = $wpdb->prefix . 'commission';
 	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $rae_id . " WHERE id = '" . $comission_id . "'");
-	
+
 	//update commission history
 	$commission = $wpdb->get_var("SELECT code FROM $table_name WHERE id = '" . $comission_id . "'");
 	wp_send_json_success([pol_update_commission_action($commission, 're', $rae_id, $owner_id)]);

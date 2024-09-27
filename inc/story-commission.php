@@ -452,6 +452,8 @@ if (is_user_logged_in()) {
             $table_name = $wpdb->prefix . 'commission';
             $result = $wpdb->insert($table_name, $data);
 
+            pol_update_commission_action($commission = $commission_text, $action = 'cc', $sender_id = $org_rae, $receiver_id = $current_owner, $story_id = '', $action_initiator = $current_user_id);
+
             // Check if the insertion was successful
             if ($result !== false) {
                 // Optionally, you can display a success message or redirect
@@ -546,6 +548,7 @@ if (is_user_logged_in()) {
                     $org_rae = sanitize_text_field($_POST["org_rae"]);
                     $current_owner = sanitize_text_field($_POST["current_owner"]);
                     $commission_id = sanitize_text_field($_POST["commission_id"]);
+                    $commission_editor = get_current_user_id();
 
                     // Prepare data for updating
                     $data = array(
@@ -563,6 +566,8 @@ if (is_user_logged_in()) {
 
                     // Perform the update query
                     $result = $wpdb->update($table_name, $data, $where);
+
+                    pol_update_commission_action($commission = $commission_text, $action = 'ce', $sender_id = $org_rae, $receiver_id = $current_owner, $story_id = '', $action_initiator = $commission_editor);
 
                     // Check if the update was successful
                     if ($result !== false) {
