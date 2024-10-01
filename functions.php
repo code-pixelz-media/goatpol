@@ -4099,96 +4099,47 @@ add_action('wp_ajax_get_commission_details', 'get_commission_details');
 
 function get_commission_details()
 {
-	ob_start();
+	// ob_start();
 	global $wpdb;
 
 	// Get the commission ID from the AJAX request
 	$commission_id = $_POST['commission_id'] ? $_POST['commission_id'] : '';
 	$action_id = $_POST['action_type'];
-	$post_id = $_POST['post_id'];
-	$post_title = get_the_title($post_id);
-	$author_id = get_post_field('post_author', $post_id);
-	$edit_profile_link = get_edit_user_link($author_id);
-	$post_status = get_post_status($post_id);
-	$author_display_name = get_the_author_meta('display_name', $author_id);
 	$commission_table_name = $wpdb->prefix . 'commission';
 	$commission = [];
 	if (!empty($commission_id)) {
 		// Query the wp_commission table to get details of the commission
 		$commission = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM wp_commission WHERE id = %d",
+				"SELECT * FROM $commission_table_name WHERE id = %d",
 				$commission_id
 			),
 			ARRAY_A
 		);
-	} ?>
-	<h3>Edit Commission</h3>
-
-	<form method="POST" class="add_commission_form">
-		<div class="commission-form-group add_commission_wrapper">
-			<label for="add_commission_key">Edit Commission</label>
-			<input type="text" name="commission_key" placeholder="Edit Commission.." class="add_commission_key" value="<?php echo $commission['code']; ?>" readonly>
-		</div>
-		<div class="commission-form-group org_rae_wrapper">
-			<label for="org_rae">Choose RAE</label>
-			<select name="org_rae" id="org_rae" class="org_rae">
-				<?php
-				// Query users with 'rae_approved' meta key set to '1'
-				$args = array(
-					'meta_key'   => 'rae_approved',
-					'meta_value' => '1',
-				);
-				$user_query = new WP_User_Query($args);
-				$approved_users = $user_query->get_results(); // Get the users
-				$org_rae =  $commission['org_rae']; // Get the current logged-in user ID
-				// Check if there are any users
-				if (!empty($approved_users)) {
-					foreach ($approved_users as $user) { ?>
-						<option value=" <?php echo esc_attr($user->ID); ?>" <?php selected($user->ID, $org_rae); ?>> <?php echo esc_html($user->display_name); ?> </option>
-				<?php }
-				} else {
-					// If no users found, display a message
-					echo '<option value="">No approved users found</option>';
-				}
-				?>
-			</select>
-		</div>
-		<div class="commission-form-group current_owner_wrapper">
-			<label for="current_owner">Choose Current Owner</label>
-			<select name="current_owner" id="current_owner" class="current_owner">
-				<?php
-				// Get all WordPress users
-				$users = get_users();
-				$current_owner =  $commission['current_owner']; // Get the current logged-in user ID
-
-				// Loop through each user and create an option
-				foreach ($users as $user) {
-					echo '<option value="' . esc_attr($user->ID) . '" ' . selected($user->ID, $current_owner) . '>' . esc_html($user->display_name) . '</option>';
-				}
-				?>
-			</select>
-		</div>
-		<input type="hidden" name="commission_id" value="<?php echo $commission_id; ?>">
-		<div class="add_submit_button">
-			<input type="submit" name="update_commission_submit" value="Update" class="button button-primary submit_commission_key">
-		</div>
-	</form>
-	<?php if (!empty($post_id)) { ?>
-		<span>There is a story <a href="<?php echo esc_url(get_edit_post_link($post_id)); ?>"><strong><?php echo esc_html($post_title); ?></strong></a> by <a href="<?php echo esc_url($edit_profile_link); ?>"><strong><?php echo esc_html($author_display_name); ?></strong></a> with status <strong><?php echo esc_html($post_status); ?></strong> using this commission.
-		</span>
-<?php }
-
-	$content = ob_get_contents();
-	ob_get_clean();
-	if ($content) {
-		// Return the commission details as JSON response
-		wp_send_json_success($content);
-	} else {
-		wp_send_json_error(array('message' => 'Commission not found'));
 	}
 
-	wp_die(); // Properly terminate the AJAX request
+	$post_id = isset($_POST['post_id']) ? $_POST['post_id'] : '';
+	$msg = '';
+	if ($post_id != '') {
+		$post_title = get_the_title($post_id);
+		$author_id = get_post_field('post_author', $post_id);
+		$edit_profile_link = get_edit_user_link($author_id);
+		$post_status = get_post_status($post_id);
+		$author_display_name = get_the_author_meta('display_name', $author_id);
+
+		if (!empty($post_id)) {
+			$msg = '
+			<span>There is a story <a href="' . esc_url(get_edit_post_link($post_id)) . '">
+				<strong>' . esc_html($post_title) . '</strong>
+				</a> by <a href="' . esc_url($edit_profile_link) . '">
+				<strong>' . esc_html($author_display_name) . '</strong>
+				</a> with status <strong>' . esc_html($post_status) . '</strong> using this commission.
+			</span>';
+		}
+	}
+
+	wp_send_json_success([$commission['org_rae'], $commission['current_owner'], $msg]);
+	wp_die();
 }
 
 

@@ -38,32 +38,45 @@ jQuery(document).ready(function () {
 
     // Get the data attributes for the ID and action type
     var commissionId = jQuery(this).data("id");
+    var commissionCode = jQuery(this).data("commission");
     var post_id = jQuery(this).data("post_id");
     var actionType = jQuery(this).data("action");
-      jQuery.ajax({
-        url: ajaxurl, // WordPress AJAX URL
-        type: "POST",
-        data: {
-          action: "get_commission_details", // WordPress action hook
-          commission_id: commissionId,
-          action_type: actionType,
-          post_id: post_id,
-        },
-        success: function (response) {
-          if (response.success) {
-            jQuery(".commission-form-wrapper").html(response.data);
-            jQuery(".after_action_message").text(response.data.message);
-          } else {
-            console.log("Error: " + response.data.message);
-          }
-        },
-        error: function () {
-          console.log("Error fetching commission details.");
-        },
-      });
+
+    jQuery(".edit_commission_key").val(commissionCode);
+    jQuery(".edit_commission_id").val(commissionId);
+
+
+    jQuery.ajax({
+      url: ajaxurl,
+      type: "POST",
+      data: {
+        action: "get_commission_details",
+        commission_id: commissionId,
+        action_type: actionType,
+        post_id: post_id,
+      },
+      success: function (response) {
+        if (response.success) {
+          var org_rae = response.data[0];
+          var current_owner = response.data[1];
+
+          //select the org_rae according to the drop down value in the #edit_org_rae section
+          jQuery("#edit_org_rae").val(org_rae).trigger("change");
+          jQuery("#edit_current_owner").val(current_owner).trigger("change");
+
+          jQuery(".after_action_message").text(response.data[2]);
+
+        } else {
+          console.log("Error: " + response.data.message);
+        }
+      },
+      error: function () {
+        console.log("Error fetching commission details.");
+      },
+    });
   });
 
-  jQuery(document).on('click','.commission_delete_action',function(){
+  jQuery(document).on('click', '.commission_delete_action', function () {
     var commissionId = jQuery(this).data("id");
     let text = "Do you want to delete this commission ?";
     if (confirm(text) == true) {
@@ -81,7 +94,7 @@ jQuery(document).ready(function () {
           } else {
             console.log("Error: " + response.data.message);
           }
-          window.location.reload(); 
+          window.location.reload();
         },
         error: function () {
           console.log("Error deleting commission details.");

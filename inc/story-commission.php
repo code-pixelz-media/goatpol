@@ -178,7 +178,7 @@ if (is_user_logged_in()) {
                         echo $this->column_default($item, $column_name);
                         echo $this->handle_row_actions($item, $column_name, $primary);
                         echo '<div class="commission_action_link">';
-                        echo '<a href="javascript:void(0);" class="commission_action" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
+                        echo '<a href="javascript:void(0);" class="commission_action" data-commission="' . $item['commission'] . '" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
                         echo '<a href="javascript:vclass(0);" class="commission_delete_action" data-id="' . $id . '" data-action="delete" >delete</a>';
                         echo '</div>';
                         echo '</td>';
@@ -463,6 +463,48 @@ if (is_user_logged_in()) {
                 echo 'Failed to add commission.';
             }
         }
+
+        if (isset($_POST["update_commission_submit"])) {
+            global $wpdb; // Don't forget to declare global $wpdb to interact with the database.
+
+            // die(var_dump($_POST));
+
+            // Sanitize and retrieve the form data
+            $commission_text = sanitize_text_field($_POST["commission_key"]);
+            $org_rae = sanitize_text_field($_POST["org_rae"]);
+            $current_owner = sanitize_text_field($_POST["current_owner"]);
+            $commission_id = sanitize_text_field($_POST["commission_id"]);
+            $commission_editor = get_current_user_id();
+
+            // Prepare data for updating
+            $data = array(
+                'code'           => $commission_text,
+                'status'         => 0, // You can update this based on your needs
+                'org_rae'        => $org_rae,
+                'current_owner'  => $current_owner
+            );
+
+            // Specify the condition for updating the correct record (where id matches $commission_id)
+            $where = array('id' => $commission_id);
+
+            // Get the table name
+            $table_name = $wpdb->prefix . 'commission';
+
+            // Perform the update query
+            $result = $wpdb->update($table_name, $data, $where);
+
+            pol_update_commission_action($commission = $commission_text, $action = 'ce', $sender_id = $org_rae, $receiver_id = $current_owner, $story_id = '', $action_initiator = $commission_editor);
+
+            // Check if the update was successful
+            if ($result !== false) {
+
+                // Success: Update completed
+                echo 'Commission updated successfully!';
+            } else {
+                // Failure: Handle the update error
+                echo 'Failed to update commission.';
+            }
+        }
         // Creating an instance
         $table = new Commission_List_Table();
 
@@ -538,54 +580,56 @@ if (is_user_logged_in()) {
                 // Display table
                 $table->display();
                 echo '</div></form>';
-
-
-                if (isset($_POST["update_commission_submit"])) {
-                    global $wpdb; // Don't forget to declare global $wpdb to interact with the database.
-
-                    // Sanitize and retrieve the form data
-                    $commission_text = sanitize_text_field($_POST["commission_key"]);
-                    $org_rae = sanitize_text_field($_POST["org_rae"]);
-                    $current_owner = sanitize_text_field($_POST["current_owner"]);
-                    $commission_id = sanitize_text_field($_POST["commission_id"]);
-                    $commission_editor = get_current_user_id();
-
-                    // Prepare data for updating
-                    $data = array(
-                        'code'           => $commission_text,
-                        'status'         => 0, // You can update this based on your needs
-                        'org_rae'        => $org_rae,
-                        'current_owner'  => $current_owner
-                    );
-
-                    // Specify the condition for updating the correct record (where id matches $commission_id)
-                    $where = array('id' => $commission_id);
-
-                    // Get the table name
-                    $table_name = $wpdb->prefix . 'commission';
-
-                    // Perform the update query
-                    $result = $wpdb->update($table_name, $data, $where);
-
-                    pol_update_commission_action($commission = $commission_text, $action = 'ce', $sender_id = $org_rae, $receiver_id = $current_owner, $story_id = '', $action_initiator = $commission_editor);
-
-                    // Check if the update was successful
-                    if ($result !== false) {
-
-                        // Success: Update completed
-                        echo 'Commission updated successfully!';
-                    } else {
-                        // Failure: Handle the update error
-                        echo 'Failed to update commission.';
-                    }
-                }
-
                 ?>
                 <div class="popup-overlay"></div>
 
                 <div class="commission_popup" id="commission_popup">
                     <div class="commission-form-wrapper">
-
+                        <h3>Edit Commission</h3>
+                        <form method="POST" class="add_commission_form">
+                            <div class="commission-form-group add_commission_wrapper">
+                                <label for="commission_key">Edit Commission</label>
+                                <input type="text" name="commission_key" placeholder="Edit Commission.." class="edit_commission_key" value="" readonly>
+                            </div>
+                            <div class="commission-form-group org_rae_wrapper">
+                                <label for="org_rae">Choose RAE</label>
+                                <select name="org_rae" id="edit_org_rae" class="org_rae">
+                                    <?php
+                                    // Query users with 'rae_approved' meta key set to '1'
+                                    $args = array(
+                                        'meta_key'   => 'rae_approved',
+                                        'meta_value' => '1',
+                                    );
+                                    $user_query = new WP_User_Query($args);
+                                    $approved_users = $user_query->get_results();
+                                    // Check if there are any users
+                                    if (!empty($approved_users)) {
+                                        foreach ($approved_users as $user) {
+                                            echo '<option value="' . esc_attr($user->ID) . '">' . esc_html($user->display_name) . '</option>';
+                                        }
+                                    } else {
+                                        // If no users found, display a message
+                                        echo '<option value="">No approved users found</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="commission-form-group current_owner_wrapper">
+                                <label for="current_owner">Choose Current Owner</label>
+                                <select name="current_owner" id="edit_current_owner" class="current_owner">
+                                    <?php
+                                    $users = get_users();
+                                    foreach ($users as $user) {
+                                        echo '<option value="' . esc_attr($user->ID) . '" >' . esc_html($user->display_name) . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <input type="hidden" name="commission_id" class="edit_commission_id" value="<?php echo $commission_id; ?>">
+                            <div class="add_submit_button">
+                                <input type="submit" name="update_commission_submit" value="Update" class="button button-primary submit_commission_key">
+                            </div>
+                        </form>
                     </div>
                     <button id="commission-popup-close-button">X</button>
                 </div>
