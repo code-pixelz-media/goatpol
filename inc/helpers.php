@@ -1232,7 +1232,6 @@ function pol_transfer_commission()
 	$sender_id = get_current_user_id();
 	$receiver_id = (int)$_POST['receiver'];
 	$curr_user_role = $_POST['currUserRole'];
-	$trasnfer_action = $_POST['transferAction'];
 
 	//get the receiver role
 	$receiver_user = get_user_by('id', (int) $receiver_id);
@@ -1245,8 +1244,6 @@ function pol_transfer_commission()
 
 	//update the usermeta to remove request of the user
 	update_user_meta((int)$receiver_id, 'currently_seeking_commission', [0, date("d/m/Y")]);
-
-	// wp_send_json_success([$sender_id,$receiver_id, $curr_user_role, $recevier_role]);
 
 	foreach ($commission_code_id as $id) {
 
@@ -1276,28 +1273,11 @@ function pol_transfer_commission()
 
 		pol_update_commission_action($commission_code, 'tr', $sender_id, $receiver_id);
 
-		// else if ($curr_user_role == "rae" && $recevier_role == "admin") {
-
-		// 	// $update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = 0, current_owner = 0 WHERE id = '" . $id . "'");
-		// 	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1 , org_rae = " . $sender_id . ", current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
-		// 	cpm_send_commission_transfer_email($receiver_id, 'other_admin', $commission_code, '');
-
-		// }else if ($curr_user_role == "user" && $recevier_role == "admin") {
-
-		// 	// $update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = 0, current_owner = 0 WHERE id = '" . $id . "'");
-		// 	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
-		// 	cpm_send_commission_transfer_email($receiver_id, 'other_admin', $commission_code, '');
-		// }
 	}
 
 	wp_die();
 }
 
-add_action('wp_ajax_pol_jjj', 'pol_jjj');
-function pol_jjj()
-{
-	wp_mail('saugatapk@example.com', 'test', 'test');
-}
 
 add_action('wp_ajax_pol_transfer_single_commission', 'pol_transfer_single_commission');
 function pol_transfer_single_commission()
@@ -1344,7 +1324,7 @@ function pol_update_commission_status()
 
 	$wpdb->get_results("UPDATE {$table_name} SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
 	$args = array(
-		'post_type'  => 'any', // Replace with your post type if it's specific, or use 'any' to search all post types
+		'post_type'  => 'any',
 		'meta_query' => array(
 			array(
 				'key'   => 'commission_used',
