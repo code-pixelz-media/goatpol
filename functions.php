@@ -4123,12 +4123,12 @@ function get_commission_details()
 			ARRAY_A
 		);
 	} ?>
-	<h3>Add Commission</h3>
+	<h3>Edit Commission</h3>
 
 	<form method="POST" class="add_commission_form">
 		<div class="commission-form-group add_commission_wrapper">
-			<label for="add_commission_key">Add Commission</label>
-			<input type="text" name="commission_key" placeholder="Add Commission.." class="add_commission_key" value="<?php echo $commission['code']; ?>" readonly>
+			<label for="add_commission_key">Edit Commission</label>
+			<input type="text" name="commission_key" placeholder="Edit Commission.." class="add_commission_key" value="<?php echo $commission['code']; ?>" readonly>
 		</div>
 		<div class="commission-form-group org_rae_wrapper">
 			<label for="org_rae">Choose RAE</label>
