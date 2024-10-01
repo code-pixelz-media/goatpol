@@ -1,4 +1,29 @@
 (function ($) {
+  var ground_rules_2_popup = `
+    <div id="ground-rules-2" title="Ground Rules" style="display: none;">
+      <div class="has-text-align-center wp-block-image is-style-no-vertical-margin" style="font-size: 26px;text-align:center">
+          <h2>Ground Rules</h2>
+      </div>
+      <div class="wp-block-image is-style-no-vertical-margin">
+          <?php echo pol_get_random_goat(); ?>
+      </div>
+      <div>
+          <p class="p1"><span class="s1"><strong>A polity is a group of people who respect and support one another as equals</strong>. Difference is celebrated and engaged. We relinquish power over others to find the potentials of collectivity. The GOAT PoL is a polity comprised of reading and writing. <strong>It is a polity</strong> of literature and <strong>not a market</strong> for literature.</span></p>
+          <p class="p1"><span class="s1">To maintain good relationships in the polity, <strong>The GOAT PoL has ground rules</strong>. Please read them and take them seriously. Without agreement to these ground rules, we cannot be a polity. The GOAT PoL ground rules are:</span></p>
+          <p class="p1"><span class="s1">(1) Everyone is honest. No lying. No hiding the actions you take. No false claims about yourself or your work.</span></p>
+          <p class="p1"><span class="s1">(2) One-commission-at-a-time. Every writer is limited to working on one-commission-at-a-time. If you have several pseudonyms (made-up names you write under) don't pursue commissions for more than one-at-a-time.</span></p>
+          <p class="p1"><span class="s1">(3) One account only: do not open multiple accounts at The GOAT PoL. Use one account only for all your writing and reading.</span></p>
+          <p class="p1"><span class="s1">(4) In the work place we cultivate and maintain mutual respect: ask, don't demand; disagree with respect, don't belittle or dismiss; listen and try to understand, even if you disagree.</span></p>
+          <p class="p1"><span class="s1">(5) No stealing—if you submit work written by someone else and claim it is your own work, we can't work with you.</span></p>
+
+          <strong>If you’re still interested, please click “close” below</strong>, hello one, confirming that you understand and want to continue working in The GOAT PoL.
+          By clicking “close” I confirm that I understand and I want to continue participating in The GOAT PoL.
+      </div>
+      <div style="text-align:center;">
+          <button type="button" class="close-modal ground-rules-2-close cbtn-ground-rules">Close</button>
+      </div>
+    </div>
+  `;
   jQuery(document).ready(function () {
     // jQuery(window).mousewheel(function (turn, delta) {
     //   if (delta == 1) {
@@ -457,8 +482,11 @@
 
     //click the 'save' button to open popup
     $(".open-ground-rules-2").on("click", function (e) {
+      jQuery("body").append(ground_rules_2_popup);
       $("#ground-rules-2").modal({
         fadeDuration: 200,
+        closeOnEscape: false, // Prevents closing on pressing escape
+        clickClose: false
       });
     });
 
@@ -467,6 +495,7 @@
       $("#ground-rules-2").modal("close");
       $(".jquery-modal").css("display", "none");
       $("body").css("overflow", "auto");
+      $("#ground-rules-2").remove();
     });
 
     //submit the form when clicked on 'close' of popup
@@ -483,6 +512,7 @@
 
     //click the 'save' button to open popup
     $(".cpm_create_user_open_ground_rules").on("click", function (e) {
+      jQuery("body").append(ground_rules_2_popup);
       $("#ground-rules-2").modal({
         fadeDuration: 200,
       });
@@ -493,6 +523,7 @@
       $("#ground-rules-2").modal("close");
       $(".jquery-modal").css("display", "none");
       $("body").css("overflow", "auto");
+      $("#ground-rules-2").remove();
     });
 
     //submit the form when clicked on 'close' of popup
@@ -578,20 +609,24 @@
     } else {
       //click the 'save' button to open popup
       $(".cpm_update_user_open_ground_rules").on("click", function (e) {
-        $("#ground-rules-3").modal({
+        jQuery("body").append(ground_rules_2_popup);
+        $("#ground-rules-2").modal({
           fadeDuration: 200,
+          closeOnEscape: false,
+          clickClose: false
         });
       });
 
       // close the modal ground-rules-2
-      $(".ground-rules-3-close").on("click", function (e) {
-        $("#ground-rules-3").modal("close");
+      $(".ground-rules-2-close").on("click", function (e) {
+        $("#ground-rules-2").modal("close");
         $(".jquery-modal").css("display", "none");
         $("body").css("overflow", "auto");
+        $("#ground-rules-2").remove();
       });
 
       //submit the form when clicked on 'close' of popup
-      jQuery("#ground-rules-3 .cbtn-ground-rules").on("click", function (e) {
+      jQuery("#ground-rules-2 .cbtn-ground-rules").on("click", function (e) {
         // e.stopPropagation();
 
         // var fd = new FormData();
@@ -937,7 +972,7 @@
                 your patience. The GOAT PoL RAEs`
             );
 
-            if(msg == "rae_notified"){
+            if (msg == "rae_notified") {
               //send email to user stating the successfull request of commission
               $.ajax({
                 url: pol_ajax_filters.ajaxurl,
@@ -1270,21 +1305,24 @@
   });
   // close modal edit story
   $(".edit-modal-close").on("click", function () {
-    console.log("chalena");
+    // console.log("chalena");
     $("#edit-uploaded-story-modal").hide();
     $("body").css("overflow", "auto");
   });
 
   $(".open-ground-rules-2").on("click", function (e) {
+    jQuery("body").append(ground_rules_2_popup);
     $("#ground-rules-2").modal({
       fadeDuration: 200,
+      closeOnEscape: false,
+      clickClose: false
     });
   });
 
   //story popup in the author page
   jQuery(document).ready(function ($) {
     $(".open-story-popup-author-page").on("click", function (e) {
-      if($(this).hasClass('dont-show-popup')){
+      if ($(this).hasClass('dont-show-popup')) {
         return;
       }
       e.preventDefault();

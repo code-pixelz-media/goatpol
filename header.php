@@ -25,6 +25,9 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="profile" href="//gmpg.org/xfn/11">
     <?php wp_head(); ?>
+    <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
 </head>
 
 <body <?php body_class(); ?> data-uid="<?php echo get_current_user_id(); ?>">
@@ -167,7 +170,7 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
     </div>
 
 
-  
+
 
 
 
@@ -200,20 +203,50 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
 
         ?>
 
+        var get_passport_options_2 =
+            `
+            <div id="getPassport-options-2" title="Welcome to The GOAT PoL" style="display: none;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="wp-block-image is-style-no-vertical-margin">
+                                <figure class="goat popup-goat">
+                                    <img width="652" height="490" src="https://staging12.thegoatpol.org/wp-content/uploads/2022/02/GOAT_23-1024x770.jpg" alt="" loading="lazy">
+                                </figure>
+                            </div>
+                            <h4>Welcome to The GOAT PoL—The Geographical Open Atlas of The Polity of Literature.</h4>
+                            <p>The GOAT PoL is free and open to everyone who wants to read and write. You can post your own writing, read work by others, take part in free group workshops, or work one-on-one with one of our ten Reader/Advisor/Editors (RAEs) to develop and publish your writing. We pay writers to work with us, $70 (Canadian) for each piece we publish. To learn more, read our <a href="/about">About Page.</a></p>
+                            <span class="getPassport-options-2-links">
+                                <a href="#" class="option2-close-modal">No thanks, I'm just looking</a> <br>
+                                <a href="#" class="option2-open-nextPopup">Yes, I want to participate</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
         jQuery(document).ready(function() {
-            // Close modal and redirect to /home
-            jQuery('.option2-close-modal').on('click', function(e) {
+            //new
+            jQuery(document).on('click', '#getPassport-options-2 .close-modal', function(e) {
                 e.preventDefault();
-                // Close the current modal
-                jQuery('#getPassport-options-2').hide();
-                // Redirect to /home
-                window.location.href = '/map';
+                jQuery("#getPassport-options-2").remove();
             });
 
-            jQuery('.option2-open-nextPopup').on('click', function(e) {
+
+            // Close modal and redirect to /home
+            jQuery(document).on('click', '#getPassport-options-2 .option2-close-modal', function(e) {
+                e.preventDefault();
+                jQuery("#getPassport-options-2").modal("close");
+                jQuery(this).closest('.jquery-modal').remove();
+            });
+
+            jQuery(document).on('click', '.option2-open-nextPopup', function(e) {
                 e.preventDefault();
                 // Close the current modal
-                jQuery('#getPassport-options-2').hide();
+                // jQuery('#getPassport-options-2').hide();
+                jQuery("#getPassport-options-2").modal("close");
+                jQuery(this).closest('.jquery-modal').remove();
                 // Show the next popup with id 'menu-popup-content'
                 jQuery('#menu-popup-content').show();
             });
@@ -236,16 +269,31 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
             var isLoggedIn = '<?php echo is_user_logged_in() ? 'true' : 'false'; ?>';
             var modalSelector = isLoggedIn == 'true' ? "#getPassport-options" : "#getPassport-options-2";
             jQuery(".getPassport-modal").on("click", function() {
+
+                if (modalSelector == "#getPassport-options-2") {
+                    jQuery("body").append(get_passport_options_2);
+                }
+
+
                 // Open the selected modal
                 jQuery(modalSelector).modal({
                     fadeDuration: 200,
+                    closeOnEscape: false, // Prevents closing on pressing escape
+                    clickClose: false
                 });
                 return false;
             });
             jQuery(".gp-menu-suyw").on("click", function() {
+
+                if (modalSelector == "#getPassport-options-2") {
+                    jQuery("body").append(get_passport_options_2);
+                }
+
                 // Open the selected modal
                 jQuery(modalSelector).modal({
                     fadeDuration: 200,
+                    closeOnEscape: false, // Prevents closing on pressing escape
+                    clickClose: false
                 });
                 return false;
             });

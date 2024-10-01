@@ -25,35 +25,6 @@ get_template_part('template-parts/popup/draftcheck');
 
 wp_footer();
 ?>
-
-<div id="getPassport-options-2" class="modal">
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="wp-block-image is-style-no-vertical-margin">
-                    <?php pol_the_random_goat('popup-goat'); ?>
-                </div>
-                <span>
-                    <h4>Welcome to The GOAT PoL—The Geographical Open Atlas of The Polity of Literature.</h4> The
-                    GOAT
-                    PoL
-                    is free and open to everyone who wants to read and write. You can post your own writing,
-                    read work by others, take part in free group workshops, or work one-on-one with one of our
-                    ten Reader/Advisor/Editors (RAEs) to develop and publish your writing. We pay writers to
-                    work with us, $70 (Canadian) for each piece we publish. To learn more, read our <span> <a
-                            href="/about">About Page. </a></span> <br>
-                    <span class="getPassport-options-2-links">
-                        <a href="" class="option2-close-modal">No thanks, I'm
-                            just looking</a> <br>
-                        <a href="" class="option2-open-nextPopup">Yes, I want to participate</a>
-                    </span>
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
 <div id="getPassport-options-commission-question" class="modal">
 
     <div class="container">
@@ -122,7 +93,24 @@ wp_footer();
     </div>
 </div>
 
-<div id="ground-rules-2" class="modal">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div id="ground-rules-2" class="modal">
     <div class="has-text-align-center wp-block-image is-style-no-vertical-margin"
         style="font-size: 26px;text-align:center">
         <h2>
@@ -130,7 +118,7 @@ wp_footer();
         </h2>
     </div>
     <div class="wp-block-image is-style-no-vertical-margin">
-        <?php echo pol_get_random_goat(); ?>
+        <?php //echo pol_get_random_goat(); ?>
     </div>
     <div>
         <p class="p1"><span class="s1"><strong>A polity is a group of people who respect and
@@ -157,7 +145,7 @@ wp_footer();
         <p class="p1"><span class="s1">(5) No stealing—if you submit work written by someone
                 else and claim it is your own work, we can't work with you.</span></p>
 
-        <strong>If you’re still interested, please click “close” below</strong>, confirming that you understand and
+        <strong>If you’re still interested, please click “close” below</strong>, hello two, confirming that you understand and
         want to continue working in The GOAT PoL.
         By clicking “close” I confirm that I understand and I want to continue participating in The GOAT PoL.
     </div>
@@ -167,10 +155,32 @@ wp_footer();
             Close
         </button>
     </div>
-</div>
+</div> -->
 
 
-<div id="ground-rules-3" class="modal">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div id="ground-rules-3" class="modal">
     <div class="has-text-align-center wp-block-image is-style-no-vertical-margin"
         style="font-size: 26px;text-align:center">
         <h2>
@@ -178,7 +188,7 @@ wp_footer();
         </h2>
     </div>
     <div class="wp-block-image is-style-no-vertical-margin">
-        <?php echo pol_get_random_goat(); ?>
+        <?php //echo pol_get_random_goat(); ?>
     </div>
     <div>
         <p class="p1"><span class="s1"><strong>A polity is a group of people who respect and
@@ -205,7 +215,7 @@ wp_footer();
         <p class="p1"><span class="s1">(5) No stealing—if you submit work written by someone
                 else and claim it is your own work, we can't work with you.</span></p>
 
-        <strong>If you’re still interested, please click “close” below</strong>, confirming that you understand and
+        <strong>If you’re still interested, please click “close” below</strong>, hello four,  confirming that you understand and
         want to continue working in The GOAT PoL.
         By clicking “close” I confirm that I understand and I want to continue participating in The GOAT PoL.
     </div>
@@ -215,7 +225,10 @@ wp_footer();
             Close
         </button>
     </div>
-</div>
+</div> -->
+
+
+
 </body>
 
 </html>
