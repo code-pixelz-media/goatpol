@@ -3361,7 +3361,10 @@ function list_user_commisions($user, $status = "", $sort = "")
 			//display story title
 			$result .= "<td>" . $commission_post_title . "</td>";
 			$result .= "<td>" . $status . "</td>";
-			$result .= "<td>" . $row['last_transfer'] . " <br><small>Log</small></td>";
+			$result .= "<td>" . $row['last_transfer'] . " <br>
+				<small class='log-".$row['code']." commission-log-open'>Log</small>
+				<div class='log-popup-".$row['code']."' style='display:none;'>".pol_decode_commission_action_history($row['code'])."</div>
+				</td>";
 
 			if ($is_current_logged_in_user_rae && $user_role == 'user') {
 				if ($row['status'] == 1  && $row['org_rae'] == $current_logged_in_user) {

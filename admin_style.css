@@ -121,7 +121,7 @@ td.commission.column-commission:hover .commission_action_link{
   z-index: 999999
 }
 .dialog-ovelay .dialog {
-  width:30%;
+  width:40%;
   margin: 100px auto 0;
   background-color: #fff;
   box-shadow: 0 0 20px rgba(0,0,0,.2);

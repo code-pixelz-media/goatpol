@@ -49,3 +49,10 @@
 body.ground-rules-popup-open {
     overflow: hidden;
 }
+
+.commission-log-open{
+    text-decoration: underline;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -1605,7 +1605,7 @@
 
       // Toggle the sort order for next click
       sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-      
+
       // $("#comission_table").toggleClass("asc");
 
       // if ($("#comission_table").hasClass("asc")) {
@@ -1645,7 +1645,48 @@
       //   });
       // }
     });
+
+
+    $(document).on('click', '[class^="log-"]', function () {
+      // console.log('Log link clicked!');  // Check if click event works
+
+      // Get the specific class that starts with 'log-' and doesn't include 'commission-log-open'
+      var classes = $(this).attr('class').split(' ');  // Split classes into an array
+      var logClass = '';
+
+      // Find the class that starts with 'log-' but not 'commission-log-open'
+      $.each(classes, function (index, value) {
+        if (value.startsWith('log-') && value !== 'commission-log-open') {
+          logClass = value.replace('log-', 'log-popup-');
+        }
+      });
+
+      // console.log('Popup class: ', logClass);  // Check if class replacement works
+
+      // Select the corresponding popup content based on the generated class
+      var logContent = $('.' + logClass).html();
+      // console.log('Log content: ', logContent);  // Check if the content exists
+
+      // Ensure logContent is not undefined before creating a dialog
+      if (logContent !== undefined && logContent.trim() !== '') {
+        $('<div class="log-contents"></div>').html(logContent).dialog({
+          title: 'Log History',
+          modal: true,
+          width: 600,
+          height: 400,
+          close: function () {
+            $(this).dialog('destroy');
+          }
+        });
+      } else {
+        console.log('No log content found.');
+      }
+    });
+
+
+
   });
+
 })(jQuery);
 
 // workshop page scroll
