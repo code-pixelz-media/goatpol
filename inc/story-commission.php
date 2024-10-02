@@ -166,7 +166,7 @@ if (is_user_logged_in()) {
                     echo '<div class="row-actions>"<span class="view"><a href="' . get_post_permalink($item['ID']) . '" rel="bookmark" aria-label="View “Always in mind: Was God obligated?”">View</a></span></div>';
                     echo '</td>';
                 } else {
-                    if ('commission' === $column_name && empty($item['post_title'])) {
+                    if ('commission' === $column_name ) {
                         global $wpdb;
                         $commission_table_name = $wpdb->prefix . 'commission';
                         $id = '';
@@ -178,8 +178,10 @@ if (is_user_logged_in()) {
                         echo $this->column_default($item, $column_name);
                         echo $this->handle_row_actions($item, $column_name, $primary);
                         echo '<div class="commission_action_link">';
-                        echo '<a href="javascript:void(0);" class="commission_action" data-commission="' . $item['commission'] . '" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
-                        echo '<a href="javascript:vclass(0);" class="commission_delete_action" data-id="' . $id . '" data-action="delete" >delete</a>';
+                        if(empty($item['post_title'])){
+                            echo '<a href="javascript:void(0);" class="commission_action" data-commission="' . $item['commission'] . '" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
+                        }
+                        echo '<a href="javascript:vclass(0);" class="commission_delete_action" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="delete" >delete</a>';
                         echo '</div>';
                         echo '</td>';
                     } else {

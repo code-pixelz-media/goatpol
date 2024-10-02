@@ -45,7 +45,6 @@ jQuery(document).ready(function () {
     jQuery(".edit_commission_key").val(commissionCode);
     jQuery(".edit_commission_id").val(commissionId);
 
-
     jQuery.ajax({
       url: ajaxurl,
       type: "POST",
@@ -65,7 +64,6 @@ jQuery(document).ready(function () {
           jQuery("#edit_current_owner").val(current_owner).trigger("change");
 
           jQuery(".after_action_message").text(response.data[2]);
-
         } else {
           console.log("Error: " + response.data.message);
         }
@@ -76,31 +74,18 @@ jQuery(document).ready(function () {
     });
   });
 
-  jQuery(document).on('click', '.commission_delete_action', function () {
+  jQuery(document).on("click", ".commission_delete_action", function () {
     var commissionId = jQuery(this).data("id");
+    var post_id = jQuery(this).data("post_id");
     let text = "Do you want to delete this commission ?";
-    if (confirm(text) == true) {
-      jQuery.ajax({
-        url: ajaxurl, // WordPress AJAX URL
-        type: "POST",
-        data: {
-          action: "delete_commission_details", // WordPress action hook
-          commission_id: commissionId,
-        },
-        success: function (response) {
-          alert('Commission deleted.');
-          if (response.success) {
-            jQuery(".after_action_message").html(response.data.message);
-          } else {
-            console.log("Error: " + response.data.message);
-          }
-          window.location.reload();
-        },
-        error: function () {
-          console.log("Error deleting commission details.");
-        },
-      });
-    }
+    Confirm(
+      "Delete Commission",
+      text,
+      "Yes, I want to delete this commission and any story or content associated with it.",
+      "No, please do not delete this commission and its associated content.",
+      commissionId,
+      post_id
+    );
   });
 
   // Close the popup
@@ -110,3 +95,62 @@ jQuery(document).ready(function () {
     jQuery(".popup-overlay").hide(); // hide the overlay
   });
 });
+
+function Confirm(title, msg, $true, $false, commissionId,post_id) {
+  var $content =
+    "<div class='dialog-ovelay'>" +
+    "<div class='dialog'><header>" +
+    " <h3> " +
+    title +
+    " </h3> " +
+    "<i class='fa fa-close'></i>" +
+    "</header>" +
+    "<div class='dialog-msg'>" +
+    " <p> " +
+    msg +
+    " </p> " +
+    "</div>" +
+    "<footer>" +
+    "<div class='controls'>" +
+    " <button class='button button-danger doAction'>" +
+    $true +
+    "</button> " +
+    " <button class='button button-default cancelAction'>" +
+    $false +
+    "</button> " +
+    "</div>" +
+    "</footer>" +
+    "</div>" +
+    "</div>";
+  $("body").prepend($content);
+  $(".doAction").click(function () {
+    jQuery.ajax({
+      url: ajaxurl, // WordPress AJAX URL
+      type: "POST",
+      data: {
+        action: "delete_commission_details", // WordPress action hook
+        commission_id: commissionId,
+        post_id: post_id,
+      },
+      success: function (response) {
+        alert("Commission deleted.");
+        if (response.success) {
+          jQuery(".after_action_message").html(response.data.message);
+        } else {
+          console.log("Error: " + response.data.message);
+        }
+        window.location.reload();
+      },
+      error: function () {
+        console.log("Error deleting commission details.");
+      },
+    });
+  });
+  $(".cancelAction, .fa-close").click(function () {
+    $(this)
+      .parents(".dialog-ovelay")
+      .fadeOut(500, function () {
+        $(this).remove();
+      });
+  });
+}

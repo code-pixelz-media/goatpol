@@ -4148,8 +4148,14 @@ function delete_commission_details()
 {
 	global $wpdb;
 	$commission_id = $_POST['commission_id'] ? $_POST['commission_id'] : '';
+	$post_id = $_POST['post_id'] ? $_POST['post_id'] : '';
 	$commission_table_name = $wpdb->prefix . 'commission';
+	$postmeta_table_name = $wpdb->prefix . 'postmeta';
 	$wpdb->delete($commission_table_name, array('id' => $commission_id));
+	if(!empty($post_id) && get_post( $post_id )){
+		$wpdb->delete($postmeta_table_name, array( 'post_id' => $post_id ) );
+		wp_delete_post( $post_id, true );
+	}
 	wp_send_json_success(array('message' => 'Commission deleted'));
 	wp_die();
 }
