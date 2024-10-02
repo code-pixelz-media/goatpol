@@ -3265,7 +3265,7 @@ function list_transferred_commissions($user)
 
 // Function to list out all user commisions based on status
 add_action('wp_ajax_list_user_commisions', 'list_user_commisions');
-function list_user_commisions($user, $status = "", $sort = "ASC")
+function list_user_commisions($user, $status = "", $sort = "")
 {
 	$is_ajax_call = defined('DOING_AJAX') && DOING_AJAX;
 	global $wpdb;
@@ -3317,10 +3317,11 @@ function list_user_commisions($user, $status = "", $sort = "ASC")
 		$result .= '<th>Originating RAE</th>';
 		$result .= '<th>Story Title</th>';
 		$result .= '<th>Status <span class="sort_comission" data-current_author_id="' . $user . '">⇅</span></th>';
+		$result .= '<th>Last Action</th>';
 		if ($is_current_logged_in_user_rae && $user_role == 'user') {
-
 			$result .= '<th>Action</th>';
 		}
+		
 		$result .= '</tr>';
 
 		foreach ($results as $row) {
@@ -3359,8 +3360,9 @@ function list_user_commisions($user, $status = "", $sort = "ASC")
 
 			//display story title
 			$result .= "<td>" . $commission_post_title . "</td>";
-
 			$result .= "<td>" . $status . "</td>";
+			$result .= "<td>" . $row['last_transfer'] . " <br><small>Log</small></td>";
+
 			if ($is_current_logged_in_user_rae && $user_role == 'user') {
 				if ($row['status'] == 1  && $row['org_rae'] == $current_logged_in_user) {
 					$result .= "<td> <a href='javascript:void(0);' data-comission_id='" . $row['id'] . "' data-org_rae='" . $row['org_rae'] . "' data-current_owner='" . $row['current_owner'] . "' class ='revoke-button' id ='revoke-button'><i class='fa-regular fa-circle-xmark'></i><span>Revoke commission</span></a></td></tr>";

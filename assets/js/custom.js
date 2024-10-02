@@ -1584,45 +1584,66 @@
       }
     });
 
+    let sortOrder = 'asc';
     $(document).on("click", ".sort_comission", function () {
-      $("#comission_table").toggleClass("asc");
-      console.log("toggle");
-      if ($("#comission_table").hasClass("asc")) {
-        // Corrected part
-        let sort_by = "DESC";
-        let current_author_id = $(this).data('current_author_id');
-        console.log("sort by", sort_by);
-        $.ajax({
-          url: pol_ajax_filters.ajaxurl,
-          type: "POST",
-          data: {
-            action: "list_user_commisions",
-            sort_by: sort_by,
-            current_author_id: current_author_id,
-          },
-          success: function (response) {
-            $('#comission_table').html(response.data);
-            console.log(response);
-          },
-        });
-      } else {
-        let sort_by = "ASC";
-        let current_author_id = $(this).data('current_author_id');
-        console.log("sort by", sort_by);
-        $.ajax({
-          url: pol_ajax_filters.ajaxurl,
-          type: "POST",
-          data: {
-            action: "list_user_commisions",
-            sort_by: sort_by,
-            current_author_id: current_author_id,
-          },
-          success: function (response) {
-            $('#comission_table').html(response.data);
-            console.log(response);
-          },
-        });
-      }
+      console.log('sdfsdf');
+      let rows = $(".profile-table tbody tr").not(":first"); // Exclude the header row
+
+      rows.sort(function (a, b) {
+        let A = $(a).find("td:nth-child(4)").text().toUpperCase(); // Get the text from the Status column (4th column)
+        let B = $(b).find("td:nth-child(4)").text().toUpperCase();
+
+        if (sortOrder === 'asc') {
+          return A > B ? 1 : (A < B ? -1 : 0);
+        } else {
+          return A < B ? 1 : (A > B ? -1 : 0);
+        }
+      });
+
+      // Append sorted rows back into the table body
+      $(".profile-table tbody").append(rows);
+
+      // Toggle the sort order for next click
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+      
+      // $("#comission_table").toggleClass("asc");
+
+      // if ($("#comission_table").hasClass("asc")) {
+      //   // Corrected part
+      //   let sort_by = "DESC";
+      //   let current_author_id = $(this).data('current_author_id');
+      //   console.log("sort by", sort_by);
+      //   $.ajax({
+      //     url: pol_ajax_filters.ajaxurl,
+      //     type: "POST",
+      //     data: {
+      //       action: "list_user_commisions",
+      //       sort_by: sort_by,
+      //       current_author_id: current_author_id,
+      //     },
+      //     success: function (response) {
+      //       $('#comission_table').html(response.data);
+      //       console.log(response);
+      //     },
+      //   });
+      // } else {
+      //   let sort_by = "ASC";
+      //   let current_author_id = $(this).data('current_author_id');
+      //   console.log("sort by", sort_by);
+      //   $.ajax({
+      //     url: pol_ajax_filters.ajaxurl,
+      //     type: "POST",
+      //     data: {
+      //       action: "list_user_commisions",
+      //       sort_by: sort_by,
+      //       current_author_id: current_author_id,
+      //     },
+      //     success: function (response) {
+      //       $('#comission_table').html(response.data);
+      //       console.log(response);
+      //     },
+      //   });
+      // }
     });
   });
 })(jQuery);
@@ -1672,3 +1693,4 @@ jQuery(document).ready(function () {
     }
   }
 });
+
