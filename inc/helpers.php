@@ -1251,7 +1251,7 @@ function pol_transfer_commission()
 
 		if (($curr_user_role == "rae" || $curr_user_role == "admin") && ($recevier_role == "rae" || $recevier_role == "admin")) {
 
-			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
+			$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 0 , org_rae = " . $receiver_id . ", current_owner = " . $receiver_id . " WHERE id = '" . $id . "'");
 			cpm_send_commission_transfer_email($receiver_id, 'rae_rae', $commission_code, '');
 		} else if (($curr_user_role == "rae" || $curr_user_role == "admin") && $recevier_role == "user") {
 
