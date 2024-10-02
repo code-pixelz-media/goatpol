@@ -112,10 +112,10 @@ function Confirm(title, msg, $true, $false, commissionId,post_id) {
     "</div>" +
     "<footer>" +
     "<div class='controls'>" +
-    " <button class='button button-danger doAction'>" +
+    " <button class='button button-primary doAction'>" +
     $true +
     "</button> " +
-    " <button class='button button-default cancelAction'>" +
+    " <button class='button button-danger cancelAction'>" +
     $false +
     "</button> " +
     "</div>" +
