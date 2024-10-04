@@ -18,11 +18,15 @@
         function disable_publish_and_draft_btns() {
             $('#publish').prop('disabled', true);
             $('#save-post').prop('disabled', true);
+            $('#post-preview').attr('disabled', 'disabled');
+            $('#post-preview').css('pointer-events', 'none');
         }
 
         function enable_publish_and_draft_btns() {
             $('#publish').prop('disabled', false);
             $('#save-post').prop('disabled', false);
+            $('#post-preview').removeAttr('disabled');
+            $('#post-preview').css('pointer-events', '');
         }
 
         function check_if_commission_is_valid() {
