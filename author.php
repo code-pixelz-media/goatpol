@@ -816,6 +816,14 @@ function get_genre($genre)
                         $user_role = 'admin';
                     }
 
+                    //is $current_author_id an rae
+                    $comm_status = 1;
+                    if(get_user_meta($current_author_id, 'rae_approved', true) == 1){
+                        $comm_status = 0;
+                    }
+
+
+
                     // if ($curr_user_is_admin || $current_author_id == $current_user->ID) { 
                     if ( $user_role == 'rae') {
 
@@ -829,7 +837,7 @@ function get_genre($genre)
                             // Prepare the SQL query
                             $query = $wpdb->prepare(
                                 "SELECT COUNT(*) FROM $table_name WHERE `status` = %d AND `current_owner` = %d",
-                                0,  // status
+                                $comm_status,  // status
                                 $current_author_id  // current_owner
                             );
 

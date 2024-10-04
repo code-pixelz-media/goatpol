@@ -3315,6 +3315,7 @@ function list_user_commisions($user, $status = "", $sort = "")
 
 		$result .= '<th>Commission</th>';
 		$result .= '<th>Originating RAE</th>';
+		$result .= '<th>Writer\'s Name</th>';
 		$result .= '<th>Story Title</th>';
 		$result .= '<th>Status <span class="sort_comission" data-current_author_id="' . $user . '">⇅</span></th>';
 		$result .= '<th>Last Action</th>';
@@ -3347,16 +3348,21 @@ function list_user_commisions($user, $status = "", $sort = "")
 
 			$result .= "<tr><td>" . esc_html($row['code']) . "</td>";
 
-			if ($user_role == 'admin' ||  $user_role == 'rae') {
-				$result .= "<td>" . $curr_author_display_name . "</td>";
-			} else {
-				if ($row['org_rae'] == $row['current_owner']) {
-					$result .= "<td></td>";
-				} else {
-					$user_detail = get_userdata($row['org_rae']);
-					$result .= "<td>" . $user_detail->display_name . "</td>";
-				}
-			}
+			//org rae
+			// if ($user_role == 'admin' ||  $user_role == 'rae') {
+			// 	$result .= "<td>" . $curr_author_display_name . "</td>";
+			// } else {
+			// 	if ($row['org_rae'] == $row['current_owner']) {
+			// 		$result .= "<td></td>";
+			// 	} else {
+			// 	}
+			// }
+			$user_detail = get_userdata($row['org_rae']);
+			$result .= "<td>" . $user_detail->display_name . "</td>";
+
+			//writers name
+			$writer_detail = get_userdata($row['current_owner']);
+			$result .= "<td>" . $writer_detail->display_name . "</td>";
 
 			//display story title
 			$result .= "<td>" . $commission_post_title . "</td>";
