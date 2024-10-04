@@ -3321,7 +3321,7 @@ function list_user_commisions($user, $status = "", $sort = "")
 		if ($is_current_logged_in_user_rae && $user_role == 'user') {
 			$result .= '<th>Action</th>';
 		}
-		
+
 		$result .= '</tr>';
 
 		foreach ($results as $row) {
@@ -3362,8 +3362,8 @@ function list_user_commisions($user, $status = "", $sort = "")
 			$result .= "<td>" . $commission_post_title . "</td>";
 			$result .= "<td>" . $status . "</td>";
 			$result .= "<td>" . $row['last_transfer'] . " <br>
-				<small class='log-".$row['code']." commission-log-open'>Log</small>
-				<div class='log-popup-".$row['code']."' style='display:none;'>".pol_decode_commission_action_history($row['code'])."</div>
+				<small class='log-" . $row['code'] . " commission-log-open'>Log</small>
+				<div class='log-popup-" . $row['code'] . "' style='display:none;'>" . pol_decode_commission_action_history($row['code']) . "</div>
 				</td>";
 
 			if ($is_current_logged_in_user_rae && $user_role == 'user') {
@@ -4196,7 +4196,7 @@ function get_meta_on_story_status_change($new_status, $old_status, $post)
 		// Update the commission table
 		$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
 
-		
+
 		if ($rae_approved == 1 && !empty($meta_value)) {
 			$updated = $wpdb->update(
 				$table_name,
@@ -4205,7 +4205,7 @@ function get_meta_on_story_status_change($new_status, $old_status, $post)
 				array('%s'),                    // Data format (status is a string)
 				array('%s')                     // WHERE format (code is a string)
 			);
-			if($updated){
+			if ($updated) {
 				delete_post_meta($post->ID, 'commission_used');
 			}
 		} else {
@@ -4216,11 +4216,48 @@ function get_meta_on_story_status_change($new_status, $old_status, $post)
 				array('%s'),                    // Data format (status is a string)
 				array('%s')                     // WHERE format (code is a string)
 			);
-			if($updated){
+			if ($updated) {
 				delete_post_meta($post->ID, 'commission_used');
 			}
 		}
-
 	}
 }
 add_action('transition_post_status', 'get_meta_on_story_status_change', 10, 3);
+
+add_action('wp_trash_post', 'get_custom_post_meta_on_trash', 10, 1);
+
+function get_custom_post_meta_on_trash($post_id)
+{
+	global $wpdb;
+	$post_type = get_post_type($post_id);
+	$author_id = get_post_field('post_author', $post_id);
+	$meta_value = get_post_meta($post_id, 'commission_used', true);
+	$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
+	$rae_approved = get_user_meta($author_id, 'rae_approved', true);
+	if ($post_type === 'story') {
+
+		if ($rae_approved == 1 && !empty($meta_value)) {
+			$updated = $wpdb->update(
+				$table_name,
+				array('status' => 0), // Data to update
+				array('code' => $meta_value),         // WHERE clause
+				array('%s'),                    // Data format (status is a string)
+				array('%s')                     // WHERE format (code is a string)
+			);
+			if ($updated) {
+				delete_post_meta($post->ID, 'commission_used');
+			}
+		} else {
+			$updated = $wpdb->update(
+				$table_name,
+				array('status' => 1), // Data to update
+				array('code' => $meta_value),         // WHERE clause
+				array('%s'),                    // Data format (status is a string)
+				array('%s')                     // WHERE format (code is a string)
+			);
+			if ($updated) {
+				delete_post_meta($post->ID, 'commission_used');
+			}
+		}
+	}
+}
