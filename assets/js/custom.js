@@ -1669,7 +1669,7 @@
 
       // Ensure logContent is not undefined before creating a dialog
       if (logContent !== undefined && logContent.trim() !== '') {
-        $('<div class="log-contents"></div>').html(logContent).dialog({
+        $('<div class="log-contents"></div>').html('<ul>'+logContent+'</ul>').dialog({
           title: 'Log History',
           modal: true,
           width: 600,

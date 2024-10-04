@@ -1152,12 +1152,13 @@ function pol_decode_commission_action_history($commission)
 
 	// Define what each action means
 	$action_types = [
-		'TR' => '[%s] Commission transferred from <em>%s</em> to <em>%s</em>. <br>',
-		'RE' => '[%s] Commission revoked by <em>%s</em> from <em>%s</em>. <br>',
-		'CC' => '[%s] New commission created by %s and rae is <em>%s</em> and assigned to <em>%s</em>. <br>',
-		'CE' => '[%s] Commission edited by <em>%s and rae is <em>%s</em> and assigned to <em>%s</em>. <br>',
-		'SC' => '[%s] Story created by <em>%s</em> for the story <em>%s</em>. <br>',
-		'SP' => '[%s] Story published by <em>%s</em> for the story <em>%s</em>. <br>'
+
+		'TR' => '<li><p><b>%s</b></p> Commission transferred from <b>%s</b> to <b>%s</b>.</li>',
+		'RE' => '<li><p><b>%s</b></p> Commission revoked by <b>%s</b> from <b>%s</b>.</li>',
+		'CC' => '<li><p><b>%s</b></p> New commission created by %s and rae is <b>%s</b> and assigned to <b>%s</b>.</li>',
+		'CE' => '<li><p><b>%s</b></p> Commission edited by <b>%s and rae is <b>%s</b> and assigned to <b>%s</b>.</li>',
+		'SC' => '<li><p><b>%s</b></p> Story created by <b>%s</b> for the story <b>%s</b>.</li>',
+		'SP' => '<li><p><b>%s</b></p> Story published by <b>%s</b> for the story <b>%s</b>.</li>'
 	];
 
 	// Sort the array by keys (timestamps) in descending order
