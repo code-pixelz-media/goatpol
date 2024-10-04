@@ -4,6 +4,16 @@ jQuery(document).ready(function () {
     allowClear: true,
     minimumResultsForSearch: 10, // Allows search when there are more than 10 options
   });
+  jQuery("#edit_org_rae").select2({
+    placeholder: "Select an option",
+    allowClear: true,
+    minimumResultsForSearch: 10, // Allows search when there are more than 10 options
+  });
+  jQuery("#edit_current_owner").select2({
+    placeholder: "Select an option",
+    allowClear: true,
+    minimumResultsForSearch: 10, // Allows search when there are more than 10 options
+  });
   jQuery("#current_owner").select2({
     placeholder: "Select an option",
     allowClear: true,
