@@ -803,7 +803,7 @@ if (is_user_logged_in()) { ?>
                         You can also transfer your extra commissions to other writers.
                         Doing this gives the other writer a chance to submit new work.
                         To transfer a commission to another writer:<br>
-                        (1) Highlight the commission you want to transfer<br>
+                        (1) Click to select the commission you want to transfer<br>
                         (2) Select the writer’s name from the drop-down list (below)<br>
                         (3) Click on “transfer.”<br>
                     </p>
