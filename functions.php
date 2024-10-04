@@ -3322,7 +3322,7 @@ function list_user_commisions($user, $status = "", $sort = "")
 		if ($is_current_logged_in_user_rae && $user_role == 'user') {
 			$result .= '<th>Action</th>';
 		}
-		
+
 		$result .= '</tr>';
 
 		foreach ($results as $row) {
@@ -3368,8 +3368,8 @@ function list_user_commisions($user, $status = "", $sort = "")
 			$result .= "<td>" . $commission_post_title . "</td>";
 			$result .= "<td>" . $status . "</td>";
 			$result .= "<td>" . $row['last_transfer'] . " <br>
-				<small class='log-".$row['code']." commission-log-open'>Log</small>
-				<div class='log-popup-".$row['code']."' style='display:none;'>".pol_decode_commission_action_history($row['code'])."</div>
+				<small class='log-" . $row['code'] . " commission-log-open'>Log</small>
+				<div class='log-popup-" . $row['code'] . "' style='display:none;'>" . pol_decode_commission_action_history($row['code']) . "</div>
 				</td>";
 
 			if ($is_current_logged_in_user_rae && $user_role == 'user') {
@@ -4061,10 +4061,10 @@ function so_update_story_meta_after_adding_commission($post_id, $commission)
 
 	//update the commission status
 	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
-	
+
 	//udpate commission history
-	$post_author_id = get_post_field( 'post_author', $post_id );
-	pol_update_commission_action($commission, 'sc', $post_author_id,'', $post_id );
+	$post_author_id = get_post_field('post_author', $post_id);
+	pol_update_commission_action($commission, 'sc', $post_author_id, '', $post_id);
 }
 
 
@@ -4163,28 +4163,107 @@ function delete_commission_details()
 	$commission_table_name = $wpdb->prefix . 'commission';
 	$postmeta_table_name = $wpdb->prefix . 'postmeta';
 	$wpdb->delete($commission_table_name, array('id' => $commission_id));
-	if(!empty($post_id) && get_post( $post_id )){
-		$wpdb->delete($postmeta_table_name, array( 'post_id' => $post_id ) );
-		wp_delete_post( $post_id, true );
+	if (!empty($post_id) && get_post($post_id)) {
+		$wpdb->delete($postmeta_table_name, array('post_id' => $post_id));
+		wp_delete_post($post_id, true);
 	}
 	wp_send_json_success(array('message' => 'Commission deleted'));
 	wp_die();
 }
 
-function generate_unique_alphanumeric_string() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'commission'; // Table name (replace 'commission' with your actual table name)
+function generate_unique_alphanumeric_string()
+{
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'commission'; // Table name (replace 'commission' with your actual table name)
 
-    do {
-        // Generate a random alphanumeric string of 12 characters
-        $random_string = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 12);
+	do {
+		// Generate a random alphanumeric string of 12 characters
+		$random_string = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 12);
 
-        // Query to check if the string exists in the table
-        $exists = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM $table_name WHERE your_column_name = %s",
-            $random_string
-        ));
-    } while ($exists > 0); // Keep generating new strings until a unique one is found
+		// Query to check if the string exists in the table
+		$exists = $wpdb->get_var($wpdb->prepare(
+			"SELECT COUNT(*) FROM $table_name WHERE your_column_name = %s",
+			$random_string
+		));
+	} while ($exists > 0); // Keep generating new strings until a unique one is found
 
-    return $random_string;
+	return $random_string;
+}
+
+function get_meta_on_story_status_change($new_status, $old_status, $post)
+{
+	global $wpdb;
+	// Check if the post type is 'story'
+	if ('story' === $post->post_type && $new_status == 'pending') {
+		// Retrieve the post meta
+		$meta_value = get_post_meta($post->ID, 'commission_used', true);
+		$author_id = get_post_field('post_author', $post->ID);
+		$rae_approved = get_user_meta($author_id, 'rae_approved', true);
+		// Update the commission table
+		$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
+
+
+		if ($rae_approved == 1 && !empty($meta_value)) {
+			$updated = $wpdb->update(
+				$table_name,
+				array('status' => 0), // Data to update
+				array('code' => $meta_value),         // WHERE clause
+				array('%s'),                    // Data format (status is a string)
+				array('%s')                     // WHERE format (code is a string)
+			);
+			if ($updated) {
+				delete_post_meta($post->ID, 'commission_used');
+			}
+		} else {
+			$updated = $wpdb->update(
+				$table_name,
+				array('status' => 1), // Data to update
+				array('code' => $meta_value),         // WHERE clause
+				array('%s'),                    // Data format (status is a string)
+				array('%s')                     // WHERE format (code is a string)
+			);
+			if ($updated) {
+				delete_post_meta($post->ID, 'commission_used');
+			}
+		}
+	}
+}
+add_action('transition_post_status', 'get_meta_on_story_status_change', 10, 3);
+
+add_action('wp_trash_post', 'get_custom_post_meta_on_trash', 10, 1);
+
+function get_custom_post_meta_on_trash($post_id)
+{
+	global $wpdb;
+	$post_type = get_post_type($post_id);
+	$author_id = get_post_field('post_author', $post_id);
+	$meta_value = get_post_meta($post_id, 'commission_used', true);
+	$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
+	$rae_approved = get_user_meta($author_id, 'rae_approved', true);
+	if ($post_type === 'story') {
+
+		if ($rae_approved == 1 && !empty($meta_value)) {
+			$updated = $wpdb->update(
+				$table_name,
+				array('status' => 0), // Data to update
+				array('code' => $meta_value),         // WHERE clause
+				array('%s'),                    // Data format (status is a string)
+				array('%s')                     // WHERE format (code is a string)
+			);
+			if ($updated) {
+				delete_post_meta($post->ID, 'commission_used');
+			}
+		} else {
+			$updated = $wpdb->update(
+				$table_name,
+				array('status' => 1), // Data to update
+				array('code' => $meta_value),         // WHERE clause
+				array('%s'),                    // Data format (status is a string)
+				array('%s')                     // WHERE format (code is a string)
+			);
+			if ($updated) {
+				delete_post_meta($post->ID, 'commission_used');
+			}
+		}
+	}
 }
