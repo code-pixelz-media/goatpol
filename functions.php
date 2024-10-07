@@ -4199,33 +4199,21 @@ function get_meta_on_story_status_change($new_status, $old_status, $post)
 		$meta_value = get_post_meta($post->ID, 'commission_used', true);
 		$author_id = get_post_field('post_author', $post->ID);
 		$rae_approved = get_user_meta($author_id, 'rae_approved', true);
+		$rae_id = get_post_meta($post->ID,'claimed_by',true) ? get_post_meta($post->ID,'claimed_by',true) : '';
 		// Update the commission table
 		$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
 
 
-		if ($rae_approved == 1 && !empty($meta_value)) {
+		if (!empty($meta_value)) {
 			$updated = $wpdb->update(
 				$table_name,
-				array('status' => 0), // Data to update
-				array('code' => $meta_value),         // WHERE clause
-				array('%s'),                    // Data format (status is a string)
-				array('%s')                     // WHERE format (code is a string)
+				array('status' => 0,'current_owner' => $rae_id), // Data to update
+				array('code' => $meta_value),         // WHERE clause                 // WHERE format (code is a string)
 			);
 			if ($updated) {
 				delete_post_meta($post->ID, 'commission_used');
 			}
-		} else {
-			$updated = $wpdb->update(
-				$table_name,
-				array('status' => 1), // Data to update
-				array('code' => $meta_value),         // WHERE clause
-				array('%s'),                    // Data format (status is a string)
-				array('%s')                     // WHERE format (code is a string)
-			);
-			if ($updated) {
-				delete_post_meta($post->ID, 'commission_used');
-			}
-		}
+		} 
 	}
 }
 add_action('transition_post_status', 'get_meta_on_story_status_change', 10, 3);
@@ -4240,29 +4228,17 @@ function get_custom_post_meta_on_trash($post_id)
 	$meta_value = get_post_meta($post_id, 'commission_used', true);
 	$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
 	$rae_approved = get_user_meta($author_id, 'rae_approved', true);
+	$rae_id = get_post_meta($post_id,'claimed_by',true);
 	if ($post_type === 'story') {
 
-		if ($rae_approved == 1 && !empty($meta_value)) {
+		if (!empty($meta_value)) {
 			$updated = $wpdb->update(
 				$table_name,
-				array('status' => 0), // Data to update
+				array('status' => 0,'current_owner' => $rae_id), // Data to update
 				array('code' => $meta_value),         // WHERE clause
-				array('%s'),                    // Data format (status is a string)
-				array('%s')                     // WHERE format (code is a string)
 			);
 			if ($updated) {
-				delete_post_meta($post->ID, 'commission_used');
-			}
-		} else {
-			$updated = $wpdb->update(
-				$table_name,
-				array('status' => 1), // Data to update
-				array('code' => $meta_value),         // WHERE clause
-				array('%s'),                    // Data format (status is a string)
-				array('%s')                     // WHERE format (code is a string)
-			);
-			if ($updated) {
-				delete_post_meta($post->ID, 'commission_used');
+				delete_post_meta($post_id, 'commission_used');
 			}
 		}
 	}
