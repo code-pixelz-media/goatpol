@@ -1598,12 +1598,11 @@
 
     let sortOrder = 'asc';
     $(document).on("click", ".sort_comission", function () {
-      console.log('sdfsdf');
       let rows = $(".profile-table tbody tr").not(":first"); // Exclude the header row
 
       rows.sort(function (a, b) {
-        let A = $(a).find("td:nth-child(4)").text().toUpperCase(); // Get the text from the Status column (4th column)
-        let B = $(b).find("td:nth-child(4)").text().toUpperCase();
+        let A = $(a).find("td:nth-child(5)").text().toUpperCase(); // Get the text from the Status column (4th column)
+        let B = $(b).find("td:nth-child(5)").text().toUpperCase();
 
         if (sortOrder === 'asc') {
           return A > B ? 1 : (A < B ? -1 : 0);
