@@ -474,11 +474,23 @@
 
   //open the new ground rules popup when the user inserts commission.
   jQuery(document).ready(function ($) {
+
+    $(".open-ground-rules-2").css('pointer-events', 'none');
+    $(document).on('keyup', '#popup-commission', function () {
+      // Remove any white spaces in the input value
+      var inputVal = $(this).val().replace(/\s/g, '');
+      $(this).val(inputVal);
+
+      if (inputVal.length > 0) {
+        $(".open-ground-rules-2").css('pointer-events', 'auto');
+      } else {
+        $(".open-ground-rules-2").css('pointer-events', 'none');
+      }
+    });
+
     if ($("#cpm-publish-user-information").length > 0) {
       return;
     }
-
-    console.log();
 
     //click the 'save' button to open popup
     $(".open-ground-rules-2").on("click", function (e) {
@@ -499,7 +511,7 @@
     });
 
     //submit the form when clicked on 'close' of popup
-    jQuery("#ground-rules-2 .cbtn-ground-rules").on("click", function (e) {
+    jQuery(document).on("click","#ground-rules-2 .cbtn-ground-rules", function (e) {
       $(".use-commission").click(); //submit the form
     });
   });
@@ -1669,7 +1681,7 @@
 
       // Ensure logContent is not undefined before creating a dialog
       if (logContent !== undefined && logContent.trim() !== '') {
-        $('<div class="log-contents"></div>').html('<ul>'+logContent+'</ul>').dialog({
+        $('<div class="log-contents"></div>').html('<ul>' + logContent + '</ul>').dialog({
           title: 'Log History',
           modal: true,
           width: 600,
@@ -1732,6 +1744,20 @@ jQuery(document).ready(function () {
         "slow"
       );
     }
+  }
+});
+
+// Save scroll position before page reload
+jQuery(window).on('beforeunload', function () {
+  localStorage.setItem('scrollPosition', jQuery(window).scrollTop());
+});
+
+// Scroll to the saved position after page reload
+jQuery(document).ready(function () {
+  var scrollPosition = localStorage.getItem('scrollPosition');
+  if (scrollPosition) {
+    jQuery(window).scrollTop(scrollPosition);
+    localStorage.removeItem('scrollPosition'); // Clean up after using
   }
 });
 
