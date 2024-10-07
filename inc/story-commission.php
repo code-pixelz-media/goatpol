@@ -210,6 +210,7 @@ if (is_user_logged_in()) {
                         }
 
                         echo "<td $attributes>";
+                        // echo "<strong>".$item['status']."</strong>";
                         echo "<strong>".$status."</strong>";
                         echo $this->column_default($item, $column_name);
                         echo $this->handle_row_actions($item, $column_name, $primary);
@@ -246,14 +247,14 @@ if (is_user_logged_in()) {
         {
             $columns = array(
                 // 'cb'            => '<input type="checkbox" />',
-                'commission' => __('Commission', ''),
-                'org_rae' => __('Originating RAE', ''),
-                'acf_writer_name' => __('Transferred to', ''),
-                'post_title' => __('Story Title', ''),
-                'post_date' => __('Date', ''),
-                'cpm_payment_method' => __('Payment Method', ''),
-                'payment_status' => __('Payment Status', ''),
-                'status' => __('Status', ''),
+                'commission' => __('Commission', 'pol'),
+                'org_rae' => __('Originating RAE', 'pol'),
+                'acf_writer_name' => __('Transferred to', 'pol'),
+                'post_title' => __('Story Title', 'pol'),
+                'post_date' => __('Date', 'pol'),
+                'cpm_payment_method' => __('Payment Method', 'pol'),
+                'payment_status' => __('Payment Status', 'pol'),
+                'status' => __('Commission Status', 'pol'),
             );
             return $columns;
         }
@@ -278,7 +279,8 @@ if (is_user_logged_in()) {
                     tt.claimed_by,
                     tt.acf_writer_name,
                     tt.acf_writer_email,
-                    tt.org_rae
+                    tt.org_rae,
+                    tt.status
                 FROM
                 (
                     SELECT
@@ -291,7 +293,8 @@ if (is_user_logged_in()) {
                         '' AS claimed_by,
                         '' AS acf_writer_name,
                         '' AS acf_writer_email,
-                        '' AS org_rae
+                        '' AS org_rae,
+                        status AS status
                     FROM $commission_table_name
                     WHERE code not in (
                         SELECT commission_used.meta_value AS code
@@ -316,7 +319,8 @@ if (is_user_logged_in()) {
                         claimed_by_meta.meta_value AS claimed_by,
                         acf_writer_name_meta.meta_value AS acf_writer_name, 
                         acf_writer_email_meta.meta_value AS acf_writer_email,
-                        claimed_by_user.display_name AS org_rae
+                        claimed_by_user.display_name AS org_rae,
+                        '' AS status
                     FROM
                         $post_table_name
                         INNER JOIN $postmeta_table_name ON $post_table_name.ID = $postmeta_table_name.post_id AND $postmeta_table_name.meta_key = '_payment_status'
