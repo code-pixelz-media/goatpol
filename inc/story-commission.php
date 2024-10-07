@@ -166,7 +166,7 @@ if (is_user_logged_in()) {
                     echo '<div class="row-actions>"<span class="view"><a href="' . get_post_permalink($item['ID']) . '" rel="bookmark" aria-label="View “Always in mind: Was God obligated?”">View</a></span></div>';
                     echo '</td>';
                 } else {
-                    if ('commission' === $column_name ) {
+                    if ('commission' === $column_name) {
                         global $wpdb;
                         $commission_table_name = $wpdb->prefix . 'commission';
                         $id = '';
@@ -178,11 +178,41 @@ if (is_user_logged_in()) {
                         echo $this->column_default($item, $column_name);
                         echo $this->handle_row_actions($item, $column_name, $primary);
                         echo '<div class="commission_action_link">';
-                        if(empty($item['post_title'])){
+                        if (empty($item['post_title'])) {
                             echo '<a href="javascript:void(0);" class="commission_action" data-commission="' . $item['commission'] . '" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="edit" >edit</a>';
                         }
                         echo '<a href="javascript:vclass(0);" class="commission_delete_action" data-id="' . $id . '" data-post_id="' . $item['ID'] . '" data-action="delete" >delete</a>';
                         echo '</div>';
+                        echo '</td>';
+                    } else if ('status' === $column_name) {
+                        global $wpdb;
+                        $commission_table_name = $wpdb->prefix . 'commission';
+                        if (!empty($item['commission'])) {
+                            $code = $item['commission'];
+                            $status = $wpdb->get_var($wpdb->prepare("SELECT status FROM $commission_table_name WHERE code LIKE '$code'"));
+                        }
+
+                        if($status == 0){
+                            $status = 'Available';
+                        }else if($status == 1){
+                            $status = 'Allocated';
+                        }else if($status == 2){
+                            $status = 'In use';
+                        }
+
+                        $story_status = get_post_status($item['ID']);
+                        if($story_status == 'publish'){
+                            $status = 'Published';
+                        }
+
+                        if($code == ''){
+                            $status = '';
+                        }
+
+                        echo "<td $attributes>";
+                        echo "<strong>".$status."</strong>";
+                        echo $this->column_default($item, $column_name);
+                        echo $this->handle_row_actions($item, $column_name, $primary);
                         echo '</td>';
                     } else {
                         echo "<td $attributes>";
@@ -223,6 +253,7 @@ if (is_user_logged_in()) {
                 'post_date' => __('Date', ''),
                 'cpm_payment_method' => __('Payment Method', ''),
                 'payment_status' => __('Payment Status', ''),
+                'status' => __('Status', ''),
             );
             return $columns;
         }
@@ -329,6 +360,8 @@ if (is_user_logged_in()) {
                     return get_user_meta($item['post_author'], 'cpm_payment_method', true);
                 case 'payment_status':
                     return $item[$column_name];
+                case 'status':
+                    return $item[$column_name];
                 default:
                     return print_r($item, true);
             }
@@ -344,6 +377,7 @@ if (is_user_logged_in()) {
                 'post_date'   => array('post_date', true),
                 'cpm_payment_method'   => array('cpm_payment_method', true),
                 'payment_status'   => array('payment_status', true),
+                'status'   => array('status', true),
             );
             return $sortable_columns;
         }
