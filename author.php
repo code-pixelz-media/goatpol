@@ -355,7 +355,7 @@ function get_genre($genre)
 
                 $write_for = get_user_meta($current_author_id, 'write_for', true);
                 // $write_for = array_map('ucfirst', $write_for);
-                $write_for = implode(', ', $write_for);
+                $write_for = is_array($write_for) ? implode(', ', $write_for) : ''; // $write_for = implode(', ', $write_for);
                 if ($write_for != '') {
 
                     echo '<p>
@@ -829,7 +829,7 @@ function get_genre($genre)
 
                         echo '<h1 id="commissions-profile-page" style="margin-top: 3rem">Author\'s Commissions</h1>';
                         echo '<p class="profile-available-commision-text profile-paragraph">These are commissions currently allocated to you.</p>';
-                        if ($current_user->ID != $current_author_id) {
+                        if ((int)$current_user->ID != (int)$current_author_id) {
                             global $wpdb;  // Access the WordPress database object
                             // Replace with your dynamic value
                             $table_name = $wpdb->prefix . 'commission';  // Table name with prefix

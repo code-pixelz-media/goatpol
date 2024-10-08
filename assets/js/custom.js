@@ -511,7 +511,7 @@
     });
 
     //submit the form when clicked on 'close' of popup
-    jQuery(document).on("click","#ground-rules-2 .cbtn-ground-rules", function (e) {
+    jQuery(document).on("click", "#ground-rules-2 .cbtn-ground-rules", function (e) {
       $(".use-commission").click(); //submit the form
     });
   });
@@ -539,7 +539,7 @@
     });
 
     //submit the form when clicked on 'close' of popup
-    jQuery("#ground-rules-2 .cbtn-ground-rules").on("click", function (e) {
+    jQuery(document).on("click","#ground-rules-2 .cbtn-ground-rules", function (e) {
       e.stopPropagation();
       // // $(".cpm_create_user").css("pointer-events", "none");
       // // $(".cpm_create_user").html("Saving...");
@@ -1574,26 +1574,66 @@
       }
     });
 
+    // $(document).on("click", "#revoke-button", function () {
+    //   let revoke_confirm_text = "Are you sure you want to revoke this commission? Writer will no longer have access to this commission and it will be returned to your RAE account as “available.”";
+    //   if (confirm(revoke_confirm_text) == true) {
+    //     var rae_id = $(this).data("org_rae");
+    //     var owner_id = $(this).data("current_owner");
+    //     var comission_id = $(this).data("comission_id");
+    //     $.ajax({
+    //       url: pol_ajax_filters.ajaxurl,
+    //       type: "POST",
+    //       data: {
+    //         action: "pol_revoke_commission",
+    //         rae_id: rae_id,
+    //         owner_id: owner_id,
+    //         comission_id: comission_id,
+    //       },
+    //       success: function (response) {
+    //         window.location.reload();
+    //       },
+    //     });
+    //   }
+    // });
+
     $(document).on("click", "#revoke-button", function () {
-      let revoke_confirm_text = "Do you really want to revoke this commission?";
-      if (confirm(revoke_confirm_text) == true) {
-        var rae_id = $(this).data("org_rae");
-        var owner_id = $(this).data("current_owner");
-        var comission_id = $(this).data("comission_id");
-        $.ajax({
-          url: pol_ajax_filters.ajaxurl,
-          type: "POST",
-          data: {
-            action: "pol_revoke_commission",
-            rae_id: rae_id,
-            owner_id: owner_id,
-            comission_id: comission_id,
+      // Create the confirmation text
+      let revoke_confirm_text = "Are you sure you want to revoke this commission? Writer will no longer have access to this commission and it will be returned to your RAE account as “available.”";
+
+      // Store the necessary data
+      var rae_id = $(this).data("org_rae");
+      var owner_id = $(this).data("current_owner");
+      var commission_id = $(this).data("comission_id");
+
+      // Create a jQuery UI dialog box
+      $("<div>" + revoke_confirm_text + "</div>").dialog({
+        title: "Revoke Commission",
+        modal: true,
+        width: 800,
+        buttons: {
+          "YES, revoke commission": function () {
+            // If confirmed, make the AJAX request
+            $.ajax({
+              url: pol_ajax_filters.ajaxurl,
+              type: "POST",
+              data: {
+                action: "pol_revoke_commission",
+                rae_id: rae_id,
+                owner_id: owner_id,
+                comission_id: commission_id,
+              },
+              success: function (response) {
+                window.location.reload();
+              },
+            });
+            $(this).dialog("close");
           },
-          success: function (response) {
-            window.location.reload();
+          "NO, please leave commission as it is": function () {
+            // Close the dialog if user cancels
+            $(this).dialog("close");
           },
-        });
-      }
+        }
+      });
     });
 
     let sortOrder = 'asc';

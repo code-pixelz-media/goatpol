@@ -493,7 +493,7 @@ if (is_user_logged_in()) {
             $result = $wpdb->insert($table_name, $data);
 
             pol_update_commission_action($commission = $commission_text, $action = 'cc', $sender_id = $org_rae, $receiver_id = $current_owner, $story_id = '', $action_initiator = $current_user_id);
-
+            cpm_send_commission_created_email($org_rae, $current_owner, 'cc', $commission_text);
             // Check if the insertion was successful
             if ($result !== false) {
                 // Optionally, you can display a success message or redirect

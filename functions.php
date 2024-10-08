@@ -2399,6 +2399,303 @@ function cpm_send_commission_transfer_email($receiverId, $transfer_info, $commis
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+function cpm_send_commission_created_email($sender_id, $receiver_id, $transfer_info, $commission)
+{
+	ob_start();
+
+	add_filter('wp_mail_content_type', 'pol_set_content_type');
+
+	$sender = get_user_by('id', $sender_id);
+	$sender_name = ucwords($sender->display_name);
+
+	$receiver = get_user_by('id', $receiver_id);
+	$receiver_name = ucwords($receiver->display_name);
+
+	$action_initiator = wp_get_current_user();
+	$action_initiator_name = ucwords($action_initiator->display_name);
+
+
+	// mail send process
+	$to = 'thegoatpol@tuta.com';
+	$subject = "New Commission Created";
+
+	if ($transfer_info == 'cc') {
+		$subject = "New Commission Created";
+	}
+
+	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"= />
+	</head>
+
+	<body bgcolor="#f6f6f6" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; margin: 0; padding: 0; ">
+		<table class="body-wrap" bgcolor="#f6f6f6" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 20px;">
+			<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+				<td class="container" bgcolor="#FFFFFF" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0;">
+					<div class="content" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; max-width: 600px; display: block; margin: 0 auto; padding: 0;">
+						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+
+									<p><img src="<?php echo site_url(); ?>/wp-content/uploads/2022/06/logo.jpg" width="150px" /></p>
+									<p style="margin-top:50px;">
+										<?php
+										echo 'Dear The GOAT PoL, a new commission was created by logged-in user '.$action_initiator_name.'
+										to originaing RAE '.$sender_name.' allocated to '.$receiver_name.'. ';
+										?>
+									</p>
+								</td>
+							</tr>
+						</table>
+
+						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; text-align:right; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+									<br>
+									<br />
+									Thanks !<br />
+									The GOAT PoL<br />
+									</p>
+								</td>
+							</tr>
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td class="padding" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 10px 0;">
+									<img src="<?php echo site_url(); ?>/wp-content/uploads/2022/02/GOAT_21-scaled.jpg" width="150px;" />
+								</td>
+							</tr>
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td>
+									<img style="margin-top:30px;" src="<?php echo site_url(); ?>/wp-content/themes/goatpol/assets/img/FullTitle_transparent.png" width="580px" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+			</tr>
+		</table>
+		<table class="footer-wrap" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; clear: both !important; margin: 0; padding: 0;">
+			<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+				<td class="container" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 0;">
+					<div class="content" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; max-width: 600px; display: block; margin: 0 auto; padding: 0;"
+						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td align="center" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+			</tr>
+		</table>
+	</body>
+	</html>
+
+<?php
+
+	$message_new = ob_get_contents();
+
+	ob_end_clean();
+
+	$send_from = 'thegoatpol@tutanota.com';
+	$headers = array('Content-Type: text/html; charset=UTF-8');
+	$headers .= 'From: ' . $send_from . "\r\n";
+	$sent = wp_mail($to, $subject, $message_new, $headers);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function cpm_send_new_user_created_email_to_rae($new_user_id, $rae_email, $rae_display_name)
+{
+	ob_start();
+
+	add_filter('wp_mail_content_type', 'pol_set_content_type');
+
+	$new_user = get_user_by('id', $new_user_id);
+	$new_user_name = ucwords($new_user->display_name);
+	$new_user_author_page = get_author_posts_url($new_user_id);
+	// $to =  $rae_email;
+	$to =  'saugatapk@gmail.com';
+	$subject = "New Writer Joined";
+	?>
+
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"= />
+	</head>
+
+	<body bgcolor="#f6f6f6" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; margin: 0; padding: 0; ">
+		<table class="body-wrap" bgcolor="#f6f6f6" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 20px;">
+			<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+				<td class="container" bgcolor="#FFFFFF" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0;">
+					<div class="content" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; max-width: 600px; display: block; margin: 0 auto; padding: 0;">
+						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+
+									<p><img src="<?php echo site_url(); ?>/wp-content/uploads/2022/06/logo.jpg" width="150px" /></p>
+									<p style="margin-top:50px;">
+										<?php
+										echo 'Dear '.$rae_display_name.', we want to alert you that a new writer has joined The GOAT PoL. 
+										<a href="'.$new_user_author_page.'">'.$new_user_name.'</a> has created a new Contributor\'s Page which you can review 
+										<a href="'.$new_user_author_page.'">here</a>. 
+										We hope you\'ll look and consider sending this writer a commission.';
+										?>
+									</p>
+								</td>
+							</tr>
+						</table>
+
+						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; text-align:right; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+									<br>
+									<br />
+									Thanks !<br />
+									The GOAT PoL<br />
+									</p>
+								</td>
+							</tr>
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td class="padding" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 10px 0;">
+									<img src="<?php echo site_url(); ?>/wp-content/uploads/2022/02/GOAT_21-scaled.jpg" width="150px;" />
+								</td>
+							</tr>
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td>
+									<img style="margin-top:30px;" src="<?php echo site_url(); ?>/wp-content/themes/goatpol/assets/img/FullTitle_transparent.png" width="580px" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+			</tr>
+		</table>
+		<table class="footer-wrap" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; clear: both !important; margin: 0; padding: 0;">
+			<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+				<td class="container" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 0;">
+					<div class="content" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; max-width: 600px; display: block; margin: 0 auto; padding: 0;"
+						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
+							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								<td align="center" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				</td>
+			</tr>
+		</table>
+	</body>
+	</html>
+
+<?php
+
+	$message_new = ob_get_contents();
+
+	ob_end_clean();
+
+	$send_from = 'thegoatpol@tutanota.com';
+	$headers = array('Content-Type: text/html; charset=UTF-8');
+	$headers .= 'From: ' . $send_from . "\r\n";
+	$sent = wp_mail($to, $subject, $message_new, $headers);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 add_action('wp_ajax_cpm_send_email_to_user_seeking_commission', 'cpm_send_email_to_user_seeking_commission');
 function cpm_send_email_to_user_seeking_commission()
 {
@@ -3320,7 +3617,7 @@ function list_user_commisions($user, $status = "", $sort = "")
 		$result .= '<th>Status <span class="sort_comission" data-current_author_id="' . $user . '">⇅</span></th>';
 		$result .= '<th>Last Action</th>';
 		if ($is_current_logged_in_user_rae && $user_role == 'user') {
-			$result .= '<th>Action</th>';
+			$result .= '<th>Cancel</th>';
 		}
 
 		$result .= '</tr>';
@@ -3374,7 +3671,20 @@ function list_user_commisions($user, $status = "", $sort = "")
 
 			if ($is_current_logged_in_user_rae && $user_role == 'user') {
 				if ($row['status'] == 1  && $row['org_rae'] == $current_logged_in_user) {
-					$result .= "<td> <a href='javascript:void(0);' data-comission_id='" . $row['id'] . "' data-org_rae='" . $row['org_rae'] . "' data-current_owner='" . $row['current_owner'] . "' class ='revoke-button' id ='revoke-button'><i class='fa-regular fa-circle-xmark'></i><span>Revoke commission</span></a></td></tr>";
+					$result .= "
+					<td> 
+						<a 
+							href='javascript:void(0);' 
+							data-comission_id='" . $row['id'] . "' 
+							data-org_rae='" . $row['org_rae'] . "' 
+							data-current_owner='" . $row['current_owner'] . "' 
+							class ='revoke-button' id='revoke-button'
+						>
+							<i class='fa-regular fa-circle-xmark'></i>
+							<span>Revoke commission</span>
+						</a>
+					</td>
+					</tr>";
 				} else {
 					$result .= "<td></td>";
 				}
@@ -4199,7 +4509,7 @@ function get_meta_on_story_status_change($new_status, $old_status, $post)
 		$meta_value = get_post_meta($post->ID, 'commission_used', true);
 		$author_id = get_post_field('post_author', $post->ID);
 		$rae_approved = get_user_meta($author_id, 'rae_approved', true);
-		$rae_id = get_post_meta($post->ID,'claimed_by',true) ? get_post_meta($post->ID,'claimed_by',true) : '';
+		$rae_id = get_post_meta($post->ID, 'claimed_by', true) ? get_post_meta($post->ID, 'claimed_by', true) : '';
 		// Update the commission table
 		$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
 
@@ -4207,13 +4517,13 @@ function get_meta_on_story_status_change($new_status, $old_status, $post)
 		if (!empty($meta_value)) {
 			$updated = $wpdb->update(
 				$table_name,
-				array('status' => 0,'current_owner' => $rae_id), // Data to update
+				array('status' => 0, 'current_owner' => $rae_id), // Data to update
 				array('code' => $meta_value),         // WHERE clause                 // WHERE format (code is a string)
 			);
 			if ($updated) {
 				delete_post_meta($post->ID, 'commission_used');
 			}
-		} 
+		}
 	}
 }
 add_action('transition_post_status', 'get_meta_on_story_status_change', 10, 3);
@@ -4228,13 +4538,13 @@ function get_custom_post_meta_on_trash($post_id)
 	$meta_value = get_post_meta($post_id, 'commission_used', true);
 	$table_name = $wpdb->prefix . 'commission'; // Assuming the table name is 'wp_commission'
 	$rae_approved = get_user_meta($author_id, 'rae_approved', true);
-	$rae_id = get_post_meta($post_id,'claimed_by',true);
+	$rae_id = get_post_meta($post_id, 'claimed_by', true);
 	if ($post_type === 'story') {
 
 		if (!empty($meta_value)) {
 			$updated = $wpdb->update(
 				$table_name,
-				array('status' => 0,'current_owner' => $rae_id), // Data to update
+				array('status' => 0, 'current_owner' => $rae_id), // Data to update
 				array('code' => $meta_value),         // WHERE clause
 			);
 			if ($updated) {

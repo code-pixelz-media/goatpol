@@ -139,6 +139,26 @@ if (is_user_logged_in()) {
 
                                     cpm_send_cp_update_email($email, $user_name);
 
+                                    
+
+                                    //notify raes that new user has been created
+                                    $args = array(
+                                        'orderby' => 'user_nicename',
+                                        'order' => 'ASC',
+                                        'meta_query' => array(
+                                            array(
+                                                'key' => 'rae_approved',
+                                                'value' => '1',
+                                                'compare' => '=',
+                                            ),
+                                        )
+                                    );
+                                    $raes = get_users($args);
+
+                                    foreach ($raes as $rae) {
+                                        cpm_send_new_user_created_email_to_rae($new_user_id, $rae->user_email, $rae->display_name);
+                                    }
+
                                     // Initialize cURL
                                     $ch = curl_init();
 
