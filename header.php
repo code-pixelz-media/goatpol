@@ -93,22 +93,8 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
                     global $wpdb;
                     // $user_has_usable_commissions = false;
                     // $uid = get_current_user_id();
-                    // // var_dump($uid);
-                    // $current_commissions = get_user_meta($uid, 'commissions', true);
-
-                    // //check if user has usable commissions
-                    // if (is_array($current_commissions)) {
-                    //     foreach ($current_commissions as $commission => $id) {
-                    //         $table_name = $wpdb->prefix . 'commission';
-
-                    //         $commission_status = $wpdb->get_var("SELECT status FROM {$table_name} WHERE code = '" . $commission . "'");
-
-                    //         if ($commission_status == '1') {
-                    //             $user_has_usable_commissions = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                    // $table_name = $wpdb->prefix . 'commission';
+                    // $number_of_available_commissions = $wpdb->get_var("SELECT COUNT(code) FROM {$table_name} WHERE (status = 0 OR status = 1) AND current_owner = $uid");
 
                     if (is_user_logged_in()) {
 
@@ -138,7 +124,8 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
                                         Insert commission here: <input type="text" name="popup-commission"
                                             id="popup-commission">, and click below to submit.</span>
                                 </p>
-                                <?php if (!$user_has_usable_commissions) { ?>
+                                <?php
+                                if ($number_of_available_commissions == 0) { ?>
                                     <!-- <p>
                                         If you have no available commissions currently, click on
                                         <u class="request-commission" style="cursor:pointer">I’d like to have a commission to

@@ -1305,7 +1305,7 @@ function pol_transfer_single_commission()
 	$commission_code = $wpdb->get_var("SELECT code FROM $table_name WHERE current_owner = '" . $rae_id . "' AND status = 0 LIMIT 1");
 
 	if (!empty($commission_code)) {
-		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = $code_status , last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
+		$update_sql = $wpdb->get_results("UPDATE $table_name SET status = $code_status , org_rae = ".$rae_id.", last_transfer = CURRENT_TIMESTAMP, current_owner = " . $author_id . " WHERE code = '" . $commission_code . "'");
 		cpm_send_commission_transfer_email($author_id, 'rae_user', $commission_code, get_user_by('id', (int) $rae_id)->display_name);
 		pol_update_commission_action($commission_code, 'tr', $rae_id, $author_id);
 		wp_send_json_success(['transfered']);
