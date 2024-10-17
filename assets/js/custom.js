@@ -488,6 +488,14 @@
       }
     });
 
+    $(document).on('keypress','#popup-commission', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('.open-ground-rules-2').click();
+      }
+    });
+
     if ($("#cpm-publish-user-information").length > 0) {
       return;
     }
@@ -925,7 +933,7 @@
   //open the commissino popup to try again
   jQuery(document).ready(function ($) {
     $(document).on("click", "#commission-try-again", function () {
-      jQuery(".getPassport-modal").click();
+      jQuery(".gp-menu-suyw").click();
     });
   });
 

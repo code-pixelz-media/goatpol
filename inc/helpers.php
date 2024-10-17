@@ -1315,39 +1315,49 @@ function pol_transfer_single_commission()
 }
 
 
-add_action('wp_ajax_pol_update_commission_status', 'pol_update_commission_status');
-function pol_update_commission_status()
-{
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'commission';
-	$commission = $_POST['commission'];
+// add_action('wp_ajax_pol_update_commission_status', 'pol_update_commission_status');
+// function pol_update_commission_status()
+// {
+// 	global $wpdb;
+// 	$table_name = $wpdb->prefix . 'commission';
+// 	$commission = $_POST['commission'];
+
+// 	$curr_commission_status = $wpdb->get_var("SELECT status {$table_name} WHERE code = '" . $commission . "'");
+
+// 	if($curr_commission_status == 2){
+// 		wp_send_json_success('not_available');
+// 	}else{
+
+// 		$wpdb->get_results("UPDATE {$table_name} SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
+// 		$args = array(
+// 			'post_type'  => 'any',
+// 			'meta_query' => array(
+// 				array(
+// 					'key'   => 'commission_used',
+// 					'value' => $commission,
+// 					'compare' => '='
+// 				)
+// 			)
+// 		);
+	
+// 		$query = new WP_Query($args);
+	
+// 		if ($query->have_posts()) {
+// 			while ($query->have_posts()) {
+// 				$query->the_post();
+	
+// 				$post_id = get_the_ID(); // Get post ID
+// 				$post_author_id = get_the_author_meta('ID'); // Get post author ID
+	
+// 				pol_update_commission_action($commission, 'sc', $post_author_id, '', $post_id);
+// 			}
+// 		}
+
+// 		wp_send_json_success('status_updated');
+// 	}
 
 
-	$wpdb->get_results("UPDATE {$table_name} SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
-	$args = array(
-		'post_type'  => 'any',
-		'meta_query' => array(
-			array(
-				'key'   => 'commission_used',
-				'value' => $commission,
-				'compare' => '='
-			)
-		)
-	);
-
-	$query = new WP_Query($args);
-
-	if ($query->have_posts()) {
-		while ($query->have_posts()) {
-			$query->the_post();
-
-			$post_id = get_the_ID(); // Get post ID
-			$post_author_id = get_the_author_meta('ID'); // Get post author ID
-
-			pol_update_commission_action($commission, 'sc', $post_author_id, '', $post_id);
-		}
-	}
-}
+// }
 
 
 

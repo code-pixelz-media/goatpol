@@ -2435,7 +2435,7 @@ function cpm_send_commission_created_email($sender_id, $receiver_id, $transfer_i
 		$subject = "New Commission Created";
 	}
 
-	?>
+?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
 
@@ -2458,8 +2458,8 @@ function cpm_send_commission_created_email($sender_id, $receiver_id, $transfer_i
 									<p><img src="<?php echo site_url(); ?>/wp-content/uploads/2022/06/logo.jpg" width="150px" /></p>
 									<p style="margin-top:50px;">
 										<?php
-										echo 'Dear The GOAT PoL, a new commission was created by logged-in user '.$action_initiator_name.'
-										to originaing RAE '.$sender_name.' allocated to '.$receiver_name.'. ';
+										echo 'Dear The GOAT PoL, a new commission was created by logged-in user ' . $action_initiator_name . '
+										to originaing RAE ' . $sender_name . ' allocated to ' . $receiver_name . '. ';
 										?>
 									</p>
 								</td>
@@ -2500,18 +2500,19 @@ function cpm_send_commission_created_email($sender_id, $receiver_id, $transfer_i
 				<td class="container" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 0;">
 					<div class="content" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; max-width: 600px; display: block; margin: 0 auto; padding: 0;"
 						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
-							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
-								<td align="center" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+			<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				<td align="center" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
 				</td>
 			</tr>
 		</table>
+		</div>
+		</td>
+		<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+		</td>
+		</tr>
+		</table>
 	</body>
+
 	</html>
 
 <?php
@@ -2567,7 +2568,7 @@ function cpm_send_new_user_created_email_to_rae($new_user_id, $rae_email, $rae_d
 	// $to =  $rae_email;
 	$to =  'saugatapk@gmail.com';
 	$subject = "New Writer Joined";
-	?>
+?>
 
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
@@ -2591,9 +2592,9 @@ function cpm_send_new_user_created_email_to_rae($new_user_id, $rae_email, $rae_d
 									<p><img src="<?php echo site_url(); ?>/wp-content/uploads/2022/06/logo.jpg" width="150px" /></p>
 									<p style="margin-top:50px;">
 										<?php
-										echo 'Dear '.$rae_display_name.', we want to alert you that a new writer has joined The GOAT PoL. 
-										<a href="'.$new_user_author_page.'">'.$new_user_name.'</a> has created a new Contributor\'s Page which you can review 
-										<a href="'.$new_user_author_page.'">here</a>. 
+										echo 'Dear ' . $rae_display_name . ', we want to alert you that a new writer has joined The GOAT PoL. 
+										<a href="' . $new_user_author_page . '">' . $new_user_name . '</a> has created a new Contributor\'s Page which you can review 
+										<a href="' . $new_user_author_page . '">here</a>. 
 										We hope you\'ll look and consider sending this writer a commission.';
 										?>
 									</p>
@@ -2635,18 +2636,19 @@ function cpm_send_new_user_created_email_to_rae($new_user_id, $rae_email, $rae_d
 				<td class="container" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto; padding: 0;">
 					<div class="content" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; max-width: 600px; display: block; margin: 0 auto; padding: 0;"
 						<table style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
-							<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
-								<td align="center" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-				<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+			<tr style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+				<td align="center" style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
 				</td>
 			</tr>
 		</table>
+		</div>
+		</td>
+		<td style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
+		</td>
+		</tr>
+		</table>
 	</body>
+
 	</html>
 
 <?php
@@ -4322,7 +4324,7 @@ function render_commission_meta_box($post)
 // Save meta box data
 function so_save_commission_meta($post_id)
 {
-
+	// if(!is_admin()){return;};
 	// echo '<pre>';
 	// var_dump($_POST);
 	// echo '</pre>';
@@ -4370,7 +4372,7 @@ function so_update_story_meta_after_adding_commission($post_id, $commission)
 	update_post_meta($post_id, 'claimed_by', $commission_rae);
 
 	//update the commission status
-	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
+	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 11, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
 
 	//udpate commission history
 	$post_author_id = get_post_field('post_author', $post_id);
@@ -4550,6 +4552,31 @@ function get_custom_post_meta_on_trash($post_id)
 			if ($updated) {
 				delete_post_meta($post_id, 'commission_used');
 			}
+		}
+	}
+}
+
+
+add_action('acf/validate_save_post', 'pol_validate_commission_status_before_submit');
+function pol_validate_commission_status_before_submit($form)
+{
+	//check if the add-story form is being submitted
+	if (isset($_POST['af_form']) && $_POST['af_form'] === 'form_624695227a534') {
+
+		global $wpdb;
+		$commission_inuse = isset($_COOKIE['popup-commission']) ? $_COOKIE['popup-commission'] : '';
+
+		if (!empty($commission_inuse)) {
+
+			$commission_status = $wpdb->get_var("SELECT status FROM {$wpdb->prefix}commission WHERE code = '$commission_inuse'");
+
+			if ($commission_status == 2) {
+				$message = 'Commission is not valid for submission, <a href="#" id="commission-try-again">try using another commission.</a>';
+				acf_add_validation_error('', $message);
+			}
+		} else {
+			$message = 'Commission is not valid for submission, <a href="#" id="commission-try-again">try using another commission.</a>';
+			acf_add_validation_error('', $message);
 		}
 	}
 }

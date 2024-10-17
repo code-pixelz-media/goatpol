@@ -7,6 +7,7 @@
 */
 get_header();
 
+global $wpdb;
 if (empty($_GET['place_id']) || !is_user_logged_in()) {
 
     ?>
@@ -62,7 +63,7 @@ if (empty($_GET['place_id']) || !is_user_logged_in()) {
                         //auto claim this story using the rae's id from the current users user meta
                         $commission_inuse = $_COOKIE['popup-commission'];
                         $current_owner = $wpdb->get_var($wpdb->prepare("SELECT current_owner from {$wpdb->prefix}commission WHERE code = '$commission_inuse' "));
-
+                        $wpdb->get_results("UPDATE {$wpdb->prefix}commission SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission_inuse . "'");
                         $rae_name = '---';
                         $rae_email = '---';
 
@@ -72,10 +73,10 @@ if (empty($_GET['place_id']) || !is_user_logged_in()) {
                             $rae_user = get_user_by('id', $rae_that_transferred_the_commission);
                             $rae_name = $rae_user->display_name;
                             $rae_email = $rae_user->user_email;
+
                             if((int)$rae_that_transferred_the_commission != 0){
+
                                 update_post_meta($post_id, 'claimed_by', $rae_that_transferred_the_commission);
-
-
 
                                 $pw = new \PhpOffice\PhpWord\PhpWord();
 
@@ -113,8 +114,8 @@ if (empty($_GET['place_id']) || !is_user_logged_in()) {
 
                                 //send mail to writer confirmming that their story was claimed
                                 // pol_send_rtf_mail_to_claimed_editor((int)$rae_that_transferred_the_commission, (int)$post_id);
-
                                 update_post_meta($post_id, 'commission_used', $commission_inuse);
+                                
                                 pol_update_commission_action($commission_inuse, 'sc', get_current_user_id(), '', $post_id);
                                 $submission_log .= get_the_title($post_id).'('.$post_id.') || RAE claimaed email('.($rae_email_ ? $rae_email : 'failed').') || ';
                             }

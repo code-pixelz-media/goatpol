@@ -13,7 +13,6 @@
 
 $commission = (isset($_POST['popup-commission']) && !empty($_POST['popup-commission'])) ? $_POST['popup-commission'] : '';
 
-// var_dump($commission);
 if (!empty($_POST['popup-commission'])) {
 	setcookie('popup-commission', $commission, time() + (86400 * 30), "/");
 }
@@ -40,36 +39,43 @@ if (!is_user_logged_in()) {
 		$is_add_place_page = true;
 	}
 
-	if ((empty($_GET['place_id']) || !isset($_COOKIE['popup-commission']) || empty($_COOKIE['popup-commission'])) && $is_add_story_page) {
+	// var_dump(empty($_GET['place_id']));
+	// var_dump(is_null($_GET['place_id']));
+	// var_dump(!isset($_COOKIE['popup-commission']));
+	// var_dump(($_COOKIE['popup-commission']));
+	// var_dump($is_add_story_page);
+	// var_dump($commission);
+
+	if ((empty($_GET['place_id']) || is_null($_GET['place_id']) || !isset($_COOKIE['popup-commission']) || empty($_COOKIE['popup-commission'])) && $is_add_story_page) {
 
 		//if user tries to directly go to the '/add-story' page send them to the '/add-place' page
-		?>
+?>
 		<script>
 			window.location.href = '/add-place';
 		</script>
-		<?php
+	<?php
 
 	} else if ((empty($commission) && $is_add_place_page)) {
 
 		//if 'commission' query var is empty then open popup and ask the user for commission
-		?>
-			<script>
-				var customMessage = '<h5>Please <a id="commission-try-agai n">enter a commission</a> to submit your story</h5>';
+	?>
+		<script>
+			var customMessage = '<h5>Please <a href="#" id="commission-try-again">enter a commission</a> to submit your story</h5>';
 
-				// Create a new div element
-				var messageDiv = document.createElement('div');
-				messageDiv.innerHTML = customMessage;
+			// Create a new div element
+			var messageDiv = document.createElement('div');
+			messageDiv.innerHTML = customMessage;
 
-				// Append the div to the body
-				document.body.appendChild(messageDiv);
+			// Append the div to the body
+			document.body.appendChild(messageDiv);
 
-				// open the modal to enter the commission
-				jQuery(document).ready(function ($) {
-					jQuery('.getPassport-modal').click();
-					jQuery('.cpm-popup-overlay').hide();
-					jQuery('#menu-popup-content').hide();
-				});
-			</script>
+			// open the modal to enter the commission
+			jQuery(document).ready(function($) {
+				jQuery('.getPassport-modal').click();
+				jQuery('.cpm-popup-overlay').hide();
+				jQuery('#menu-popup-content').hide();
+			});
+		</script>
 		<?php
 	} else {
 
@@ -81,16 +87,16 @@ if (!is_user_logged_in()) {
 		// $user_commissions = get_user_meta($curr_user_id, 'commissions', true);
 
 		// if (is_array($user_commissions)) { //check if user has commissions
-			// if (array_key_exists($commission, $user_commissions)) { //check if user has this particular commission
+		// if (array_key_exists($commission, $user_commissions)) { //check if user has this particular commission
 
-				//check if commission is not 'in-use' i.e status should not be equal to '2'
-				// echo "SELECT status from {$wpdb->prefix}commission WHERE code = '$commission' AND current_owner = $curr_user_id ";
-				$current_owner = $wpdb->get_var($wpdb->prepare("SELECT current_owner from {$wpdb->prefix}commission WHERE code = '$commission' AND current_owner = $curr_user_id AND status != 2"));
+		//check if commission is not 'in-use' i.e status should not be equal to '2'
+		// echo "SELECT status from {$wpdb->prefix}commission WHERE code = '$commission' AND current_owner = $curr_user_id ";
+		$current_owner = $wpdb->get_var($wpdb->prepare("SELECT current_owner from {$wpdb->prefix}commission WHERE code = '$commission' AND current_owner = $curr_user_id AND status != 2"));
 
-				if ((int)$current_owner == (int)$curr_user_id ) {
-					$commission_is_valid = true;
-				}
-			// }
+		if ((int)$current_owner == (int)$curr_user_id) {
+			$commission_is_valid = true;
+		}
+		// }
 		// }
 
 		//! just for testing
@@ -104,49 +110,25 @@ if (!is_user_logged_in()) {
 			echo '<div class="commision-not-valid-notice"><h5>This commission is not valid, it may already be in use or may not exist, 
 			please check commission status from your <a href="/registration" target="_blank">profile</a> and try again !!</h5></div>';
 		} else { //if commission valid
-			?>
-				<main id="site-content" role="main">
-					<div class="site-content-inner">
-						<?php
-						while (have_posts()) {
-							the_post();
-							get_template_part('template-parts/single/content', 'form');
-						}
-						?>
-					</div>
-				</main>
+		?>
+			<main id="site-content" role="main">
+				<div class="site-content-inner">
+					<?php
+					while (have_posts()) {
+						the_post();
+						get_template_part('template-parts/single/content', 'form');
+					}
+					?>
+				</div>
+			</main>
 
-			<?php
+	<?php
 		}
 	}
 }
 
 
-if ($is_add_story_page) {
 
-	?>
-	<script>
-		// open the modal to enter the commission
-		jQuery(document).ready(function ($) {
-			jQuery(document).on('submit', '.af-form.acf-form', function () {
-				$.ajax({
-					url: pol_ajax_filters.ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'pol_update_commission_status',
-						commission: '<?php echo $commission; ?>',
-					},
-					success: function (response) {
-						// document.cookie = "popup-commission=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-					}
-				});
-			});
-		});
-	</script>
-	<?php
-
-
-}
 
 
 
