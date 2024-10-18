@@ -1485,33 +1485,10 @@ function pol_request_commission()
 	$uid = get_current_user_id();
 	$table_name = $wpdb->prefix . 'commission';
 
-	// $current_commissions = get_user_meta($uid, 'commissions', true);
-
-	// if (is_array($current_commissions)) {
-	// 	foreach ($current_commissions as $commission => $id) {
-	// 		$table_name = $wpdb->prefix . 'commission';
-
-	// 		$commission_status = $wpdb->get_var("SELECT status FROM {$table_name} WHERE code = '" . $commission . "'");
-	// 		var_dump($commission_status);
-	// 		if ($commission_status == '1') {
-	// 			update_user_meta($uid, 'currently_seeking_commission', [1, date("d/m/Y")]);
-	// 			wp_send_json_success('rae_notified');
-	// 			break;
-	// 		}
-	// 	}
-	// 	wp_send_json_success('has_commission');
-	// } else {
-	// 	update_user_meta($uid, 'currently_seeking_commission', [1, date("d/m/Y")]);
-	// 	wp_send_json_success('rae_notified');
-	// }
-	//==========
-
-	$current_commissions = $wpdb->get_var("SELECT count(id) FROM {$table_name} WHERE curr_owner = $uid AND status != 2");
-
+	$current_commissions = $wpdb->get_var("SELECT count(id) FROM {$table_name} WHERE current_owner = $uid AND status != 2");
 	$currently_seeking_commission = get_user_meta($uid, 'currently_seeking_commission', true);
-
-
-	if ($currently_seeking_commission[0] == 1 && $current_commissions == 0) { //if rae already notified and does not have any available commissions
+	//if rae already notified and does not have any available commissions
+	if ($currently_seeking_commission[0] == 1 && $current_commissions == 0) { 
 		wp_send_json_success('rae_notification_sent');
 	} else if ($current_commissions == 0) {
 		update_user_meta($uid, 'currently_seeking_commission', [1, date("d/m/Y")]);
@@ -1521,15 +1498,6 @@ function pol_request_commission()
 		wp_send_json_success('has_commission');
 	}
 
-
-
-	// if ($current_commissions == 0) {
-	// 	update_user_meta($uid, 'currently_seeking_commission', [1, date("d/m/Y")]);
-	// 	wp_send_json_success('rae_notified');
-	// } else {
-	// 	update_user_meta($uid, 'currently_seeking_commission', [0, date("d/m/Y")]);
-	// 	wp_send_json_success('has_commission');
-	// }
 	wp_die();
 }
 

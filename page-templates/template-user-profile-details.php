@@ -619,12 +619,12 @@ if (is_user_logged_in()) { ?>
                         Highlight and “copy” the code, then paste it in where the submission form asks you for a commission.
                     </p>
 
-                    <div id="commission-request-confirmation-popup" class="modal" style="position: fixed; top: 50%; left: 40%;">
+                    <!-- <div id="commission-request-confirmation-popup" class="modal" style="position: fixed; top: 50%; left: 40%;">
                         <a href="#close-modal" rel="modal:close" class="close-modal">Close</a>
                         <div style="text-align:center;">
-                            <span class="request-commission-msg"></span>
+                            <span class="request-commission-popup-msg"></span>
                         </div>
-                    </div>
+                    </div> -->
 
                     <?php
 

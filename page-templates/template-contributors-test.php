@@ -10,19 +10,105 @@
 
 get_header();
 
+
+
+// function cpm_send_new_user_created_email_to_rae_test($new_user_id, $rae_email, $rae_display_name)
+// {
+// 	ob_start();
+
+// 	add_filter('wp_mail_content_type', 'pol_set_content_type');
+
+// 	$new_user = get_user_by('id', $new_user_id);
+// 	$new_user_name = ucwords($new_user->display_name);
+// 	$new_user_author_page = get_author_posts_url($new_user_id);
+// 	$to =  $rae_email;
+// 	// $to =  'saugatapk@gmail.com';
+// 	$subject = "New Writer Joined";
+
+// 	$message_new = ob_get_contents();
+// 	ob_end_clean();
+
+// 	$send_from = 'thegoatpol@tutanota.com';
+// 	$headers = array('Content-Type: text/html; charset=UTF-8');
+// 	$headers .= 'From: ' . $send_from . "\r\n";
+//     echo $to.'====';
+
+// 	// $sent = wp_mail($to, $subject, $message_new, $headers);
+// }
+
+
+// //notify raes that new user has been created
+// $args = array(
+//     'orderby' => 'user_nicename',
+//     'order' => 'ASC',
+//     'meta_query' => array(
+//         array(
+//             'key' => 'rae_approved',
+//             'value' => '1',
+//             'compare' => '=',
+//         ),
+//     )
+// );
+// $raes = get_users($args);
+
+// foreach ($raes as $rae) {
+//     cpm_send_new_user_created_email_to_rae_test($new_user_id, $rae->user_email, $rae->display_name);
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function pol_mail_sender_temp($to, $subject, $message, $salutation = '', $attach = array())
 {
-	$args = array('salutation' => $salutation, 'message' => $message);
-	ob_start();
-	add_filter('wp_mail_content_type', 'pol_set_mail_content');
-	get_template_part('mail-templates/pol', 'mail', $args);
-	$message = ob_get_contents();
-	ob_end_clean();
-	$send_from = 'thegoatpol@tutanota.com';
-	$headers = array('Content-Type: text/html; charset=UTF-8');
-	$headers .= 'From: ' . $send_from . "\r\n";
-	$subject = $subject;
-	return '=='.$to;
+    $args = array('salutation' => $salutation, 'message' => $message);
+    ob_start();
+    add_filter('wp_mail_content_type', 'pol_set_mail_content');
+    get_template_part('mail-templates/pol', 'mail', $args);
+    $message = ob_get_contents();
+    ob_end_clean();
+    $send_from = 'thegoatpol@tutanota.com';
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+    $headers .= 'From: ' . $send_from . "\r\n";
+    $subject = $subject;
+    return '==' . $to;
 }
 
 function pol_send_email_24_hours_before_workshop_test()
@@ -141,10 +227,10 @@ function pol_send_email_24_hours_before_workshop_test()
         $new_sql .= ($search_sql != '') ? ' UNION ALL ' : '';
 
 
-        if(is_array($meta_key) && is_array($query_arr)){
+        if (is_array($meta_key) && is_array($query_arr)) {
             foreach ($query_arr as $q) {
                 $new_sql .=
-                "
+                    "
                     SELECT DISTINCT(user_id) as ID
                     FROM bny_usermeta um
                     WHERE 
@@ -155,29 +241,29 @@ function pol_send_email_24_hours_before_workshop_test()
                     (um.meta_key LIKE '" . $meta_key[2] . "' AND um.meta_value LIKE '%" . $q . "%' )
                 ";
             }
-        }else if(!is_array($meta_key) && !is_array($query_arr)){
+        } else if (!is_array($meta_key) && !is_array($query_arr)) {
             $new_sql .=
-            "
+                "
                 SELECT DISTINCT(user_id) as ID
                 FROM bny_usermeta um
                 WHERE um.meta_key LIKE '" . $meta_key . "' AND um.meta_value LIKE '%" . $query_arr . "%' 
             ";
-        }else if(!is_array($meta_key) && is_array($query_arr)){
+        } else if (!is_array($meta_key) && is_array($query_arr)) {
             $new_sql .= "
                 SELECT DISTINCT(user_id) as ID
                 FROM bny_usermeta um
                 WHERE um.meta_key LIKE '" . $meta_key . "' AND 
             ";
-            if(sizeof($query_arr) == 1){
+            if (sizeof($query_arr) == 1) {
                 $new_sql .= " um.meta_value LIKE '%" . $query_arr[0] . "%' ";
-            }else{
+            } else {
                 $new_sql .= " (";
                 $last_index = sizeof($query_arr) - 1;
                 $ii = 0;
                 foreach ($query_arr as $q) {
-                    if($ii != $last_index){
+                    if ($ii != $last_index) {
                         $new_sql .= " um.meta_value LIKE '%" . $q . "%' OR ";
-                    }else{
+                    } else {
                         $new_sql .= " um.meta_value LIKE '%" . $q . "%' ";
                     }
                     $ii++;
@@ -459,7 +545,7 @@ function pol_send_email_24_hours_before_workshop_test()
 
     // var_dump($user_id_list);
 
-    if($filter_count == 0){
+    if ($filter_count == 0) {
         $users = get_users();
 
         // Initialize an empty array to store the user IDs
@@ -496,7 +582,7 @@ function pol_send_email_24_hours_before_workshop_test()
 
 
 
-    
+
     // var_dump($user_id_list);
     // echo '<br>======<br>';
     // var_dump($user_id_list_for_page);
@@ -521,7 +607,7 @@ function pol_send_email_24_hours_before_workshop_test()
         $ind_nom_de_plume = get_user_meta($q, 'nom_de_plume', true);
         $curr_location_nation = get_user_meta($q, 'current_location_nation', true);
         $ind_username = $curr_user->display_name;
-        $display_name = $ind_username ;
+        $display_name = $ind_username;
         $seeking_commission_meta = get_user_meta($q, 'currently_seeking_commission', true);
         $check_rae_approved = get_user_meta($q, 'rae_approved', true) == 1;
         if (!empty($seeking_commission_meta)) {

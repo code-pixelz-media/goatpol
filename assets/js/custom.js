@@ -982,7 +982,7 @@
 
           if (msg == "rae_notified" || msg == "rae_notification_sent") {
             $('#commission-request-confirmation-popup').show();
-            $(".request-commission-msg").html(
+            $(".request-commission-popup-msg").html(
               `The RAEs have been notified. Thank you for your patience. 
                 The RAEs will all look at your Contributor’s Page to see what 
                 kinds of writing and reading interest you. While waiting, 
@@ -1003,9 +1003,10 @@
                 success: function (response) { },
               });
             }
+            $(".request-commission-msg").html("");
           } else if (msg == "has_commission") {
             $(".request-commission-msg").html(
-              "You already have commission, please check your profile !!"
+              "You already have commissions available, please check your profile !!"
             );
           }
 

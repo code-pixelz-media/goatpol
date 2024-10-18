@@ -16,6 +16,8 @@ get_header();
 
     <?php
 
+    
+
     $users = get_users();
 
     //get all  places 
@@ -78,6 +80,8 @@ get_header();
         // echo '$query_arr:::'.is_array($query_arr).'<br>';
         // echo '$meta_key:::'.is_array($meta_key).'<br>';
 
+        global $wpdb;
+        $table_prefix = $wpdb->prefix;
 
         $new_sql = '';
         $new_sql .= ($search_sql != '') ? ' UNION ALL ' : '';
@@ -88,7 +92,7 @@ get_header();
                 $new_sql .=
                 "
                     SELECT DISTINCT(user_id) as ID
-                    FROM bny_usermeta um
+                    FROM ".$table_prefix."usermeta um
                     WHERE 
                     (um.meta_key LIKE '" . $meta_key[0] . "' AND um.meta_value LIKE '%" . $q . "%' )
                     OR
@@ -101,13 +105,13 @@ get_header();
             $new_sql .=
             "
                 SELECT DISTINCT(user_id) as ID
-                FROM bny_usermeta um
+                FROM ".$table_prefix."usermeta um
                 WHERE um.meta_key LIKE '" . $meta_key . "' AND um.meta_value LIKE '%" . $query_arr . "%' 
             ";
         }else if(!is_array($meta_key) && is_array($query_arr)){
             $new_sql .= "
                 SELECT DISTINCT(user_id) as ID
-                FROM bny_usermeta um
+                FROM ".$table_prefix."usermeta um
                 WHERE um.meta_key LIKE '" . $meta_key . "' AND 
             ";
             if(sizeof($query_arr) == 1){
@@ -132,6 +136,7 @@ get_header();
     }
 
     global $wpdb;
+    $table_prefix = $wpdb->prefix;
     $number = 50; // number of authors per page
     // $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
     // $offset = ($paged - 1) * $number;
@@ -170,11 +175,11 @@ get_header();
         if (!empty($search_term)) {
             $search_sql .=
                 "
-                SELECT DISTINCT(p.post_author) as ID FROM bny_posts p WHERE p.post_title LIKE '%" . $search_term . "%' 
+                SELECT DISTINCT(p.post_author) as ID FROM ".$table_prefix."posts p WHERE p.post_title LIKE '%" . $search_term . "%' 
                 UNION
-                SELECT ID FROM bny_users WHERE display_name LIKE '%" . $search_term . "%' 
+                SELECT ID FROM ".$table_prefix."users WHERE display_name LIKE '%" . $search_term . "%' 
                 UNION 
-                SELECT DISTINCT(user_id) as ID FROM bny_usermeta 
+                SELECT DISTINCT(user_id) as ID FROM ".$table_prefix."usermeta 
                 WHERE 
                 (meta_key LIKE 'first_name' AND meta_value LIKE '%" . $search_term . "%')
                 AND
@@ -188,8 +193,8 @@ get_header();
             $search_sql .=
                 "
                  SELECT DISTINCT(p.post_author) as ID
-                FROM bny_postmeta pm
-                INNER JOIN bny_posts p ON pm.post_id = p.ID
+                FROM ".$table_prefix."postmeta pm
+                INNER JOIN ".$table_prefix."posts p ON pm.post_id = p.ID
                 WHERE pm.meta_key LIKE 'stories_place' AND pm.meta_value LIKE '%" . $search_story_loc_id . "%' 
             ";
             $filter_count++;
@@ -200,8 +205,8 @@ get_header();
             $search_sql .=
                 "
                  SELECT DISTINCT(p.post_author) as ID
-                FROM bny_postmeta pm
-                INNER JOIN bny_posts p ON pm.post_id = p.ID
+                FROM ".$table_prefix."postmeta pm
+                INNER JOIN ".$table_prefix."posts p ON pm.post_id = p.ID
                 WHERE pm.meta_key LIKE 'place_languages' AND pm.meta_value LIKE '%" . $search_story_lang . "%' 
             ";
             $filter_count++;

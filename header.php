@@ -90,11 +90,11 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
             <div class="row">
                 <div class="col-lg-12">
                     <?php
-                    global $wpdb;
+                    // global $wpdb;
                     // $user_has_usable_commissions = false;
-                    // $uid = get_current_user_id();
-                    // $table_name = $wpdb->prefix . 'commission';
-                    // $number_of_available_commissions = $wpdb->get_var("SELECT COUNT(code) FROM {$table_name} WHERE (status = 0 OR status = 1) AND current_owner = $uid");
+                    $uid = get_current_user_id();
+                    $table_name = $wpdb->prefix . 'commission';
+                    $number_of_available_commissions = $wpdb->get_var("SELECT COUNT(code) FROM {$table_name} WHERE (status = 0 OR status = 1) AND current_owner = $uid");
 
                     if (is_user_logged_in()) {
 
@@ -126,11 +126,11 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
                                 </p>
                                 <?php
                                 if ($number_of_available_commissions == 0) { ?>
-                                    <!-- <p>
+                                    <p>
                                         If you have no available commissions currently, click on
                                         <u class="request-commission" style="cursor:pointer">I’d like to have a commission to
                                             write for The GOAT PoL.</u>
-                                    </p> -->
+                                    </p>
                                 <?php } ?>
                                 <span class="getPassport-options-question-modal">
                                     <!-- <a href="/registration#commissions-profile-page">What are commissions, and where can I
@@ -140,6 +140,13 @@ if (get_user_meta($current_user->ID, 'rae_approved', true) == 1) {
                                 </span>
                                 <span class="request-commission-msg"></span>
                             </form>
+
+                            <div id="commission-request-confirmation-popup" class="modal" style="position: fixed; top: 50%; left: 40%;">
+                                <a href="#close-modal" rel="modal:close" class="close-modal">Close</a>
+                                <div style="text-align:center;">
+                                    <span class="request-commission-popup-msg"></span>
+                                </div>
+                            </div>
                         </li>
                     <?php } else { ?>
                         <li id="email-form">

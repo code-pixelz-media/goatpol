@@ -1406,6 +1406,8 @@ function cpm_draft_email($post_id)
 	$draft_list_sql = "SELECT *  from {$wpdb->prefix}posts WHERE {$wpdb->prefix}posts.post_status = 'draft' AND {$wpdb->prefix}posts.post_date > DATE_SUB(NOW(), INTERVAL 1 DAY) ORDER BY {$wpdb->prefix}posts.ID DESC";
 	$result_draft_post_lists = $wpdb->get_results($draft_list_sql);
 
+	pol_check_currently_seeking_commision_author_status();
+
 	$contributors_seeking_commission = get_users(
 		array(
 			'meta_query' => array(
@@ -2832,6 +2834,28 @@ function cpm_send_email_to_user_seeking_commission()
 	$sent = wp_mail($to, $subject, $message_new, $headers);
 }
 
+//function that loops through all users and updates the 'currently_seeking_commission' user meta to [0,date("d/m/Y")] 
+//if they already have available commissions
+add_action( 'init', 'pol_check_currently_seeking_commision_author_status' );
+function pol_check_currently_seeking_commision_author_status()
+{
+	global $wpdb;
+
+	$users = get_users();
+	$table_name = $wpdb->prefix . 'commission';
+
+	foreach ($users as $user) {
+		if (metadata_exists('user', $user->ID, 'currently_seeking_commission')) {
+			$get_seeking = get_user_meta($user->ID, 'currently_seeking_commission', true);
+			$available_commissions = $wpdb->get_var("SELECT count(id) FROM {$table_name} WHERE current_owner = $user->ID AND status != 2");
+
+			if ($get_seeking[0] == 1 && (int)$available_commissions > 0) {
+				update_user_meta($user->ID, 'currently_seeking_commission', [0, date("d/m/Y")]);
+			}
+		}
+	}
+}
+
 
 
 
@@ -3385,6 +3409,7 @@ function pol_workshops_post_type()
 
 	register_post_type('workshop', $args);
 }
+
 
 
 // add_action('admin_menu', 'custom_book_submenu');
