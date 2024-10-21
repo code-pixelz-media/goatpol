@@ -4397,7 +4397,7 @@ function so_update_story_meta_after_adding_commission($post_id, $commission)
 	update_post_meta($post_id, 'claimed_by', $commission_rae);
 
 	//update the commission status
-	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 1, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
+	$update_sql = $wpdb->get_results("UPDATE $table_name SET status = 2, last_transfer = CURRENT_TIMESTAMP WHERE code = '" . $commission . "'");
 
 	//udpate commission history
 	$post_author_id = get_post_field('post_author', $post_id);
